@@ -1,0 +1,220 @@
+domain : apiservice7pagi.cloudapp.net
+password : .DTXVy-6(x?rm7tz
+
+FORMAT: 1A
+
+# Tujuh Pagi API Blueprint
+
+#Group Foundation
+### Get All Foundation [GET /api/foundations]
+Admin can get all foundation id
++ Request
+    + Headers
+        access_token : user access token
+        user_id : 1
++ Parameters
+    + -
++ Response 200 (application/json)
+    {
+        "token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjIxMTZlZDEyOWYzNWIyMWFhZjkzZDEiLCJpYXQiOjE0NDUwNTI1NzksImV4cCI6MTQ0NTA3MDU3OX0.lmzj2Sew_D05YDGXn81orkW2Nx8DMuJ1CgXYX6YPHLk"
+    }
+
+# Group Users
+
+### Login User [POST /auth/local]
+User can upload his new photos, change his name
++ Parameters
+    + email (string) - user's email
+    + password (string) - user's password
++ Response 200 (application/json)
+    {
+        "token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjIxMTZlZDEyOWYzNWIyMWFhZjkzZDEiLCJpYXQiOjE0NDUwNTI1NzksImV4cCI6MTQ0NTA3MDU3OX0.lmzj2Sew_D05YDGXn81orkW2Nx8DMuJ1CgXYX6YPHLk"
+    }
+
+### Update my profile [POST /users/update]
+User can upload his new photos, change his name
++ Request
+    + Headers
+            access_token : user access token
+            user_id : 1
++ Parameters
+    + file (binary) - new user's photo
+    + name (string) - new user's name
++ Response 200 (application/json)
+
+        {
+            "message" : "ok"
+        }
+
+### Update my profile [POST /users/update]
+User can upload his new photos, change his name
++ Request
+    + Headers
+        access_token : user access token
+        user_id : 1
++ Parameters
+    + file (binary) - new user's photo
+    + name (string) - new user's name
++ Response 200 (application/json)
+        {
+            "message" : "ok"
+        }
+
+
+### Get all users in my school [GET /users/get_users]
++ Request
+    + Headers
+        access_token : user access token
+        user_id : 1
++ Parameters
+    + last_update (string) - last time user get the users list for ex "2015-10-12 11:00:00"
++ Response 200 (application/json)
+    {
+        "server_time" : "2015-10-12 12:00:00",
+        "users" : [
+            {
+                "id" : 2,
+                "name" : "Agus Salim",
+                "address" : "jalan bla bla",
+                "child_name" : "Sule",
+                "email" : "agus@email.com",
+                "url_image" : "http://2.bp.blogspot.com/-_vzQG6xPs1A/Ux5OzrkeuBI/AAAAAAAABBg/rgIuMVlKLc8/s1600/gambar+kata+kata+meme+lucu+9.jpg"
+            },
+            {
+                "id" : 3,
+                "name" : "Bella",
+                "address" : "jalan bla bla",
+                "child_name" : "Cyntia",
+                "email" : "bella@email.com",
+                "url_image" : "http://2.bp.blogspot.com/-_vzQG6xPs1A/Ux5OzrkeuBI/AAAAAAAABBg/rgIuMVlKLc8/s1600/gambar+kata+kata+meme+lucu+9.jpg"
+            }
+        ],
+        "classes" : [
+            {
+                "id" : 2,
+                "name" : "Kelas X-A",
+                "address" : "jalan bla bla",
+                "child_name" : "Sule",
+                "email" : "agus@email.com",
+                "url_image" : "http://2.bp.blogspot.com/-_vzQG6xPs1A/Ux5OzrkeuBI/AAAAAAAABBg/rgIuMVlKLc8/s1600/gambar+kata+kata+meme+lucu+9.jpg"
+            },
+            {
+                "id" : 3,
+                "name" : "Kelas X-B",
+                "address" : "jalan bla bla",
+                "child_name" : "Cyntia",
+                "email" : "bella@email.com",
+                "url_image" : "http://2.bp.blogspot.com/-_vzQG6xPs1A/Ux5OzrkeuBI/AAAAAAAABBg/rgIuMVlKLc8/s1600/gambar+kata+kata+meme+lucu+9.jpg"
+            }
+        ]
+    }
+
+
+# Group Stories
+
+### Create a story [POST /stories/create]
++ Request
+    + Headers
+        access_token : user access token
+        user_id : 1
++ Parameters
+    + files%5B%5D (array(binary)) - array of images
+    + message (String) - user's comment
+    + story_receiver_user_id (Number) - receiver user id, if the destination is group, then this field is set 0
+    + story_receiver_group_id (Number) - receiver group id, if the destination is direct user, then this field is set 0
++ Response 200 (application/json)
+    {
+        "message" : "ok"
+    }
+        
+### Get stories for me [GET /stories/get_stories]
++ Request
+    + Headers
+        access_token : user access token
+        user_id : 1        
++ Parameters
+    + last_update (string) - last time user update his stories list forex "2015-10-12 11:00:00"
++ Response 200 (application/json)
+    {
+        "server_time" : "2015-10-12 12:00:00",
+        "stories" : [
+            {
+                "id" : 1,
+                "message" : "Contoh post ke personal",
+                "story_type" : "DIARY",
+                "story_writer_user_id" : 1,
+                "story_time" : "2015-10-12 11:10:00",
+                "story_receiver_user_id" : 2,
+                "story_receiver_group_id" : 0,
+                "url_images" : [
+                    { "url_image" : "http://4.bp.blogspot.com/-tO9ccWYc3t8/VczDKSpzrgI/AAAAAAAAATQ/08l1TsJfDwA/s1600/Meme%2BLucu%2BNgakak%2B2015%2B-%2B8.png" },
+                    { "url_image" : "http://situshandphone.com/wp-content/uploads/2015/03/meme_4.jpg" },
+                    { "url_image" : "http://1.bp.blogspot.com/-mmKUBNoXT-E/U3KaCqaqY3I/AAAAAAAACpI/Lg9FsZ4FF0A/s1600/Meme+Dengan+Kata-Kata+3.jpg" },
+                    { "url_image" : "http://1.bp.blogspot.com/-yJ8NTHZVMbo/VLxSVtqtXKI/AAAAAAAABKo/rBqaf2cMnCA/s1600/sinetron%2Blucu.jpg" }
+                ]
+            },
+            {
+                "id" : 2,
+                "message" : "Contoh post ke group",
+                "story_type" : "DIARY",
+                "story_writer_user_id" : 1,
+                "story_time" : "2015-10-12 11:10:00",
+                "story_receiver_user_id" : 0,
+                "story_receiver_group_id" : 5,
+                "url_images" : [
+                    { "url_image" : "http://4.bp.blogspot.com/-tO9ccWYc3t8/VczDKSpzrgI/AAAAAAAAATQ/08l1TsJfDwA/s1600/Meme%2BLucu%2BNgakak%2B2015%2B-%2B8.png" },
+                    { "url_image" : "http://situshandphone.com/wp-content/uploads/2015/03/meme_4.jpg" },
+                    { "url_image" : "http://1.bp.blogspot.com/-mmKUBNoXT-E/U3KaCqaqY3I/AAAAAAAACpI/Lg9FsZ4FF0A/s1600/Meme+Dengan+Kata-Kata+3.jpg" },
+                    { "url_image" : "http://1.bp.blogspot.com/-yJ8NTHZVMbo/VLxSVtqtXKI/AAAAAAAABKo/rBqaf2cMnCA/s1600/sinetron%2Blucu.jpg" }
+                ]
+            }
+        ]
+    }
+
+
+        
+# Group Reply
+
+### Create reply for a story [POST /replies/create]
++ Request
+    + Headers
+
+            access_token : user access token
+            user_id : 1
+
++ Parameters
+    + story_id (number) - story that will be replied
+    + message (string) - text content
+    
++ Response 200 (application/json)
+
+        {
+            "message" : "ok"
+        }
+        
+
+### Get replies of a story [GET /replies/get_replies]
++ Request
+    + Headers
+        access_token : user access token
+        user_id : 1            
++ Parameters
+    + story_id (number) - server will search all replies of this story
+    + last_update (string) - last time user get all replies for this story    
++ Response 200 (application/json)
+
+        {
+            "server_time" : "2015-10-12 12:00:00",
+            "replies" : [
+                {
+                    "id" : 1,
+                    "reply_creator_user_id" : 1,
+                    "message" : "bagus tuh"
+                },
+                {
+                    "id" : 2,
+                    "reply_creator_user_id" : 2,
+                    "message" : "iya ya"
+                }
+            ]
+        }

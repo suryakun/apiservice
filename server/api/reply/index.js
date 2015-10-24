@@ -12,5 +12,6 @@ router.post('/', auth.hasRole(['teacher', 'parent']), controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
+router.post('/get-reply-by-date', auth.hasRole(['teacher', 'parent']), controller.getReplyByDate);
 
 module.exports = router;

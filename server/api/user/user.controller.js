@@ -184,6 +184,24 @@ exports.getMyStories = function (req, res) {
     }
 }
 
+exports.getMyStoriesByDate = function (req, res) {
+    var user_id = req.user._id;
+    var date = new Date(req.body.date);
+    if (req.user.role == 'teacher') {
+        User.getStoriesForTeacherByDate(user_id, date, function (err, data) {
+            if(err) { return handleError(res, err); }
+            if(!data) { return res.status(404).send('Not Found'); }
+            res.status(200).json(data._story);
+        });
+    } else if (req.user.role == 'parent') {
+        User.getStoriesForParentByDate(user_id, date, function (err, data) {
+            if(err) { return handleError(res, err); }
+            if(!data) { return res.status(404).send('Not Found'); }
+            res.status(200).json(data._story);
+        });
+    }
+}
+
 exports.getMyClass = function (req, res) {
     var user_id = req.user._id;
     if (req.user.role == 'teacher') {

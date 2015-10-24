@@ -64,6 +64,17 @@ exports.destroy = function(req, res) {
     });
 };
 
+// Deletes a reply from the DB.
+exports.getReplyByDate = function(req, res) {
+    var story_id = mongoose.Types.ObjectId(req.body.story_id);
+    var date = new Date(req.body.date);
+    Reply.find({ _story : story_id, {"$gt": date} }, function (err, reply) {
+        if(err) { return handleError(res, err); }
+        if(!reply) { return res.status(404).send('Not Found'); }        
+        return res.status(204).send(reply);
+    });
+};
+
 function handleError(res, err) {
     return res.status(500).send(err);
 }

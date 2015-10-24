@@ -6,7 +6,7 @@ module.exports = {
   // Server IP
   ip:       process.env.OPENSHIFT_NODEJS_IP ||
             process.env.IP ||
-            'localhost',
+            'apiservice7pagi',
 
   // Server port
   port:     process.env.OPENSHIFT_NODEJS_PORT ||

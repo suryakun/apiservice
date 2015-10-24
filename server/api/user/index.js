@@ -20,5 +20,6 @@ router.post('/upload-profile', auth.hasRole(['admin', 'parent', 'teacher']), con
 router.get('/get-students-from-my-school', auth.hasRole(['teacher', 'student']), controller.getStudentsFromMySchool);
 router.get('/get-my-stories', auth.hasRole(['teacher','parent']), controller.getMyStories);
 router.get('/get-my-class', auth.hasRole(['teacher','parent']), controller.getMyClass);
+router.post('/update-gcm-id', auth.hasRole(['teacher','parent','student','principal']), controller.updateGcmId);
 
 module.exports = router;

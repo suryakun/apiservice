@@ -8,5 +8,5 @@ module.exports = {
     uri: 'mongodb://localhost/room-dev'
   },
 
-  seedDB: true
+  seedDB: false
 };

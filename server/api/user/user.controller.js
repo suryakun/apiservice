@@ -201,6 +201,20 @@ exports.getMyClass = function (req, res) {
     }
 }
 
+exports.updateGcmId = function (req, res) {
+    var gcm_id = req.body.gcm_id;
+    User.findById(req.user._id, function (err, me) {
+        if(err) { return handleError(res, err); }
+        if(!me) { return res.status(404).send('Not Found'); }
+        me.gcm_id = gcm_id;
+        me.save(function (err) {
+            if(err) { return handleError(res, err); }
+            res.status(200).json({message: 'ok'});
+        });
+    });
+    
+}
+
 function handleString(res, string) {
     var type = typeof string;
     if ( type !== 'string' ) res.status(401).send({message: 'Bad Request'});

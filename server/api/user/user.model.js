@@ -20,6 +20,8 @@ var UserSchema = new Schema({
   name: String,
   email: { type: String, lowercase: true },
   avatar: String,
+  gcm_id: String,
+  ios_id: String,
   role: {
     type: String,
     default: 'user'
@@ -262,6 +264,14 @@ UserSchema.statics.getParentForTeacher = function (id, callback) {
   var user = this;
   return user.findById(id).exec(function (err, me) {
     user.find({_school : me._school, role : 'student'}).populate("_parent").exec(callback);
+  });
+}
+
+UserSchema.statics.updateGcmId = function (id, gcm_id, callback) {
+  var user = this;
+  return user.findById(id).exec(function (err, me) {
+    me.gcm_id = gcm_id;
+    me.save();
   });
 }
 

@@ -77,13 +77,15 @@ Classd.find({}).remove(function() {
     }, function () {
 
         //set relation to level
-        Level.findOne({ grade: 'nol kecil'}, function (err, level) {
-            Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
-                cls._level = level._id;
-                cls.save();
+        setTimeout(function function_name (argument) {
+            Level.findOne({ grade: 'nol kecil'}, function (err, level) {
+                Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+                    cls._level = level._id;
+                    cls.save();
 
-                level._class.push(cls._id);
-                level.save();
+                    level._class.push(cls._id);
+                    level.save();
+                });
             });
         });
 
@@ -255,10 +257,12 @@ Story.find({}).remove(function() {
             },1000);
 
             //relation story to parent
-            User.findOne({ name: 'Parent dua'}, function (err, prnt) {
-                story._parent.push(prnt._id);
-                story.save();
-            });
+            setTimeout(function () {
+                User.findOne({ name: 'Parent dua'}, function (err, prnt) {
+                    story._parent.push(prnt._id);
+                    story.save();
+                });
+            },520)
 
             Photo.findOne({url: 'http://localhost:8000/image/diary.png'}, function (err, photo) {
                 story._photo.push(photo._id);

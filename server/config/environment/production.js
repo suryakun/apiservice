@@ -6,7 +6,7 @@ module.exports = {
   // Server IP
   ip:       process.env.OPENSHIFT_NODEJS_IP ||
             process.env.IP ||
-            111.221.104.74,
+            0.0.0.0,
 
   // Server port
   port:     process.env.OPENSHIFT_NODEJS_PORT ||

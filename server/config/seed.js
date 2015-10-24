@@ -77,7 +77,7 @@ Classd.find({}).remove(function() {
     }, function () {
 
         //set relation to level
-        setTimeout(function function_name (argument) {
+        setTimeout(function (argument) {
             Level.findOne({ grade: 'nol kecil'}, function (err, level) {
                 Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
                     cls._level = level._id;
@@ -87,18 +87,20 @@ Classd.find({}).remove(function() {
                     level.save();
                 });
             });
-        });
+        },1000);
 
         //set relation to school
-        School.findOne({ name: 'PG Tirta jasa 2'}, function (err, scl) {
-            Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
-                cls._school = scl._id;                
-                cls.save();
+        setTimeout(function (argument) {
+            School.findOne({ name: 'PG Tirta jasa 2'}, function (err, scl) {
+                Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+                    cls._school = scl._id;                
+                    cls.save();
 
-                scl._class.push(cls._id);
-                scl.save();
+                    scl._class.push(cls._id);
+                    scl.save();
+                });
             });
-        });
+        },1100);
 
     });
 });

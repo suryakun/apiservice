@@ -68,7 +68,8 @@ UserSchema
         return {
             'name': this.name,
             'avatar': this.avatar,
-            'role': this.role
+            'role': this.role,
+            '_student': this._student
         };
     });
 
@@ -267,6 +268,7 @@ UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
 
     });
 }
+        
 
 UserSchema.statics.getStoriesForTeacherByDate = function (id, date, callback) {
     return this.find({_id: id, createdAt: {$gt: date}}).populate('_story').exec(function (err, story) {

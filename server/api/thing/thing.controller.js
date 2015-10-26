@@ -66,11 +66,16 @@ exports.destroy = function(req, res) {
     });
 };
 
-exports.sendGcm = function (req, res) {
-    message.addData('key1', 'msg1');
-    var regTokens = ['YOUR_REG_TOKEN_HERE'];
+exports.sendGcm = function (type, creator_id, story_id, regTokens) {
+    if (type == "story") {
+        message.addData('type', 'story');
+    } else {
+        message.addData('type', 'reply');
+    };
+    message.addData('sender', creator_id);
+    message.addData('sender', story_id);
     // Set up the sender with you API key
-    var sender = new gcm.Sender('YOUR_API_KEY_HERE');
+    var sender = new gcm.Sender('AIzaSyD4ti3j30JD1DeCOi-e2jaTkPHWdo8O2Pc');
 
     // Now the sender can be used to send messages
     sender.send(message, { registrationTokens: regTokens }, function (err, result) {
@@ -79,13 +84,11 @@ exports.sendGcm = function (req, res) {
     });
 
     // Send to a topic, with no retry this time
-    sender.sendNoRetry(message, { topic: '/topics/global' }, function (err, result) {
-        if(err) console.error(err);
-        else    console.log(result);
-    });
+    // sender.sendNoRetry(message, { topic: '/topics/global' }, function (err, result) {
+    //     if(err) console.error(err);
+    //     else    console.log(result);
+    // });
 }
-
-
 
 function handleError(res, err) {
     return res.status(500).send(err);

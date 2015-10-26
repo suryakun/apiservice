@@ -15,6 +15,8 @@ var _ = require('lodash');
 var mkdirp = require('mkdirp');
 var queue = require('queue');
 var q = queue();
+var Thing = require('../thing/thing.controller');
+var Gcm = Thing.sendGcm;
 
 // Get list of storys
 exports.index = function(req, res) {
@@ -28,6 +30,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
     Story.find({_id: req.params.id, active: true}, function (err, story) {
         if(err) { return handleError(res, err); }
+        if(!story) { return res.status(404).send('Not Found'); }
         if(!story) { return res.status(404).send('Not Found'); }
         return res.json(story);
     });
@@ -62,14 +65,21 @@ exports.create = function(req, res) {
 
             Story.findById(story._id, function (err, str) {
                 var me = req.user;
+                var receiver_ids = [];
                 function save(str, fields, res, filename) {
                     if(err) { return handleError(res, err); }
                     if(!str) { return res.status(404).send('Not Found'); }
                     var class_id = fields.class_id.split(",");
                     if (fields.type == 'info') {
+                        var classes = [];
                         for (var i = 0, c = class_id.length ; i < c; i++) {
                             str._class.push(mongoose.Types.ObjectId(class_id[i]));
+                            classes.push(mongoose.Types.ObjectId(class_id[i]));
                         };
+                        
+                        Classd.find({ _id : {$in: receiver_ids }}).populate("_student").exec(function (err, students) {
+                            console.log(students);
+                        });
                     } else {
                         var parent = fields.parent.split(",");
                         for (var j = 0, p = parent.length ; j < parent; j++) {
@@ -81,7 +91,11 @@ exports.create = function(req, res) {
                             if(err) { return handleError(res, err); }
                             if(!teacher) { return res.status(404).send('Not Found Teacher'); }
                             teacher._story.push(str._id);
-                            teacher.save();
+                            teacher.save(function (err) {
+                                if(err) { return handleError(res, err); }
+                                // Gcm.sendGcm('story', teacher._id, str._id, )
+                            });
+
                             res.status(201).send({message: 'ok'}); 
                         });
                     });

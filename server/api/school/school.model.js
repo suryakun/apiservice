@@ -27,11 +27,11 @@ SchoolSchema.pre('save', function (done) {
 });
 
 SchoolSchema.statics.getFoundationBySchoolId = function (id, callback) {
-    return this.findOne({ _id: id}).populate("_foundation").exec(callback);
+    return this.findOne({ _id: id, active: true}).populate("_foundation").exec(callback);
 }
 
 SchoolSchema.statics.getClassBySchoolId = function (id, callback) {
-    return this.findOne({ _id: id}).populate("_class").exec(callback);
+    return this.findOne({ _id: id, active: true}).populate("_class").exec(callback);
 }
 
 module.exports = mongoose.model('School', SchoolSchema);

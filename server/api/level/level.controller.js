@@ -5,7 +5,7 @@ var Level = require('./level.model');
 
 // Get list of levels
 exports.index = function(req, res) {
-  Level.find(function (err, levels) {
+  Level.find({active: true}, function (err, levels) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(levels);
   });
@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single level
 exports.show = function(req, res) {
-  Level.findById(req.params.id, function (err, level) {
+  Level.find({_id: req.params.id, active: true}, function (err, level) {
     if(err) { return handleError(res, err); }
     if(!level) { return res.status(404).send('Not Found'); }
     return res.json(level);
@@ -31,7 +31,7 @@ exports.create = function(req, res) {
 // Updates an existing level in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Level.findById(req.params.id, function (err, level) {
+  Level.find({_id: req.params.id, active: true}, function (err, level) {
     if (err) { return handleError(res, err); }
     if(!level) { return res.status(404).send('Not Found'); }
     var updated = _.merge(level, req.body);
@@ -44,7 +44,7 @@ exports.update = function(req, res) {
 
 // Deletes a level from the DB.
 exports.destroy = function(req, res) {
-  Level.findById(req.params.id, function (err, level) {
+  Level.find({_id: req.params.id, active: true}, function (err, level) {
     if(err) { return handleError(res, err); }
     if(!level) { return res.status(404).send('Not Found'); }
     level.remove(function(err) {

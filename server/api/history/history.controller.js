@@ -5,7 +5,7 @@ var History = require('./history.model');
 
 // Get list of historys
 exports.index = function(req, res) {
-  History.find(function (err, historys) {
+  History.find({_id: req.params.id, active: true}, function (err, historys) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(historys);
   });
@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single history
 exports.show = function(req, res) {
-  History.findById(req.params.id, function (err, history) {
+  History.find({_id: req.params.id, active: true}, function (err, history) {
     if(err) { return handleError(res, err); }
     if(!history) { return res.status(404).send('Not Found'); }
     return res.json(history);
@@ -31,7 +31,7 @@ exports.create = function(req, res) {
 // Updates an existing history in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  History.findById(req.params.id, function (err, history) {
+  History.find({_id: req.params.id, active: true}, function (err, history) {
     if (err) { return handleError(res, err); }
     if(!history) { return res.status(404).send('Not Found'); }
     var updated = _.merge(history, req.body);
@@ -44,7 +44,7 @@ exports.update = function(req, res) {
 
 // Deletes a history from the DB.
 exports.destroy = function(req, res) {
-  History.findById(req.params.id, function (err, history) {
+  History.find({_id: req.params.id, active: true}, function (err, history) {
     if(err) { return handleError(res, err); }
     if(!history) { return res.status(404).send('Not Found'); }
     history.remove(function(err) {

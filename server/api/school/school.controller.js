@@ -2,10 +2,11 @@
 
 var _ = require('lodash');
 var School = require('./school.model');
+var mongoose = require('mongoose');
 
 // Get list of schools
 exports.index = function(req, res) {
-  School.find(function (err, schools) {
+  School.find({ active: true}, function (err, schools) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(schools);
   });
@@ -13,7 +14,7 @@ exports.index = function(req, res) {
 
 // Get a single school
 exports.show = function(req, res) {
-  School.findById(req.params.id, function (err, school) {
+  School.findd({_id: req.params.id, active: true}, function (err, school) {
     if(err) { return handleError(res, err); }
     if(!school) { return res.status(404).send('Not Found'); }
     return res.json(school);
@@ -22,6 +23,7 @@ exports.show = function(req, res) {
 
 // Creates a new school in the DB.
 exports.create = function(req, res) {
+  req.body._foundation = mongoose.Types.ObjectId(req.body._foundation);
   School.create(req.body, function(err, school) {
     if(err) { return handleError(res, err); }
     return res.status(201).json(school);
@@ -31,7 +33,7 @@ exports.create = function(req, res) {
 // Updates an existing school in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  School.findById(req.params.id, function (err, school) {
+  School.find({_id: req.params.id, active: true}, function (err, school) {
     if (err) { return handleError(res, err); }
     if(!school) { return res.status(404).send('Not Found'); }
     var updated = _.merge(school, req.body);
@@ -44,7 +46,7 @@ exports.update = function(req, res) {
 
 // Deletes a school from the DB.
 exports.destroy = function(req, res) {
-  School.findById(req.params.id, function (err, school) {
+  School.find({_id: req.params.id, active: true}, function (err, school) {
     if(err) { return handleError(res, err); }
     if(!school) { return res.status(404).send('Not Found'); }
     school.remove(function(err) {

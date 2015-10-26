@@ -6,7 +6,7 @@ var Reply = require('./reply.model');
 
 // Get list of replys
 exports.index = function(req, res) {
-    Reply.find(function (err, replys) {
+    Reply.find({ active: true}, function (err, replys) {
         if(err) { return handleError(res, err); }
         return res.status(200).json(replys);
     });
@@ -14,7 +14,7 @@ exports.index = function(req, res) {
 
 // Get a single reply
 exports.show = function(req, res) {
-    Reply.findById(req.params.id, function (err, reply) {
+    Reply.find({_id: req.params.id, active: true}, function (err, reply) {
         if(err) { return handleError(res, err); }
         if(!reply) { return res.status(404).send('Not Found'); }
         return res.json(reply);
@@ -41,7 +41,7 @@ exports.create = function(req, res) {
 // Updates an existing reply in the DB.
 exports.update = function(req, res) {
     if(req.body._id) { delete req.body._id; }
-    Reply.findById(req.params.id, function (err, reply) {
+    Reply.find({_id: req.params.id, active: true}, function (err, reply) {
         if (err) { return handleError(res, err); }
         if(!reply) { return res.status(404).send('Not Found'); }
         var updated = _.merge(reply, req.body);
@@ -54,7 +54,7 @@ exports.update = function(req, res) {
 
 // Deletes a reply from the DB.
 exports.destroy = function(req, res) {
-    Reply.findById(req.params.id, function (err, reply) {
+    Reply.find({_id: req.params.id, active: true}, function (err, reply) {
         if(err) { return handleError(res, err); }
         if(!reply) { return res.status(404).send('Not Found'); }
         reply.remove(function(err) {
@@ -68,7 +68,7 @@ exports.destroy = function(req, res) {
 exports.getReplyByDate = function(req, res) {
     var story_id = mongoose.Types.ObjectId(req.body.story_id);
     var date = new Date(req.body.date);
-    Reply.find({ _story : story_id, createdAt: {"$gt": date} }, function (err, reply) {
+    Reply.find({ _story : story_id, createdAt: {"$gt": date}, active: true }, function (err, reply) {
         if(err) { return handleError(res, err); }
         if(!reply) { return res.status(404).send('Not Found'); }        
         return res.status(204).send(reply);

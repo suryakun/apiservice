@@ -26,15 +26,15 @@ ClassSchema.pre('save', function (done) {
 });
 
 ClassSchema.statics.getAllStudentByClassId = function (id, callback) {
-    return this.findOne({ _id: id}).populate("_student").exec(callback);
+    return this.findOne({ _id: id, active: true}).populate("_student").exec(callback);
 }
 
 ClassSchema.statics.getSchoolByClassId = function (id, callback) {
-    return this.findOne({ _id: id}).populate("_school").exec(callback);
+    return this.findOne({ _id: id, active: true}).populate("_school").exec(callback);
 }
 
 ClassSchema.statics.getLevelByClassId = function (id, callback) {
-    return this.findOne({ _id: id}).populate("_level").exec(callback);
+    return this.findOne({ _id: id, active: true}).populate("_level").exec(callback);
 }
 
 module.exports = mongoose.model('Class', ClassSchema);

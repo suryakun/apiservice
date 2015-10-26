@@ -5,7 +5,7 @@ var Classd = require('./class.model');
 
 // Get list of classs
 exports.index = function(req, res) {
-  Classd.find(function (err, classs) {
+  Classd.find({active: true}).exec(function (err, classs) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(classs);
   });
@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single class
 exports.show = function(req, res) {
-  Classd.findById(req.params.id, function (err, classd) {
+  Classd.find({ _id: req.params.id, active: true}, function (err, classd) {
     if(err) { return handleError(res, err); }
     if(!classd) { return res.status(404).send('Not Found'); }
     return res.json(classd);
@@ -31,7 +31,7 @@ exports.create = function(req, res) {
 // Updates an existing class in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Classd.findById(req.params.id, function (err, classd) {
+  Classd.find({ _id: req.params.id, active: true}, function (err, classd) {
     if (err) { return handleError(res, err); }
     if(!classd) { return res.status(404).send('Not Found'); }
     var updated = _.merge(classd, req.body);
@@ -44,7 +44,7 @@ exports.update = function(req, res) {
 
 // Deletes a class from the DB.
 exports.destroy = function(req, res) {
-  Classd.findById(req.params.id, function (err, classd) {
+  Classd.find({ _id: req.params.id, active: true}, function (err, classd) {
     if(err) { return handleError(res, err); }
     if(!classd) { return res.status(404).send('Not Found'); }
     classd.remove(function(err) {

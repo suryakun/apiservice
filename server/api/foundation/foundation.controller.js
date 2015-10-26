@@ -5,7 +5,7 @@ var Foundation = require('./foundation.model');
 
 // Get list of foundations
 exports.index = function(req, res) {
-  Foundation.find(function (err, foundations) {
+  Foundation.find({ _id: req.params.id, active: true}).exec(function (err, foundations) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(foundations);
   });
@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single foundation
 exports.show = function(req, res) {
-  Foundation.findById(req.params.id, function (err, foundation) {
+  Foundation.find({ _id: req.params.id, active: true}, function (err, foundation) {
     if(err) { return handleError(res, err); }
     if(!foundation) { return res.status(404).send('Not Found'); }
     return res.json(foundation);
@@ -22,6 +22,7 @@ exports.show = function(req, res) {
 
 // Creates a new foundation in the DB.
 exports.create = function(req, res) {
+  req.body.active = true;
   Foundation.create(req.body, function(err, foundation) {
     if(err) { return handleError(res, err); }
     return res.status(201).json(foundation);
@@ -31,7 +32,7 @@ exports.create = function(req, res) {
 // Updates an existing foundation in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Foundation.findById(req.params.id, function (err, foundation) {
+  Foundation.find({ _id: req.params.id, active: true}, function (err, foundation) {
     if (err) { return handleError(res, err); }
     if(!foundation) { return res.status(404).send('Not Found'); }
     var updated = _.merge(foundation, req.body);
@@ -44,7 +45,7 @@ exports.update = function(req, res) {
 
 // Deletes a foundation from the DB.
 exports.destroy = function(req, res) {
-  Foundation.findById(req.params.id, function (err, foundation) {
+  Foundation.find({ _id: req.params.id, active: true}, function (err, foundation) {
     if(err) { return handleError(res, err); }
     if(!foundation) { return res.status(404).send('Not Found'); }
     foundation.remove(function(err) {

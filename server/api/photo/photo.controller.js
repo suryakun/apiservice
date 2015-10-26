@@ -5,7 +5,7 @@ var Photo = require('./photo.model');
 
 // Get list of photos
 exports.index = function(req, res) {
-  Photo.find(function (err, photos) {
+  Photo.find({ active:true }, function (err, photos) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(photos);
   });
@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single photo
 exports.show = function(req, res) {
-  Photo.findById(req.params.id, function (err, photo) {
+  Photo.find({_id: req.params.id, active: true}, function (err, photo) {
     if(err) { return handleError(res, err); }
     if(!photo) { return res.status(404).send('Not Found'); }
     return res.json(photo);
@@ -31,7 +31,7 @@ exports.create = function(req, res) {
 // Updates an existing photo in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Photo.findById(req.params.id, function (err, photo) {
+  Photo.find({_id: req.params.id, active: true}, function (err, photo) {
     if (err) { return handleError(res, err); }
     if(!photo) { return res.status(404).send('Not Found'); }
     var updated = _.merge(photo, req.body);
@@ -44,7 +44,7 @@ exports.update = function(req, res) {
 
 // Deletes a photo from the DB.
 exports.destroy = function(req, res) {
-  Photo.findById(req.params.id, function (err, photo) {
+  Photo.find({_id: req.params.id, active: true}, function (err, photo) {
     if(err) { return handleError(res, err); }
     if(!photo) { return res.status(404).send('Not Found'); }
     photo.remove(function(err) {

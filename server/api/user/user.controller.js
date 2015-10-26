@@ -20,7 +20,7 @@ var validationError = function(res, err) {
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-    User.find({}, '-salt -hashedPassword', function (err, users) {
+    User.find({active: true}, '-salt -hashedPassword', function (err, users) {
         if(err) return res.status(500).send(err);
         res.status(200).json(users);
     });
@@ -46,7 +46,7 @@ exports.create = function (req, res, next) {
 exports.show = function (req, res, next) {
     var userId = req.params.id;
 
-    User.findById(userId, function (err, user) {
+    User.find({_id: req.params.id, active: true}, function (err, user) {
         if (err) return next(err);
         if (!user) return res.status(401).send('Unauthorized');
         res.json(user.profile);
@@ -72,7 +72,7 @@ exports.changePassword = function(req, res, next) {
     var oldPass = String(req.body.oldPassword);
     var newPass = String(req.body.newPassword);
 
-    User.findById(userId, function (err, user) {
+    User.find({_id: userId, active: true}, function (err, user) {
         if(user.authenticate(oldPass)) {
             user.password = newPass;
             user.save(function(err) {
@@ -91,7 +91,8 @@ exports.changePassword = function(req, res, next) {
 exports.me = function(req, res, next) {
     var userId = req.user._id;
     User.findOne({
-        _id: userId
+        _id: userId,
+        active: true
     }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
         if (err) return next(err);
         if (!user) return res.status(401).send('Unauthorized');
@@ -191,13 +192,13 @@ exports.getMyStoriesByDate = function (req, res) {
         User.getStoriesForTeacherByDate(user_id, date, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            res.status(200).json(data._story);
+            res.status(200).json(data);
         });
     } else if (req.user.role == 'parent') {
         User.getStoriesForParentByDate(user_id, date, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            res.status(200).json(data._story);
+            res.status(200).json(data);
         });
     }
 }

@@ -22,7 +22,7 @@ LevelSchema.pre('save', function (done) {
 });
 
 LevelSchema.statics.getClassByLevelId = function (id, callback) {
-  return this.findOne({_id: id}).populate("_class").exec(callback);
+  return this.findOne({_id: id, active: true}).populate("_class").exec(callback);
 }
 
 module.exports = mongoose.model('Level', LevelSchema);

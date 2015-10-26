@@ -15,7 +15,7 @@ var FoundationSchema = new Schema({
 });
 
 FoundationSchema.statics.getAllSchoolById = function (id, callback) {    
-  return this.findById(id).populate('_school').exec(callback);
+  return this.find({_id: id, active: true}).populate('_school').exec(callback);
 };
 
 FoundationSchema.pre('save', function (done) {

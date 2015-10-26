@@ -29,23 +29,23 @@ StorySchema.pre('save', function (done) {
 });
 
 StorySchema.statics.getReplyByStoryId = function (id, callback) {
-  return this.findOne({_id: id}).populate("_reply").exec(callback);
+  return this.findOne({_id: id, active: true}).populate("_reply").exec(callback);
 }
 
 StorySchema.statics.getParentByStoryId = function (id, callback) {
-  return this.findOne({_id: id}).populate("_parent").exec(callback);
+  return this.findOne({_id: id, active: true}).populate("_parent").exec(callback);
 }
 
 StorySchema.statics.getPhotoByStoryId = function (id, callback) {
-  return this.findOne({_id: id}).populate("_photo").exec(callback);
+  return this.findOne({_id: id, active: true}).populate("_photo").exec(callback);
 }
 
 StorySchema.statics.getClassByStoryId = function (id, callback) {
-  return this.findOne({_id: id}).populate("_class").exec(callback);
+  return this.findOne({_id: id, active: true}).populate("_class").exec(callback);
 }
 
 StorySchema.statics.getTeacherByStoryId = function (id, callback) {
-  return this.findOne({_id: id}).populate("_teacher").exec(callback);
+  return this.findOne({_id: id, active: true}).populate("_teacher").exec(callback);
 }
 
 module.exports = mongoose.model('Story', StorySchema);

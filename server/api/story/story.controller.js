@@ -18,7 +18,7 @@ var q = queue();
 
 // Get list of storys
 exports.index = function(req, res) {
-    Story.find(function (err, storys) {
+    Story.find({ active: true}, function (err, storys) {
         if(err) { return handleError(res, err); }
         return res.status(200).json(storys);
     });
@@ -26,7 +26,7 @@ exports.index = function(req, res) {
 
 // Get a single story
 exports.show = function(req, res) {
-    Story.findById(req.params.id, function (err, story) {
+    Story.find({_id: req.params.id, active: true}, function (err, story) {
         if(err) { return handleError(res, err); }
         if(!story) { return res.status(404).send('Not Found'); }
         return res.json(story);
@@ -61,24 +61,30 @@ exports.create = function(req, res) {
             });
 
             Story.findById(story._id, function (err, str) {
-
+                var me = req.user;
                 function save(str, fields, res, filename) {
                     if(err) { return handleError(res, err); }
                     if(!str) { return res.status(404).send('Not Found'); }
                     var class_id = fields.class_id.split(",");
-                    var parent = fields.parent.split(",");
                     if (fields.type == 'info') {
                         for (var i = 0, c = class_id.length ; i < c; i++) {
                             str._class.push(mongoose.Types.ObjectId(class_id[i]));
                         };
                     } else {
+                        var parent = fields.parent.split(",");
                         for (var j = 0, p = parent.length ; j < parent; j++) {
                             str._parent.push(mongoose.Types.ObjectId(parent[j]));
                         };
                     }
-                    console.log(str);
-                    str.save();
-                    res.status(201).send({message: 'ok'}); 
+                    str.save(function (err) {
+                        User.findById(me._id).exec(function (err, teacher) {
+                            if(err) { return handleError(res, err); }
+                            if(!teacher) { return res.status(404).send('Not Found Teacher'); }
+                            teacher._story.push(str._id);
+                            teacher.save();
+                            res.status(201).send({message: 'ok'}); 
+                        });
+                    });
                 }
 
                 if (filename.length > 0) {
@@ -86,7 +92,6 @@ exports.create = function(req, res) {
                         _.each(photo, function (docs, index) {
                             str._photo.push(mongoose.Types.ObjectId(docs._id));
                         });
-                        console.log(str);
                         save(str, fields, res, filename);
                     });
                 } else { 
@@ -101,7 +106,7 @@ exports.create = function(req, res) {
 // Updates an existing story in the DB.
 exports.update = function(req, res) {
     if(req.body._id) { delete req.body._id; }
-    Story.findById(req.params.id, function (err, story) {
+    Story.find({_id: req.params.id, active: true}, function (err, story) {
         if (err) { return handleError(res, err); }
         if(!story) { return res.status(404).send('Not Found'); }
         var updated = _.merge(story, req.body);
@@ -114,7 +119,7 @@ exports.update = function(req, res) {
 
 // Deletes a story from the DB.
 exports.destroy = function(req, res) {
-    Story.findById(req.params.id, function (err, story) {
+    Story.find({_id: req.params.id, active: true}, function (err, story) {
         if(err) { return handleError(res, err); }
         if(!story) { return res.status(404).send('Not Found'); }
         story.remove(function(err) {

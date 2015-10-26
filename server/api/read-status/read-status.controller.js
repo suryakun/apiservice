@@ -5,7 +5,7 @@ var ReadStatus = require('./read-status.model');
 
 // Get list of reads
 exports.index = function(req, res) {
-  ReadStatus.find(function (err, read) {
+  ReadStatus.find({ active: true}, function (err, read) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(read);
   });
@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single read
 exports.show = function(req, res) {
-  ReadStatus.findById(req.params.id, function (err, read) {
+  ReadStatus.find({_id: req.params.id, active: true}, function (err, read) {
     if(err) { return handleError(res, err); }
     if(!read) { return res.status(404).send('Not Found'); }
     return res.json(read);
@@ -31,7 +31,7 @@ exports.create = function(req, res) {
 // Updates an existing read in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  ReadStatus.findById(req.params.id, function (err, read) {
+  ReadStatus.find({_id: req.params.id, active: true}, function (err, read) {
     if (err) { return handleError(res, err); }
     if(!read) { return res.status(404).send('Not Found'); }
     var updated = _.merge(read, req.body);
@@ -44,7 +44,7 @@ exports.update = function(req, res) {
 
 // Deletes a read from the DB.
 exports.destroy = function(req, res) {
-  ReadStatus.findById(req.params.id, function (err, read) {
+  ReadStatus.find({_id: req.params.id, active: true}, function (err, read) {
     if(err) { return handleError(res, err); }
     if(!read) { return res.status(404).send('Not Found'); }
     read.remove(function(err) {

@@ -22,7 +22,7 @@ PhotoSchema.pre('save', function (done) {
 });
 
 PhotoSchema.statics.getStoryByPhotoId = function (id, callback) {
-  return this.findOne({_id: id}).populate("_story").exec(callback);
+  return this.findOne({_id: id, active: true}).populate("_story").exec(callback);
 }
 
 module.exports = mongoose.model('Photo', PhotoSchema);

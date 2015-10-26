@@ -5,7 +5,7 @@ var Parent = require('./parent.model');
 
 // Get list of parents
 exports.index = function(req, res) {
-  Parent.find(function (err, parents) {
+  Parent.find({active: true}, function (err, parents) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(parents);
   });

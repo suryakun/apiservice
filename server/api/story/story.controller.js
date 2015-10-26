@@ -77,9 +77,16 @@ exports.create = function(req, res) {
                             classes.push(mongoose.Types.ObjectId(class_id[i]));
                         };
                         
-                        Classd.find({ _id : {$in: receiver_ids }}).populate("_student").exec(function (err, students) {
-                            console.log(students);
+                        Classd.find({ _id : {$in: classes }}).populate("_student").exec(function (err, dataclass) {
+                            _.each(dataclass, function (classe, index) {
+                                _.each(classe._student, function (studentData, index) {
+                                    if (studentData._parent) {
+                                        receiver_ids.push(studentData._parent);
+                                    };
+                                });
+                            });
                         });
+
                     } else {
                         var parent = fields.parent.split(",");
                         for (var j = 0, p = parent.length ; j < parent; j++) {
@@ -92,11 +99,18 @@ exports.create = function(req, res) {
                             if(!teacher) { return res.status(404).send('Not Found Teacher'); }
                             teacher._story.push(str._id);
                             teacher.save(function (err) {
+                                var gcm_ids = [];
                                 if(err) { return handleError(res, err); }
-                                // Gcm.sendGcm('story', teacher._id, str._id, )
+                                User.find({ _id: {$in : receiver_ids }}, "name").exec(function (err, gcmData) {
+                                    // _.each(gcmData, function (gcm, index) {
+                                    //     if (gcm.gcm_id) {
+                                    //         gcm_ids.push(gcm.gcm_id);
+                                    //     };
+                                    // })
+                                    // Gcm.sendGcm('story', teacher._id, str._id, gcm_ids);
+                                    res.status(201).send({message: 'ok'}); 
+                                });
                             });
-
-                            res.status(201).send({message: 'ok'}); 
                         });
                     });
                 }

@@ -50,48 +50,49 @@ exports.create = function(req, res) {
             var gcm_ids = [];
             var ios_ids = [];
             var dataDescription = {};
+            var filename = [];
+            var uniqid = Date.now();
 
-            doCreateStory(function () {
-                console.log(dataDescription);
-                console.log(gcm_ids);
-                console.log(ios_ids);
+            dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
+            dataDescription.info = fields.info;
+            dataDescription.type = fields.type;
+            dataDescription.active = true;
+            dataDescription._class = mongoose.Types.ObjectId(fields.class_id);
+            dataDescription._parent = [];
+            dataDescription._photo = [];
+
+            Classd.findById(dataDescription._class).populate("_student").exec(function (err, destClass) {
+                // console.log(destClass);
+                User.populate(destClass._student, {
+                    path: '_parent',
+                    select: 'name gcm_id ios_id',
+                    model: User
+                }, function (err, parents) {
+                    _.each(parents, function (parent, index) {
+                        if (parent._parent) {
+                            dataDescription._parent.push(mongoose.Types.ObjectId(parent._parent._id));
+                            gcm_ids.push(parent._parent.gcm_id);
+                            ios_ids.push(parent._parent.ios_id);
+                        };
+                    });
+                    
+                    Story.create(dataDescription, function (err, story) {
+                        _.each(files, function (file, index) {
+                            var name = uniqid + file.name;
+                            var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
+                            var targetfile = pathfile + '/' + name;
+                            fs.rename(file.path, targetfile);
+                            console.log(file.path);
+                            filename.push({ url: story._id + '/' + name});
+                            dataDescription._photo.push(name);
+                        });
+                        console.log(filename);
+                        console.log(dataDescription);
+                    });
+
+                });
             });
-
-            function doCreateStory(fnCallback) {
-                async.series([
-                    function (callback) {
-                        dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
-                        dataDescription.info = fields.info;
-                        dataDescription.type = fields.type;
-                        dataDescription.active = true;
-                        dataDescription._class = mongoose.Types.ObjectId(fields.class_id);
-                        dataDescription._parent = [];
-                        callback();
-                    }
-                ], [
-                    function (callback) {
-                        Classd.findById(dataDescription._class).populate("_student").exec(function (err, destClass) {
-                            // console.log(destClass);
-                            User.populate(destClass._student, {
-                                path: '_parent',
-                                select: 'name gcm_id ios_id',
-                                model: User
-                            }, callback);
-                        });
-                    }
-                ], [
-                    function (err, parents, callback) {
-                        _.each(parents, function (parent, index) {
-                            if (parent._parent) {
-                                dataDescription._parent.push(mongoose.Types.ObjectId(parent._parent._id));
-                                gcm_ids.push(parent._parent.gcm_id);
-                                ios_ids.push(parent._parent.ios_id);
-                            };
-                        });
-                        callback();
-                    }
-                ]);
-            }            
+            
 
             // Story.create(dataDescription, function (err, story) {
             //     var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);

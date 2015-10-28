@@ -9,7 +9,7 @@ var StorySchema = new Schema({
     _teacher: { type: Schema.ObjectId, ref: 'User' },
     _photo: [{ type: Schema.ObjectId, ref: 'Photo' }],
     _parent: [{ type: Schema.ObjectId, ref: 'User' }],
-    _class: [{ type: Schema.ObjectId, ref: 'Class' }],
+    _class: { type: Schema.ObjectId, ref: 'Class' },
     _reply: [{ type: Schema.ObjectId, ref: 'Reply' }],
     name: String,
     info: String,

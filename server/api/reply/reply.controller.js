@@ -3,6 +3,10 @@
 var _ = require('lodash');
 var mongoose = require('mongoose');
 var Reply = require('./reply.model');
+var Thing = require('../thing/thing.controller');
+var User = require('../user/user.model');
+var Story = require('../story/story.model');
+var _ = require('lodash');
 
 // Get list of replys
 exports.index = function(req, res) {
@@ -26,15 +30,28 @@ exports.create = function(req, res) {
     var reply = {};
     reply.info = req.body.info;
     reply._story = mongoose.Types.ObjectId(req.body.story_id);
+    var receiver_message = [];
     if (req.user.role == 'teacher') {
-        reply._teacher = mongoose.Types.ObjectId(req.body.teacher_id);
+        reply._teacher = mongoose.Types.ObjectId(req.user._id);
     } else if (req.user.role == 'parent') {
-        reply._parent = mongoose.Types.ObjectId(req.body.parent_id);
+        reply._parent = mongoose.Types.ObjectId(req.user._id);
     }
     
     Reply.create(reply, function (err, rep) {
         if (err) { return res.status(500).send('Something wrong, please try again') };
-        return res.status(201).json({ message: 'ok'});
+        Story.findById(req.body.story_id).populate("_teacher").populate("_parent").exec(function (err, story) {
+            if(err) { return handleError(res, err); }
+            if(!story) { return res.status(404).send('Story Not Found'); }
+            if (req.user.role == 'teacher') {
+                _.each(story._parent, function (parent, index) {
+                    if (parent.gcm_id) receiver_message.push(parent.gcm_id);
+                });
+            } else {
+                if (story._teacher.gcm_id) receiver_message.push(story._teacher.gcm_id);
+            };
+            if (receiver_message.length > 0) Thing.sendGcm('reply', req.user._id, story._id, receiver_message);
+            return res.status(201).json({message: 'ok'});
+        });
     });
 };
 

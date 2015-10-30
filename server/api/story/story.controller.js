@@ -109,13 +109,14 @@ exports.create = function(req, res) {
                             if(err) { return handleError(res, err); }
                             if(!classd) { return res.status(404).send('Class Not Found'); }
                             classd._story.push(story._id);
-                            classd.save();
+                            classd.save(function (err, cls) {
+                                if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
+                                return res.status(201).json({message: 'ok'});
+                            });
                         });
-                        if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
                     });
                 });
             });
-            return res.status(201).json({message: 'ok'});
         } else {
             var gcm_ids = [];
             var ios_ids = [];
@@ -170,11 +171,11 @@ exports.create = function(req, res) {
                             p.save(function (err, pgcm) {
                                 if (pgcm.gcm_id) gcm_ids.push(pgcm.gcm_id);
                                 if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
+                                return res.status(201).json({message: 'ok'});
                             });
                         });
                     });
                 });
-                return res.status(201).json({message: 'ok'});
             });
         };
     });

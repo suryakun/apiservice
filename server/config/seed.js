@@ -14,6 +14,7 @@ var Story = require('../api/story/story.model');
 var Photo = require('../api/photo/photo.model');
 var Reply = require('../api/reply/reply.model');
 var async = require('async');
+var mongoose = require('mongoose');
 
 Foundation.find({}).remove(function() {
     Foundation.create({
@@ -216,10 +217,11 @@ Story.find({}).remove(function() {
         active: true,
     }, {
         info: 'This is Diary. Just for any parent',
-        isDiary: true,
+        type: 'diary',
         active: true,
     }, function () {
         Story.findOne({info: 'This is My first Post. Awesome'}, function (err, story) {
+            if (err) { console.log(err);};
             //relation story to teacher
             setTimeout(function (argument) {
                 User.findOne({ name: 'Teacher satu'}, function (err, tcr) {
@@ -232,13 +234,15 @@ Story.find({}).remove(function() {
             },1500);
 
             //relation story to class
-            Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
-                story._class.push(cls._id);
-                story.save();
+            setTimeout(function () {
+                Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+                    story._class = cls._id;
+                    story.save();
 
-                cls._story = story._id;
-                cls.save();
-            });
+                    cls._story = story._id;
+                    cls.save();
+                });
+            }, 2000);
 
             Photo.findOne({url: 'http://localhost:8000/image/info.png'}, function (err, photo) {
                 story._photo.push(photo._id);

@@ -37,9 +37,6 @@ exports.show = function(req, res) {
     });
 };
 
-function initialFolderUpload (argument) {
-}
-
 // Creates a new story in the DB.
 exports.create = function(req, res) {
     var form = new formidable.IncomingForm();
@@ -71,181 +68,116 @@ exports.create = function(req, res) {
                     _.each(parents, function (parent, index) {
                         if (parent._parent) {
                             dataDescription._parent.push(mongoose.Types.ObjectId(parent._parent._id));
-                            gcm_ids.push(parent._parent.gcm_id);
-                            ios_ids.push(parent._parent.ios_id);
+                            if (parent._parent.gcm_id) gcm_ids.push(parent._parent.gcm_id);
+                            if (parent._parent.ios_id) ios_ids.push(parent._parent.ios_id);
                         };
                     });
                     
                     Story.create(dataDescription, function (err, story) {
-                        _.each(files, function (file, index) {
-                            var name = uniqid + file.name;
-                            var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
-                            var targetfile = pathfile + '/' + name;
-                            fs.rename(file.path, targetfile);
-                            console.log(file.path);
-                            filename.push({ url: story._id + '/' + name});
-                            dataDescription._photo.push(name);
-                        });
-                        console.log(filename);
-                        console.log(dataDescription);
-                    });
+                        var Filekeys = Object.keys(files);
+                        if (Filekeys.length > 0) {
+                            _.each(Filekeys, function (file, index) {
+                                var name = uniqid + files[file]['name'];
+                                var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
+                                var targetfile = pathfile + '/' + name;
+                                // console.log(files[file]);
+                                // return false;
+                                mkdirp(pathfile, function(err) {
+                                    if(err) { return handleError(res, err); }
+                                });
 
+                                fs.rename(files[file]['path'], targetfile);
+                                filename.push({ url: story._id + '/' + name});
+                            });
+
+                            Photo.create(filename, function (err, photos) {
+                                _.each(photos, function (photo, index) {
+                                    story._photo.push(photo._id);
+                                    story.save();
+
+                                    Photo.findOne(photo, function (err, pho) {
+                                        pho._user = mongoose.Types.ObjectId(req.user._id);
+                                        pho._story = story._id;
+                                        pho.save();
+                                    });
+                                });
+                            });
+                            // res.status(201).json({message: 'ok'});
+                        }
+
+                        Classd.findById(fields.class_id, function (err, classd) {
+                            if(err) { return handleError(res, err); }
+                            if(!classd) { return res.status(404).send('Class Not Found'); }
+                            classd._story.push(story._id);
+                            classd.save();
+                        });
+                        if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
+                    });
                 });
             });
-            
+            return res.status(201).json({message: 'ok'});
+        } else {
+            var gcm_ids = [];
+            var ios_ids = [];
+            var dataDescription = {};
+            var filename = [];
+            var uniqid = Date.now();
+            var story_id;
 
-            // Story.create(dataDescription, function (err, story) {
-            //     var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
-            //     var uniqid = Date.now();
-            //     var idfile = [];
-            //     var filename = [];
+            dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
+            dataDescription.info = fields.info;
+            dataDescription.type = fields.type;
+            dataDescription.active = true;
+            dataDescription._parent = [];
+            dataDescription._photo = [];
 
-            //     mkdirp(pathfile, function(err) {
-            //         if(err) { return handleError(res, err); }
-            //     });
+            var Parents = fields.parent.split(",");
+            User.find({_id : { $in : Parents }}, function (err, parents) {
+                _.each(parents, function (parent, index) {
+                    Story.create(dataDescription, function (err, story) {
+                        story._parent.push(parent._id);
+                        var Filekeys = Object.keys(files);
+                        if (Filekeys.length > 0) {
+                            _.each(Filekeys, function (file, index) {
+                                var name = uniqid + files[file]['name'];
+                                var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
+                                var targetfile = pathfile + '/' + name;
+                                
+                                mkdirp(pathfile, function(err) {
+                                    if(err) { return handleError(res, err); }
+                                });
 
-            //     _.each(files, function (file, index) {
-            //         var name = uniqid + file.name;
-            //         var targetfile = pathfile + '/' + name;
-            //         fs.rename(file.path, targetfile);
-            //         filename.push({ url: story._id + '/' + name});
-            //         story._photo.push({ url: story._id + '/' + name});
-            //     });
+                                fs.rename(files[file]['path'], targetfile);
+                                filename.push({ url: story._id + '/' + name});
+                            });
 
+                            Photo.create(filename, function (err, photos) {
+                                _.each(photos, function (photo, index) {
+                                    story._photo.push(photo._id);
+                                    story.save();
 
-
-
-
-                
-                
-            // })
-            
+                                    Photo.findOne(photo, function (err, pho) {
+                                        pho._user = mongoose.Types.ObjectId(req.user._id);
+                                        pho._story = story._id;
+                                        pho.save();
+                                    });
+                                });
+                            });
+                        };
+                        
+                        User.findOne(parent, function (err, p) {
+                            p._story.push(story._id);
+                            p.save(function (err, pgcm) {
+                                if (pgcm.gcm_id) gcm_ids.push(pgcm.gcm_id);
+                                if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
+                            });
+                        });
+                    });
+                });
+                return res.status(201).json({message: 'ok'});
+            });
         };
     });
-    //move file to uploader path    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //     Story.create({
-    //         info: fields.info,
-    //         type: fields.type,
-    //         active: true,
-    //     }, function (err, story) {
-            
-    //         var filename = [];
-    //         var idfile = [];
-    //         var uniqid = Date.now();
-    //         //move file to uploader path    
-    //         _.each(files, function (file, index) {
-    //             var name = uniqid + file.name;
-    //             var targetfile = pathfile + '/' + name;
-    //             fs.rename(file.path, targetfile);
-    //             filename.push({ url: story._id + '/' + name});
-    //         });
-
-    //         var me = req.user;
-    //         var receiver_ids = [];
-    //         var classes = [];
-            
-    //         function saveFieldToStory(str, fields, res, filename) {
-    //             var class_id = fields.class_id.split(",");
-    //             if (fields.type == 'info') {
-    //                 for (var i = 0, c = class_id.length ; i < c; i++) {
-    //                     Story._class.push(mongoose.Types.ObjectId(class_id[i]));
-    //                     classes.push(mongoose.Types.ObjectId(class_id[i]));
-    //                 };
-                    
-    //                 Classd.find({ _id : {$in: classes }}).populate("_student").exec(function (err, dataclass) {
-    //                     _.each(dataclass, function (classe, index) {
-    //                         _.each(classe._student, function (studentData, index) {
-    //                             if (studentData._parent) {
-    //                                 receiver_ids.push(studentData._parent);
-    //                             };
-    //                         });
-    //                     });
-    //                 });
-
-    //             } else {
-    //                 var parent = fields.parent.split(",");
-    //                 for (var j = 0, p = parent.length ; j < parent; j++) {
-    //                     Story._parent.push(mongoose.Types.ObjectId(parent[j]));
-    //                 };
-    //             }
-                
-    //             Story.save(function (err) {
-    //                 User.findById(me._id).exec(function (err, teacher) {
-    //                     if(err) { return handleError(res, err); }
-    //                     if(!teacher) { return res.status(404).send('Not Found Teacher'); }
-    //                     teacher._story.push(str._id);
-    //                     teacher.save(function (err) {
-    //                         var gcm_ids = [];
-    //                         if(err) { return handleError(res, err); }
-    //                         User.find({ _id: {$in : receiver_ids }}, "name").exec(function (err, gcmData) {
-    //                             _.each(gcmData, function (gcm, index) {
-    //                                 if (gcm.gcm_id) {
-    //                                     gcm_ids.push(gcm.gcm_id);
-    //                                 };
-    //                             })
-    //                             if (gcm_ids.length > 0) {
-    //                                 Gcm.sendGcm('story', teacher._id, Story._id, gcm_ids);
-    //                             };
-    //                             res.status(201).send({message: 'ok'}); 
-    //                         });
-    //                     });
-    //                 });
-    //             });
-    //         }
-
-    //         if (filename.length > 0) {
-    //             console.log(filename);
-    //             Photo.create(filename, function (err, photo) {
-    //                 _.each(photo, function (docs, index) {
-    //                     Story._photo.push(mongoose.Types.ObjectId(docs._id));
-    //                 });
-    //                 saveFieldToStory(Story, fields, res, filename);
-    //             });
-    //         } else { 
-    //             saveFieldToStory(Story, fields, res, filename);
-    //         }
-
-    //     });
-    // });
 }
 
 // Updates an existing story in the DB.

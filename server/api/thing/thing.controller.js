@@ -80,7 +80,7 @@ exports.sendGcm = function (type, creator_id, story_id, regTokens) {
     // Now the sender can be used to send messages
     sender.send(message, { registrationTokens: regTokens }, function (err, result) {
         if(err) console.error(err);
-        else    console.log(result);
+        console.log(result);
     });
 
     // Send to a topic, with no retry this time

@@ -49,6 +49,10 @@ exports.create = function(req, res) {
             } else {
                 if (story._teacher.gcm_id) receiver_message.push(story._teacher.gcm_id);
             };
+            User.findById(req.user._id, function (err, user) {
+                user._reply.push(rep._id);
+                user.save();
+            });
             if (receiver_message.length > 0) Thing.sendGcm('reply', req.user._id, story._id, receiver_message);
             return res.status(201).json({message: 'ok'});
         });

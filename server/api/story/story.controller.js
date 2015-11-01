@@ -114,6 +114,17 @@ exports.create = function(req, res) {
                                 return res.status(201).json({message: 'ok'});
                             });
                         });
+
+                        User.findById(req.user._id, function (err, teacher) {
+                            teacher._story.push(mongoose.Types.ObjectId(story._id));
+                            teacher.save();
+                        });
+
+                        // console.log(dataDescription._parent);
+                        User.update({_id: { $in : dataDescription._parent }}, {$push : {'_story': mongoose.Types.ObjectId(story._id)}}, {multi: true}, function (err, parent) {
+                            console.log(parent);
+                        });
+
                     });
                 });
             });
@@ -176,6 +187,11 @@ exports.create = function(req, res) {
                         });
                     });
                 });
+            });
+
+            User.findById(req.user._id, function (err, teacher) {
+                teacher._story.push(mongoose.Types.ObjectId(story._id));
+                teacher.save();
             });
         };
     });

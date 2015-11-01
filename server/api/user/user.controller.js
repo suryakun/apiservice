@@ -89,14 +89,10 @@ exports.changePassword = function(req, res, next) {
  * Get my info
  */
 exports.me = function(req, res, next) {
-    var userId = req.user._id;
-    User.findOne({
-        _id: userId,
-        active: true
-    }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+    User.findById(req.user._id, '-salt -hashedPassword').populate("_student").populate("_parent").populate("_class").exec( function(err, user) { 
         if (err) return next(err);
         if (!user) return res.status(401).send('Unauthorized');
-        res.json(user);
+        res.json(user.profile);
     });
 };
 

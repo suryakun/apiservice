@@ -15,9 +15,9 @@ var _ = require('lodash');
 var mkdirp = require('mkdirp');
 var queue = require('queue');
 var q = queue();
-var Thing = require('../thing/thing.controller');
-var Gcm = Thing.sendGcm;
 var async = require('async');
+var gcm = require('android-gcm');
+var gcmObject = new gcm.AndroidGcm('AIzaSyBpjxJEYkAfLMhEWBq2ger2_0EV60VtdW4');
 
 // Get list of storys
 exports.index = function(req, res) {
@@ -111,7 +111,24 @@ exports.create = function(req, res) {
                             if(!classd) { return res.status(404).send('Class Not Found'); }
                             classd._story.push(story._id);
                             classd.save(function (err, cls) {
-                                if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
+                                if (gcm_ids.length > 0) {
+                                    console.log(gcm_ids);
+                                    var message = new gcm.Message({
+                                        // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
+                                        registration_ids: gcm_ids,
+                                        data: {
+                                            type: 'story',
+                                            sender: req.user._id,
+                                            story_id: story._id
+                                        }
+                                    });
+
+                                    // send the message 
+                                    gcmObject.send(message, function(err, response) {
+                                        if (err) { console.log(err) };
+                                        console.log(response);
+                                    });
+                                };
                                 return res.status(201).json({message: 'ok'});
                             });
                         });
@@ -180,15 +197,30 @@ exports.create = function(req, res) {
                             };
 
                             user._story.push(mongoose.Types.ObjectId(story._id));
-                            user.save(function (err, u) {
-                                console.log(u);
-                            });
+                            user.save();
                             
                             User.findOne(parent, function (err, p) {
                                 p._story.push(story._id);
                                 p.save(function (err, pgcm) {
-                                    if (pgcm.gcm_id) gcm_ids.push(pgcm.gcm_id);
-                                    if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
+                                    var t = [];
+                                    t.push(pgcm.gcm_id);
+
+                                    // create new message 
+                                    var message = new gcm.Message({
+                                        // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
+                                        registration_ids: t,
+                                        data: {
+                                            type: 'story',
+                                            sender: req.user._id,
+                                            story_id: story._id
+                                        }
+                                    });
+
+                                    // send the message 
+                                    gcmObject.send(message, function(err, response) {
+                                        if (err) { console.log(err) };
+                                        console.log(response);
+                                    });
                                     return res.status(201).json({message: 'ok'});
                                 });
                             });

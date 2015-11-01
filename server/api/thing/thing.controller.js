@@ -73,21 +73,21 @@ exports.sendGcm = function (type, creator_id, story_id, regTokens) {
         message.addData('type', 'reply');
     };
     message.addData('sender', creator_id);
-    message.addData('sender', story_id);
+    message.addData('story_id', story_id);
     // Set up the sender with you API key
-    var sender = new gcm.Sender('AIzaSyD4ti3j30JD1DeCOi-e2jaTkPHWdo8O2Pc');
+    var sender = new gcm.Sender('AIzaSyBpjxJEYkAfLMhEWBq2ger2_0EV60VtdW4');
 
     // Now the sender can be used to send messages
     sender.send(message, { registrationTokens: regTokens }, function (err, result) {
         if(err) console.error(err);
-        console.log(result);
+        console.log(result, 'testing gcm');
     });
 
     // Send to a topic, with no retry this time
-    // sender.sendNoRetry(message, { topic: '/topics/global' }, function (err, result) {
-    //     if(err) console.error(err);
-    //     else    console.log(result);
-    // });
+    sender.sendNoRetry(message, { topic: '/topics/global' }, function (err, result) {
+        if(err) console.error(err);
+        else    console.log(result);
+    });
 }
 
 function handleError(res, err) {

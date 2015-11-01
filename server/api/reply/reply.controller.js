@@ -7,6 +7,8 @@ var Thing = require('../thing/thing.controller');
 var User = require('../user/user.model');
 var Story = require('../story/story.model');
 var _ = require('lodash');
+var gcm = require('android-gcm');
+var gcmObject = new gcm.AndroidGcm('AIzaSyBpjxJEYkAfLMhEWBq2ger2_0EV60VtdW4');
 
 // Get list of replys
 exports.index = function(req, res) {
@@ -53,7 +55,23 @@ exports.create = function(req, res) {
                 user._reply.push(rep._id);
                 user.save();
             });
-            if (receiver_message.length > 0) Thing.sendGcm('reply', req.user._id, story._id, receiver_message);
+            if (receiver_message.length > 0) {
+                var message = new gcm.Message({
+                    // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
+                    registration_ids: receiver_message,
+                    data: {
+                        type: 'reply',
+                        sender: req.user._id,
+                        story_id: story._id
+                    }
+                });
+
+                // send the message 
+                gcmObject.send(message, function(err, response) {
+                    if (err) { console.log(err) };
+                    console.log(response);
+                });
+            };
             return res.status(201).json({message: 'ok'});
         });
     });

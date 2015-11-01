@@ -177,6 +177,11 @@ exports.create = function(req, res) {
                                 });
                             });
                         };
+
+                        User.findById(req.user._id, function (err, teacher) {
+                            teacher._story.push(mongoose.Types.ObjectId(story._id));
+                            teacher.save();
+                        });
                         
                         User.findOne(parent, function (err, p) {
                             p._story.push(story._id);

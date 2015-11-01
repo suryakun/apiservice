@@ -44,6 +44,7 @@ exports.create = function(req, res) {
     form.parse(req, function(err, fields, files) {
 
         if (fields.type == 'info') {
+            if (req.user.role == 'parent') { return res.status(401).send('parent cannot create info Story'); };
             var gcm_ids = [];
             var ios_ids = [];
             var dataDescription = {};
@@ -185,14 +186,11 @@ exports.create = function(req, res) {
                                 return res.status(201).json({message: 'ok'});
                             });
                         });
+
                     });
                 });
             });
 
-            User.findById(req.user._id, function (err, teacher) {
-                teacher._story.push(mongoose.Types.ObjectId(story._id));
-                teacher.save();
-            });
         };
     });
 }

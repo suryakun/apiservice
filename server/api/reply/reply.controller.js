@@ -66,6 +66,7 @@ exports.create = function(req, res) {
                     }
                 });
 
+                console.log(receiver_message);
                 // send the message 
                 gcmObject.send(message, function(err, response) {
                     if (err) { console.log(err) };

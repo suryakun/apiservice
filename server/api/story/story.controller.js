@@ -112,7 +112,6 @@ exports.create = function(req, res) {
                             classd._story.push(story._id);
                             classd.save(function (err, cls) {
                                 if (gcm_ids.length > 0) {
-                                    console.log(gcm_ids);
                                     var message = new gcm.Message({
                                         // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
                                         registration_ids: gcm_ids,
@@ -167,6 +166,7 @@ exports.create = function(req, res) {
                     _.each(parents, function (parent, index) {
                         Story.create(dataDescription, function (err, story) {
                             story._parent.push(parent._id);
+                            story.save();
                             var Filekeys = Object.keys(files);
                             if (Filekeys.length > 0) {
                                 _.each(Filekeys, function (file, index) {

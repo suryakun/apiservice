@@ -200,31 +200,17 @@ UserSchema.statics.getStudentsFromMySchool = function (id, callback) {
 
 UserSchema.statics.getStoriesForParent = function (id, callback) {
     var usr = this;
-    return usr.findById(id).populate('_student').exec(function (err, std) {
-
-        usr.populate(std, {
-            path : '',
-            select: 'name _class',
-            model: Classd
-        }, function (err, data) {
-            usr.populate(data._student, {
-                path: '',
-                select: 'name createdAt',
-                model: Classd
-            }, function (err, data) {
-                Classd.findById(data[0]['_class']).populate('_story').exec(function (err, data) {
-                    
-                    Classd.populate(data, {
-                        path: '_story._reply',
-                        select: 'info _parent createdAt',
-                        model: Reply
-                    }, callback);
-
-
-                });
-
-            });
-
+    return usr.findById(id).populate('_story').exec(function (err, story) {
+        Story.populate(story, {
+                path: "_story._reply",
+                select: "info _parent",
+                model: Reply
+        }, function (err, popstory) {
+                Story.populate(story, {
+                        path: "_story._photo",
+                        select: "url",
+                        model: Photo
+                },callback);
         });
     });
 }
@@ -240,7 +226,7 @@ UserSchema.statics.getStoriesForTeacher = function (id, callback) {
                                 path: "_story._photo",
                                 select: "url",
                                 model: Photo
-                        },callback)   
+                        },callback);
                 });
     });
 }

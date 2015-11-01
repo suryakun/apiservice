@@ -145,56 +145,59 @@ exports.create = function(req, res) {
             dataDescription._photo = [];
 
             var Parents = fields.parent.split(",");
-            User.find({_id : { $in : Parents }}, function (err, parents) {
-                _.each(parents, function (parent, index) {
-                    Story.create(dataDescription, function (err, story) {
-                        story._parent.push(parent._id);
-                        var Filekeys = Object.keys(files);
-                        if (Filekeys.length > 0) {
-                            _.each(Filekeys, function (file, index) {
-                                var name = uniqid + files[file]['name'];
-                                var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
-                                var targetfile = pathfile + '/' + name;
-                                
-                                mkdirp(pathfile, function(err) {
-                                    if(err) { return handleError(res, err); }
+            User.findById(req.user._id).exec(function (err, user) {
+                User.find({_id : { $in : Parents }}, function (err, parents) {
+                    _.each(parents, function (parent, index) {
+                        Story.create(dataDescription, function (err, story) {
+                            story._parent.push(parent._id);
+                            var Filekeys = Object.keys(files);
+                            if (Filekeys.length > 0) {
+                                _.each(Filekeys, function (file, index) {
+                                    var name = uniqid + files[file]['name'];
+                                    var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
+                                    var targetfile = pathfile + '/' + name;
+                                    
+                                    mkdirp(pathfile, function(err) {
+                                        if(err) { return handleError(res, err); }
+                                    });
+
+                                    fs.rename(files[file]['path'], targetfile);
+                                    filename.push({ url: story._id + '/' + name});
                                 });
 
-                                fs.rename(files[file]['path'], targetfile);
-                                filename.push({ url: story._id + '/' + name});
-                            });
+                                Photo.create(filename, function (err, photos) {
+                                    _.each(photos, function (photo, index) {
+                                        story._photo.push(photo._id);
+                                        story.save();
 
-                            Photo.create(filename, function (err, photos) {
-                                _.each(photos, function (photo, index) {
-                                    story._photo.push(photo._id);
-                                    story.save();
-
-                                    Photo.findOne(photo, function (err, pho) {
-                                        pho._user = mongoose.Types.ObjectId(req.user._id);
-                                        pho._story = story._id;
-                                        pho.save();
+                                        Photo.findOne(photo, function (err, pho) {
+                                            pho._user = mongoose.Types.ObjectId(req.user._id);
+                                            pho._story = story._id;
+                                            pho.save();
+                                        });
                                     });
                                 });
-                            });
-                        };
+                            };
 
-                        User.findById(req.user._id, function (err, teacher) {
-                            teacher._story.push(mongoose.Types.ObjectId(story._id));
-                            teacher.save();
-                        });
-                        
-                        User.findOne(parent, function (err, p) {
-                            p._story.push(story._id);
-                            p.save(function (err, pgcm) {
-                                if (pgcm.gcm_id) gcm_ids.push(pgcm.gcm_id);
-                                if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
-                                return res.status(201).json({message: 'ok'});
+                            user._story.push(mongoose.Types.ObjectId(story._id));
+                            user.save(function (err, u) {
+                                console.log(u);
                             });
-                        });
+                            
+                            User.findOne(parent, function (err, p) {
+                                p._story.push(story._id);
+                                p.save(function (err, pgcm) {
+                                    if (pgcm.gcm_id) gcm_ids.push(pgcm.gcm_id);
+                                    if (gcm_ids.length > 0) Thing.sendGcm('story', req.user._id, story._id, gcm_ids);
+                                    return res.status(201).json({message: 'ok'});
+                                });
+                            });
 
+                        });
                     });
                 });
             });
+            
 
         };
     });

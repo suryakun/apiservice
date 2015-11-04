@@ -29,7 +29,7 @@ StorySchema.pre('save', function (done) {
 });
 
 StorySchema.statics.getReplyByStoryId = function (id, callback) {
-  return this.findOne({_id: id, active: true}).populate("_reply").exec(callback);
+  return this.findById(id).populate("_reply").exec(callback);
 }
 
 StorySchema.statics.getParentByStoryId = function (id, callback) {

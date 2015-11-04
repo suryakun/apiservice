@@ -67,7 +67,7 @@ UserSchema
     .get(function() {
         return {
             'name': this.name,
-            'avatar': this.avatar,
+            'avatar': this.avatar || '',
             'role': this.role,
             '_student': this._student,
             '_parent': this._parent,

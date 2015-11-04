@@ -55,6 +55,10 @@ exports.create = function(req, res) {
                 user._reply.push(rep._id);
                 user.save();
             });
+
+            story._reply.push(rep._id);
+            story.save();
+
             if (receiver_message.length > 0) {
                 var message = new gcm.Message({
                     // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
@@ -66,7 +70,6 @@ exports.create = function(req, res) {
                     }
                 });
 
-                console.log(receiver_message);
                 // send the message 
                 gcmObject.send(message, function(err, response) {
                     if (err) { console.log(err) };

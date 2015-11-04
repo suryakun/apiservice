@@ -19,11 +19,11 @@ router.post('/', function(req, res, next) {
 			School.findById(clas._school).exec(function (err, school) {
 				if (err) return res.status(401).json(error);
 			    if (!school) return res.status(404).json({message: 'Something went wrong, please try again.'});
-			    res.json({token: token, id:user._id, name: user.name, avatar:user.avatar || '', school_name: school.name});
+			    res.json({token: token, id:user._id, name: user.name, avatar:user.avatar || '', school_name: school.name || '', role: user.role });
 			});
     	});
     } else {
-    	res.json({token: token, id:user._id, name: user.name});
+    	res.json({token: token, id:user._id, name: user.name, avatar:user.avatar || '', school_name: '', role: user.role });
     }
   })(req, res, next)
 });

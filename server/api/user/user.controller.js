@@ -135,22 +135,32 @@ exports.updateProfile = function (req, res) {
         if(err) { return handleError(res, err); }
     })
     form.parse(req, function(err, fields, files) {
-        var filename;
-        //move file to uploader path    
-        _.each(files, function (file, index) {
-            var name = uniqid + file.name;
-            var targetfile = pathfile + '/' + name;
-            fs.rename(file.path, targetfile);
-            filename = name;
-        });
-
         User.findById(req.user._id, function (err, user) {
-            user.name = fields.name;
-            user.avatar = req.user._id + '/' + filename;
+            if (files.length) {
+                var filename;
+                //move file to uploader path    
+                _.each(files, function (file, index) {
+                    var name = uniqid + file.name;
+                    var targetfile = pathfile + '/' + name;
+                    fs.rename(file.path, targetfile);
+                    filename = name;
+                });
+                user.avatar = req.user._id + '/' + filename;
+            } else {
+                user.avatar = user.avatar;
+            }
+
+            if (fields.hasOwnProperty('name')) {
+                user.name = fields.name;
+            } else {
+                user.name = user.name;
+            }
+
             user.save();
-        });
-        res.status(200).send({
-            "message": "ok"
+
+            res.status(200).send({
+                "message": "ok"
+            });
         });
     });
 }

@@ -194,6 +194,8 @@ exports.getMyStories = function (req, res) {
 exports.getMyStoriesByDate = function (req, res) {
     var user_id = req.user._id;
     var date = new Date(req.body.date);
+    console.log(date);
+    return false;
     if (req.user.role == 'teacher') {
         User.getStoriesForTeacherByDate(user_id, date, function (err, data) {
             if(err) { return handleError(res, err); }

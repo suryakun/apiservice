@@ -244,7 +244,7 @@ UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
         });
         
         if (tmp_id.length == 0) callback(null, null);
-        Classd.findById(tmp_id[0]).populate('_story').exec(function (err, data) {
+        Classd.findById(tmp_id[0]).populate('_story', null, {createdAt: {$gt: date}}).exec(function (err, data) {
             if (err) { callback(err, null); };
             console.log(data);
             Classd.populate(data, {
@@ -259,8 +259,7 @@ UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
         
 
 UserSchema.statics.getStoriesForTeacherByDate = function (id, date, callback) {
-    return this.find({_id: id, createdAt: {$gt: date}}).populate('_story').exec(function (err, story) {
-                        console.log(story);
+    return this.findById(id).populate('_story', null, {createdAt: {$gt: date}} ).exec(function (err, story) {
                 Story.populate(story, {
                         path: "_story._reply",
                         select: "info _parent",

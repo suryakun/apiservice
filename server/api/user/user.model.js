@@ -6,6 +6,7 @@ var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 var Classd = require('../class/class.model');
 var Story = require('../story/story.model');
+var School = require('../school/school.model');
 var Reply = require('../reply/reply.model');
 var Photo = require('../photo/photo.model');
 var _ = require('lodash');
@@ -275,10 +276,11 @@ UserSchema.statics.getStoriesForTeacherByDate = function (id, date, callback) {
 }
 
 UserSchema.statics.getClassForTeacher = function (id, callback) {
-    return this.findById(id).exec(function (err, me) {
-        Classd.findById(me._class).exec(function (err, clas) {
-                Classd.find({ _school: clas._school}).exec(callback);
-        });
+    return this.findById(id).populate("_class").exec(function (err, cls) {
+        Classd.populate(cls, {
+            path: "_class._school",
+            model: School
+        }, callback);
     });
 }
 
@@ -287,9 +289,13 @@ UserSchema.statics.getClassForParent = function (id, callback) {
     return user.findById(id).populate("_student").exec(function (err, student) {
             user.populate(student, {
                 path: "_student._class",
-                select: "name info createdAt",
                 model: Classd
-            },callback);
+            }, function (err, cls) {
+                Classd.populate(cls, {
+                    path: "_student._class._school",
+                    model: School
+                }, callback);
+            });
     });
 }
 

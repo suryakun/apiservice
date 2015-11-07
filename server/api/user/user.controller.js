@@ -215,13 +215,21 @@ exports.getMyClass = function (req, res) {
         User.getClassForTeacher(user_id, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            res.status(200).json(data);
+            data = data.toObject();
+            delete data._class._story;
+            delete data._class._teacher;
+            delete data._class._student;
+            res.status(200).json(data._class);
         });    
     } else if (req.user.role == 'parent') {
         User.getClassForParent(user_id, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            res.status(200).json(data['_student'][0]['_class']);
+            var d = data['_student'][0]['_class'].toObject();
+            delete d._story;
+            delete d._teacher;
+            delete d._student;
+            res.status(200).json(d);
         });
     }
 }

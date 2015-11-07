@@ -5,7 +5,7 @@ var Foundation = require('./foundation.model');
 
 // Get list of foundations
 exports.index = function(req, res) {
-  Foundation.find({ _id: req.params.id, active: true}).exec(function (err, foundations) {
+  Foundation.find({}).exec(function (err, foundations) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(foundations);
   });

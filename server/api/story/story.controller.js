@@ -184,7 +184,7 @@ exports.create = function(req, res) {
 
                                 Photo.create(filename, function (err, photos) {
                                     _.each(photos, function (photo, index) {
-                                        story._photo.push(photo._id);
+                                        story._photo.push(mongoose.Types.ObjectId(photo._id));
                                         story.save();
 
                                         Photo.findOne(photo, function (err, pho) {

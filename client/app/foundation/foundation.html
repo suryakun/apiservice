@@ -8,7 +8,7 @@
       <a md-ink-ripple  data-toggle="modal" data-target="#aside" class="navbar-item pull-left visible-xs visible-sm"><i class="mdi-navigation-menu i-24"></i></a>
       <!-- / -->
       <!-- Page title - Bind to $state's title -->
-      <div class="navbar-item pull-left title-page h4">Schools</div>
+      <div class="navbar-item pull-left title-page h4">Foundations</div>
       <!-- / -->
       <!-- Common tools -->
       <ul class="nav nav-sm navbar-tool pull-right">
@@ -79,14 +79,14 @@
             <div class="row row-sm">
               <div class="panel panel-card">
                 <div class="panel-heading">
-                    <strong>Parents List</strong>
+                    <strong>Foundation List</strong>
                 </div>
                 <div class="row ">
                     <div class="panel-body col-sm-5">
-                      <input id="filter" type="text" class="form-control input-sm w-auto inline m-r" placeholder="Search">
+                      <input id="filter" type="text" ng-model="key" class="form-control input-sm w-auto inline m-r" placeholder="Search">
                     </div>
                     <div class="text-right col-sm-7">
-                    <a md-ink-ripple="" href="yayasan_add.html" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect"><i class="fa fa-plus"></i> Add New</a>        
+                    <a md-ink-ripple="" href="/foundation-create" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect"><i class="fa fa-plus"></i> Add New</a>        
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -94,23 +94,34 @@
                     <tr>
                       <th class="">Foundation Name</th>  
                       <th class="">Foundation Owner</th>
-                      <th class="">Email</th>
+                      <th class="">Address</th>
+                      <th class="">Phone</th>
                       <th class="text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                       <td>Tridaya</td>
-                       <td>John Doe</td>
-                       <td>john@tridaya.org</td>
+                    <tr ng-repeat="found in foundations |  startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage | filter: key">
+                       <td>{{ found.name }}</td>
+                       <td>{{ found.owner }}</td>
+                       <td>{{ found.address }}</td>
+                       <td>{{ found.phone }}</td>
                        <td class="text-center"><a href="yayasan_edit.html" class="m-r-md"><i class="fa fa-edit"></i> Edit</a> <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-trash-o"></i> Remove</a></td>
                     </tr>
                   </tbody>
                 </table>
                 <div class="row ">
-                    <nav class="text-right panel-body col-sm-12">
-                        <ul class="pagination no-margin"><li class="footable-page-arrow disabled"><a data-page="first" href="#first">«</a></li><li class="footable-page-arrow disabled"><a data-page="prev" href="#prev">‹</a></li><li class="footable-page active"><a data-page="0" href="#">1</a></li><li class="footable-page"><a data-page="1" href="#">2</a></li><li class="footable-page-arrow"><a data-page="next" href="#next">›</a></li><li class="footable-page-arrow"><a data-page="last" href="#last">»</a></li></ul>
-                    </nav>
+                    <ul class="pagination">
+                      <li ng-hide="pagination.page == 0">
+                        <a href="" ng-click="pagination.prevPage()">&laquo;</a>
+                      </li>
+                      <li ng-repeat="n in [] | range: pagination.numPages" ng-class="{active: n == pagination.page}">
+                        <a href="" ng-click="pagination.toPageId(n)">{{n + 1}}</a>
+                      </li>
+                      <li ng-hide="pagination.page + 1 >= pagination.numPages">
+                        <a href="" ng-click="pagination.nextPage()">&raquo;</a>
+                      </li>
+                    </ul>
+
                 </div>
               </div>
             </div>
@@ -121,8 +132,4 @@
     </div>
   </div>
   <!-- / content -->
-
-
-
-
 </div>

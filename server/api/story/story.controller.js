@@ -313,6 +313,22 @@ exports.getTeacherByStoryId = function (req, res) {
     });
 }
 
+exports.readStory = function (req, res) {
+    Story.readStory(req.body.story_id, req.body.user_id, function (err, reader) {
+        if(err) { return handleError(res, err); }
+        if(!reader) { return res.status(404).send('Not Found'); }
+        res.status(200).json({message: 'ok'}); 
+    });
+}
+
+exports.getReader = function (req, res) {
+    Story.getReader(req.params.id, function (err, reader) {
+        if(err) { return handleError(res, err); }
+        if(!reader) { return res.status(404).send('Not Found'); }
+        res.status(200).json(reader); 
+    });    
+}
+
 function handleString(res, string) {
     var type = typeof string;
     if ( type !== 'string' ) res.status(401).send({message: 'Bad Request'});

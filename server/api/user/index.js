@@ -22,5 +22,6 @@ router.get('/get-my-stories', auth.hasRole(['teacher','parent']), controller.get
 router.get('/get-my-class', auth.hasRole(['teacher','parent']), controller.getMyClass);
 router.post('/update-gcm-id', auth.hasRole(['teacher','parent','student','principal']), controller.updateGcmId);
 router.post('/get-story-by-date', auth.hasRole(['teacher','parent']), controller.getMyStoriesByDate);
+router.post('/get-all-principal', auth.hasRole(['admin']), controller.getAllPrincipal);
 
 module.exports = router;

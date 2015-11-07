@@ -314,4 +314,8 @@ UserSchema.statics.updateGcmId = function (id, gcm_id, callback) {
     });
 }
 
+UserSchema.statics.getAllPrincipal = function (callback) {
+    return this.find({role: 'principal'}).exec(callback);
+}
+
 module.exports = mongoose.model('User', UserSchema);

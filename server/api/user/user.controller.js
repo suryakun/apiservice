@@ -248,6 +248,14 @@ exports.updateGcmId = function (req, res) {
     
 }
 
+exports.getAllPrincipal = function (req, res) {
+    User.getAllPrincipal(function (err, user) {
+        if(err) { return handleError(res, err); }
+        if(!user) { return res.status(404).send('Not Found'); }
+        res.status(200).json(user);
+    });
+}
+
 function handleString(res, string) {
     var type = typeof string;
     if ( type !== 'string' ) res.status(401).send({message: 'Bad Request'});

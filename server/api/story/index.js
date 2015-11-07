@@ -17,5 +17,7 @@ router.get('/get-parent-by-story-id/:id', auth.hasRole(['teacher','student','par
 router.get('/get-photo-by-story-id/:id', auth.hasRole(['teacher','student','parent']), controller.getPhotoByStoryId);
 router.get('/get-class-by-story-id/:id', auth.hasRole(['teacher','student','parent']), controller.getClassByStoryId);
 router.get('/get-teacher-by-story-id/:id', auth.hasRole(['teacher','student','parent']), controller.getTeacherByStoryId);
+router.post('/read-story', auth.hasRole(['teacher','parent']), controller.readStory);
+router.get('/get-reader', auth.hasRole(['teacher','parent']), controller.getReader);
 
 module.exports = router;

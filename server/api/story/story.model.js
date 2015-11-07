@@ -11,6 +11,7 @@ var StorySchema = new Schema({
     _parent: [{ type: Schema.ObjectId, ref: 'User' }],
     _class: { type: Schema.ObjectId, ref: 'Class' },
     _reply: [{ type: Schema.ObjectId, ref: 'Reply' }],
+    _readed: [{ type: Schema.ObjectId, ref: 'User' }],
     name: String,
     info: String,
     type: String,
@@ -46,6 +47,14 @@ StorySchema.statics.getClassByStoryId = function (id, callback) {
 
 StorySchema.statics.getTeacherByStoryId = function (id, callback) {
   return this.findOne({_id: id, active: true}).populate("_teacher").exec(callback);
+}
+
+StorySchema.statics.readStory = function (story_id, user_id, callback) {
+  return this.update({_id: story._id}, {$push : {'_readed': mongoose.Types.ObjectId(user_id)}}, {multi: false}, callback);
+}
+
+StorySchema.statics.getReader = function (story_id, callback) {
+  return this.findById(story_id).populate("_readed").exec(callback);
 }
 
 module.exports = mongoose.model('Story', StorySchema);

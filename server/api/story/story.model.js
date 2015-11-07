@@ -50,7 +50,7 @@ StorySchema.statics.getTeacherByStoryId = function (id, callback) {
 }
 
 StorySchema.statics.readStory = function (story_id, user_id, callback) {
-  return this.update({_id: story._id}, {$push : {'_readed': mongoose.Types.ObjectId(user_id)}}, {multi: false}, callback);
+  return this.update({_id: story_id}, {$push : {'_readed': mongoose.Types.ObjectId(user_id)}}, {multi: false}, callback);
 }
 
 StorySchema.statics.getReader = function (story_id, callback) {

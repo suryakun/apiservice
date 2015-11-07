@@ -184,8 +184,10 @@ exports.create = function(req, res) {
 
                                 Photo.create(filename, function (err, photos) {
                                     _.each(photos, function (photo, index) {
-                                        story._photo.push(mongoose.Types.ObjectId(photo._id));
-                                        story.save();
+                                        
+                                        Story.update({_id: story._id}, {$push : {'_photo': mongoose.Types.ObjectId(photo._id)}}, {multi: false}, function (err, str) {
+                                            console.log(str);
+                                        });
 
                                         Photo.findOne(photo, function (err, pho) {
                                             pho._user = mongoose.Types.ObjectId(req.user._id);

@@ -172,7 +172,8 @@ Classd.find({}).remove(function() {
     });    
 });
 
-User.find({}).remove(function() {
+setTimeout(function (argument) {
+    User.find({}).remove(function() {
 
 //Student
     User.create([{
@@ -755,6 +756,7 @@ User.find({}).remove(function() {
 
 
 });
+}, 1000);
 
 Photo.find({}).remove(function() {
     

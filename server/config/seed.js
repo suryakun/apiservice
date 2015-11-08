@@ -19,25 +19,6 @@ var mongoose = require('mongoose');
 Foundation.find({}).remove(function() {
     Foundation.create({
         _school: [],
-        name: 'Tirta Jasa',
-        address: 'Jln. Dipatiukur',
-        phone: '0998798798',
-        owner: 'Agus Salim',
-        active: true
-    }, function() {
-        setTimeout(function (argument) {
-            School.findOne({ name: 'PG Tirta jasa 2' }, function (err, school) {
-                Foundation.findOne({ name: 'Tirta Jasa'}, function (err, found) {
-                    found._school.push(school._id);
-                    found.save();
-                });
-            });
-        }, 1000);
-        console.log('finished populating foundation');
-    });
-
-    Foundation.create({
-        _school: [],
         name: 'Kidz Potentia',
         address: 'Bandung',
         phone: '0998798798',
@@ -57,24 +38,6 @@ Foundation.find({}).remove(function() {
 });
 
 School.find({}).remove(function() {
-    School.create({
-        address: 'Bandung',
-        phone: '987986987697',
-        principal: 'Agus NdP',
-        name: 'PG Tirta jasa 2',
-        info: 'Sekolah dasar negeri',
-        active: true
-    }, function() {
-        Foundation.findOne({ name: 'Tirta Jasa'}, function (err, found) {
-            School.findOne({ name: 'PG Tirta jasa 2' }, function (err, school) {
-                school._foundation = found._id;
-                school.save();
-            });
-        });
-
-        console.log('finished populating school');
-    });
-
     School.create({
         address: 'Bandung',
         phone: '987986987697',
@@ -107,39 +70,6 @@ Level.find({}).remove(function() {
 });
 
 Classd.find({}).remove(function() {
-    Classd.create({
-        name: 'Bunga Matahari',
-        info: 'Kelas Bunga Matahari',
-        active: true
-    }, function () {
-
-        //set relation to level
-        setTimeout(function (argument) {
-            Level.findOne({ grade: 'nol kecil'}, function (err, level) {
-                Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
-                    cls._level = level._id;
-                    cls.save();
-
-                    level._class.push(cls._id);
-                    level.save();
-                });
-            });
-        },1000);
-
-        //set relation to school
-        setTimeout(function (argument) {
-            School.findOne({ name: 'PG Tirta jasa 2'}, function (err, scl) {
-                Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
-                    cls._school = scl._id;                
-                    cls.save();
-
-                    scl._class.push(cls._id);
-                    scl.save();
-                });
-            });
-        },1100);
-
-    });
 
     Classd.create({
         name: 'Toddler',
@@ -161,13 +91,14 @@ Classd.find({}).remove(function() {
         //set relation to school
         setTimeout(function (argument) {
             School.findOne({ name: 'Kidz Potentia'}, function (err, scl) {
+                console.log(scl);
                 cls._school = scl._id;                
                 cls.save();
 
                 scl._class.push(cls._id);
                 scl.save();
             });
-        },1100);
+        },2000);
 
     });    
 });
@@ -756,7 +687,7 @@ setTimeout(function (argument) {
 
 
 });
-}, 1000);
+})
 
 Photo.find({}).remove(function() {
     

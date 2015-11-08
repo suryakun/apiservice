@@ -15,6 +15,7 @@ var Photo = require('../api/photo/photo.model');
 var Reply = require('../api/reply/reply.model');
 var async = require('async');
 var mongoose = require('mongoose');
+var _ = require('lodash');
 
 Foundation.find({}).remove(function() {
     Foundation.create({
@@ -91,7 +92,6 @@ Classd.find({}).remove(function() {
         //set relation to school
         setTimeout(function (argument) {
             School.findOne({ name: 'Kidz Potentia'}, function (err, scl) {
-                console.log(scl);
                 cls._school = scl._id;                
                 cls.save();
 
@@ -685,8 +685,61 @@ setTimeout(function (argument) {
         },500);
     });
 
+    User.create([{
+        provider: 'local',        
+        name: 'Elvi',
+        email: 'elvi@kidzpotentia.com',
+        role: 'teacher',
+        password: 'teacher.elvi'
+    }, {
+        provider: 'local',        
+        name: 'Debi',
+        email: 'debi@kidzpotentia.com',
+        role: 'teacher',
+        password: 'teacher.debi'
+    }, {
+        provider: 'local',        
+        name: 'Ria',
+        email: 'ria@kidzpotentia.com',
+        role: 'teacher',
+        password: 'teacher.ria'
+    }, {
+        provider: 'local',        
+        name: 'Myta',
+        email: 'myta@kidzpotentia.com',
+        role: 'teacher',
+        password: 'teacher.myta'
+    }, {
+        provider: 'local',        
+        name: 'Anggi',
+        email: 'anggi@kidzpotentia.com',
+        role: 'teacher',
+        password: 'teacher.anggi'
+    }], function (err) {
+        Classd.find({name: 'Toddler'}, function (err, cls) {
+            User.update({role: 'teacher'}, {$set : {'_class': mongoose.Types.ObjectId(cls._id)}}, {multi: true}, function (err, parent) {
+                console.log(parent);
+            });
+
+        });
+    })
+
+    setTimeout(function (argument) {
+        User.find({role: 'teacher'}, function (err, teacher) {
+            _.each(teacher, function (teach, index) {
+                Classd.update({name: 'Toddler'}, {$push : {'_teacher': mongoose.Types.ObjectId(teach._id)}}, {multi: true}, function (err, tc) {
+                    console.log(tc);
+                });
+            });
+        });
+    }, 3000);
+
 
 });
+})
+
+Classd.find({}).remove(function (argument) {
+    // body...
 })
 
 Photo.find({}).remove(function() {

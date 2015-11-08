@@ -15,40 +15,40 @@ var Photo = require('../api/photo/photo.model');
 var Reply = require('../api/reply/reply.model');
 var async = require('async');
 var mongoose = require('mongoose');
-var _ = require('lodash');
 
 Foundation.find({}).remove(function() {
     Foundation.create({
         _school: [],
-        name: 'Kidz Potentia',
-        address: 'Bandung',
+        name: 'Tirta Jasa',
+        address: 'Jln. Dipatiukur',
         phone: '0998798798',
-        owner: 'Ibu Ade',
+        owner: 'Agus Salim',
         active: true
     }, function() {
         setTimeout(function (argument) {
-            School.findOne({ name: 'Kidz Potentia' }, function (err, school) {
-                Foundation.findOne({ name: 'Kidz Potentia'}, function (err, found) {
+            School.findOne({ name: 'PG Tirta jasa 2' }, function (err, school) {
+                Foundation.findOne({ name: 'Tirta Jasa'}, function (err, found) {
                     found._school.push(school._id);
                     found.save();
                 });
             });
         }, 1000);
         console.log('finished populating foundation');
-    });
+    });  
+
 });
 
 School.find({}).remove(function() {
     School.create({
         address: 'Bandung',
         phone: '987986987697',
-        principal: 'Ibu Ade',
-        name: 'Kidz Potentia',
-        info: 'Play Group',
+        principal: 'Agus NdP',
+        name: 'PG Tirta jasa 2',
+        info: 'Sekolah dasar negeri',
         active: true
     }, function() {
-        Foundation.findOne({ name: 'Kidz Potentia'}, function (err, found) {
-            School.findOne({ name: 'Kidz Potentia' }, function (err, school) {
+        Foundation.findOne({ name: 'Tirta Jasa'}, function (err, found) {
+            School.findOne({ name: 'PG Tirta jasa 2' }, function (err, school) {
                 school._foundation = found._id;
                 school.save();
             });
@@ -71,685 +71,240 @@ Level.find({}).remove(function() {
 });
 
 Classd.find({}).remove(function() {
-
     Classd.create({
-        name: 'Toddler',
-        info: 'Kelas Collection',
+        name: 'Bunga Matahari',
+        info: 'Kelas Bunga Matahari',
         active: true
-    }, function (err, cls) {
+    }, function () {
 
         //set relation to level
         setTimeout(function (argument) {
             Level.findOne({ grade: 'nol kecil'}, function (err, level) {
-                cls._level = level._id;
-                cls.save();
+                Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+                    cls._level = level._id;
+                    cls.save();
 
-                level._class.push(cls._id);
-                level.save();
+                    level._class.push(cls._id);
+                    level.save();
+                });
             });
-        },2000);
+        },1000);
 
         //set relation to school
         setTimeout(function (argument) {
-            School.findOne({ name: 'Kidz Potentia'}, function (err, scl) {
-                cls._school = scl._id;                
+            School.findOne({ name: 'PG Tirta jasa 2'}, function (err, scl) {
+                Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+                    cls._school = scl._id;                
+                    cls.save();
+
+                    scl._class.push(cls._id);
+                    scl.save();
+                });
+            });
+        },1100);
+
+    });
+});
+
+User.find({}).remove(function() {
+    User.create({
+        provider: 'local',        
+        name: 'Parent satu',
+        email: 'parent1@test.com',
+        role: 'parent',
+        password: 'parent1'
+    }, {
+        provider: 'local',
+        name: 'Student satu',
+        email: 'student1@test.com',
+        role: 'student',
+        password: 'student1'
+    },
+    {
+        provider: 'local',
+        name: 'Parent dua',
+        email: 'parent2@test.com',
+        role: 'parent',
+        password: 'parent2'
+    }, {
+        provider: 'local',
+        name: 'Student dua',
+        email: 'student2@test.com',
+        role: 'student',
+        password: 'student2'
+    }, {
+        provider: 'local',
+        name: 'Teacher satu',
+        email: 'teacher1@test.com',
+        role: 'teacher',
+        password: 'teacher1'
+    }, {
+        provider: 'local',
+        name: 'Teacher dua',
+        email: 'teacher2@test.com',
+        role: 'teacher',
+        password: 'teacher2'
+    }, {
+        provider: 'local',
+        name: 'Test',
+        email: 'test@test.com',
+        password: 'test'
+    }, {
+        provider: 'local',
+        role: 'admin',
+        name: 'Admin',
+        email: 'admin@admin.com',
+        password: 'admin'
+    }, function() {
+        //relation parent to student
+        User.findOne({ name: 'Parent satu'}, function (err, prnt) {
+            User.findOne({ name: 'Student satu'}, function (err, stdn) {
+                stdn._parent = prnt._id;
+                stdn.save();
+
+                prnt._student.push(stdn._id);
+                prnt.save();
+            });
+        });
+
+        Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+           User.findOne({ name: 'Student satu'}, function (err, stdn) {
+                stdn._class = cls._id;
+                stdn.save();
+
+                cls._student.push(stdn._id);
                 cls.save();
-
-                scl._class.push(cls._id);
-                scl.save();
-            });
-        },2000);
-
-    });    
-});
-
-setTimeout(function (argument) {
-    User.find({}).remove(function() {
-
-//Student
-    User.create([{
-        provider: 'local',        
-        name: 'Adella Aqila Azka Hartoyo',
-        email: 'student.adella.aqila@kidzpotentia.com',
-        role: 'student',
-        password: 'student.adella'
-    }, {
-        provider: 'local',        
-        name: 'Adyati Pradini Yudison',
-        email: 'adella.aqila@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.adella'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Adella Aqila Azka Hartoyo'}, function (err, std) {
-                User.find({name: 'Adyati Pradini Yudison'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Akiela Putri Arkadian',
-        email: 'student.akiela@kidzpotentia.com',
-        role: 'student',
-        password: 'student.akiela'
-    }, {
-        provider: 'local',        
-        name: 'Mariska Tri Adithia',
-        email: 'akiela.putri@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.akiela'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Akiela Putri Arkadian'}, function (err, std) {
-                User.find({name: 'Mariska Tri Adithia'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Alexey Setya Darmawan',
-        email: 'student.alexey@kidzpotentia.com',
-        role: 'student',
-        password: 'student.alexey'
-    }, {
-        provider: 'local',        
-        name: 'Irina Aueriyanova',
-        email: 'alexey.setya@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.alexey'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Alexey Setya Darmawan'}, function (err, std) {
-                User.find({name: 'Irina Aueriyanova'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Audrey Ardelia Puspa',
-        email: 'student.audrey@kidzpotentia.com',
-        role: 'student',
-        password: 'student.audrey'
-    }, {
-        provider: 'local',        
-        name: 'Grace Puspasari',
-        email: 'audrey.ardelia@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.audrey'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Audrey Ardelia Puspa'}, function (err, std) {
-                User.find({name: 'Grace Puspasari'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Azzaren Taaza Pangsumadi',
-        email: 'student.azzaran@kidzpotentia.com',
-        role: 'student',
-        password: 'student.azzaran'
-    }, {
-        provider: 'local',        
-        name: 'Irrisa Rosyid',
-        email: 'azzaran.taaza@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.azzaran'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Azzaren Taaza Pangsumadi'}, function (err, std) {
-                User.find({name: 'Irrisa Rosyid'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Cleo Adriani Jill Kristen Silaban',
-        email: 'student.cleo@kidzpotentia.com',
-        role: 'student',
-        password: 'student.cleo'
-    }, {
-        provider: 'local',        
-        name: 'Juli Ance Sibajat',
-        email: 'cleo.adriani@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.cleo'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Cleo Adriani Jill Kristen Silaban'}, function (err, std) {
-                User.find({name: 'Juli Ance Sibajat'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Dastan Pranaja A.Radhya',
-        email: 'student.dastan@kidzpotentia.com',
-        role: 'student',
-        password: 'student.dastan'
-    }, {
-        provider: 'local',        
-        name: 'Septyani P Putri',
-        email: 'dastan.pranaja@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.dastan'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Dastan Pranaja A.Radhya'}, function (err, std) {
-                User.find({name: 'Septyani P Putri'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Giftan Aqila Virendra',
-        email: 'student.giftan@kidzpotentia.com',
-        role: 'student',
-        password: 'student.giftan'
-    }, {
-        provider: 'local',        
-        name: 'Nuri Husna',
-        email: 'giftan.aqila@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.giftan'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Giftan Aqila Virendra'}, function (err, std) {
-                User.find({name: 'Nuri Husna'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Hadranura Mahadirga Azlan Harahap',
-        email: 'student.hadranura@kidzpotentia.com',
-        role: 'student',
-        password: 'student.hadranura'
-    }, {
-        provider: 'local',        
-        name: 'Sarah Asriyani',
-        email: 'hadranura.mahadirga@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.hadranura'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Hadranura Mahadirga Azlan Harahap'}, function (err, std) {
-                User.find({name: 'Sarah Asriyani'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Kaleen Nadindra Baruna',
-        email: 'student.kaleen@kidzpotentia.com',
-        role: 'student',
-        password: 'student.kaleen'
-    }, {
-        provider: 'local',        
-        name: 'Melati Astri Maharani',
-        email: 'kaleen.nadindra@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.kaleen'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Kaleen Nadindra Baruna'}, function (err, std) {
-                User.find({name: 'Melati Astri Maharani'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Karl Theodore Budhi',
-        email: 'student.karl@kidzpotentia.com',
-        role: 'student',
-        password: 'student.karl'
-    }, {
-        provider: 'local',        
-        name: 'Aprilia Grace Sweetasari',
-        email: 'karl.theodore@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.karl'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Karl Theodore Budhi'}, function (err, std) {
-                User.find({name: 'Aprilia Grace Sweetasari'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Khansa Tabina Subhan',
-        email: 'student.khansa@kidzpotentia.com',
-        role: 'student',
-        password: 'student.khansa'
-    }, {
-        provider: 'local',        
-        name: 'Yenny Rachmawati',
-        email: 'khansa.tabina@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.khansa'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Khansa Tabina Subhan'}, function (err, std) {
-                User.find({name: 'Yenny Rachmawati'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'M Faza Aqasyah',
-        email: 'student.faza@kidzpotentia.com',
-        role: 'student',
-        password: 'student.faza'
-    }, {
-        provider: 'local',        
-        name: 'Sendra Ayu Prinastuti',
-        email: 'm.faza@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.faza'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'M Faza Aqasyah'}, function (err, std) {
-                User.find({name: 'Sendra Ayu Prinastuti'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'M Rajendra Farras Atari',
-        email: 'student.rajendra@kidzpotentia.com',
-        role: 'student',
-        password: 'student.rajendra'
-    }, {
-        provider: 'local',        
-        name: 'Riana Sary Aditya',
-        email: 'm.rajendra@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.rajendra'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'M Rajendra Farras Atari'}, function (err, std) {
-                User.find({name: 'Riana Sary Aditya'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Olivia Gabrielle Thomas',
-        email: 'student.olivia@kidzpotentia.com',
-        role: 'student',
-        password: 'student.olivia'
-    }, {
-        provider: 'local',        
-        name: 'Leiny Riutsiara',
-        email: 'olivia.gabrielle@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.olivia'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Olivia Gabrielle Thomas'}, function (err, std) {
-                User.find({name: 'Leiny Riutsiara'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Renata Khair Nakhla',
-        email: 'student.renata@kidzpotentia.com',
-        role: 'student',
-        password: 'student.renata'
-    }, {
-        provider: 'local',        
-        name: 'Riri Adriana',
-        email: 'renata.khair@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.renata'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Renata Khair Nakhla'}, function (err, std) {
-                User.find({name: 'Riri Adriana'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Ruby Pratama Sutjo',
-        email: 'student.ruby@kidzpotentia.com',
-        role: 'student',
-        password: 'student.ruby'
-    }, {
-        provider: 'local',        
-        name: 'Susi Meilani',
-        email: 'ruby.pratama@kidzpotentia.com',
-        role: 'parent',
-        password: 'parent.ruby'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Ruby Pratama Sutjo'}, function (err, std) {
-                User.find({name: 'Susi Meilani'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn._id);
-                    std[0].save();
-
-                    prn[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    prn[0].save();
-                });
-
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls._id);
-                    std[0].save();
-
-                    cls[0]._student.push(mongoose.Types.ObjectId(std._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
-
-    User.create([{
-        provider: 'local',        
-        name: 'Elvi',
-        email: 'elvi@kidzpotentia.com',
-        role: 'teacher',
-        password: 'teacher.elvi'
-    }, {
-        provider: 'local',        
-        name: 'Debi',
-        email: 'debi@kidzpotentia.com',
-        role: 'teacher',
-        password: 'teacher.debi'
-    }, {
-        provider: 'local',        
-        name: 'Ria',
-        email: 'ria@kidzpotentia.com',
-        role: 'teacher',
-        password: 'teacher.ria'
-    }, {
-        provider: 'local',        
-        name: 'Myta',
-        email: 'myta@kidzpotentia.com',
-        role: 'teacher',
-        password: 'teacher.myta'
-    }, {
-        provider: 'local',        
-        name: 'Anggi',
-        email: 'anggi@kidzpotentia.com',
-        role: 'teacher',
-        password: 'teacher.anggi'
-    }], function (err) {
-        Classd.find({name: 'Toddler'}, function (err, cls) {
-            User.update({role: 'teacher'}, {$set : {'_class': mongoose.Types.ObjectId(cls._id)}}, {multi: true}, function (err, parent) {
-                console.log(parent);
-            });
-
+            }); 
         });
-    })
 
-    setTimeout(function (argument) {
-        User.find({role: 'teacher'}, function (err, teacher) {
-            _.each(teacher, function (teach, index) {
-                Classd.update({name: 'Toddler'}, {$push : {'_teacher': mongoose.Types.ObjectId(teach._id)}}, {multi: true}, function (err, tc) {
-                    console.log(tc);
-                });
-            });
+        Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+           User.findOne({ name: 'Student dua'}, function (err, stdn) {
+                stdn._class = cls._id;
+                stdn.save();
+
+                cls._student.push(stdn._id);
+                cls.save();
+            }); 
         });
-    }, 3000);
 
+        Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+           User.findOne({ name: 'Teacher satu'}, function (err, tcr) {
+                tcr._class = cls._id;
+                tcr.save();
 
+                cls._teacher.push(tcr._id);
+                cls.save();
+            }); 
+        });
+        console.log('finished populating users');
+    });
 });
-})
-
-Classd.find({}).remove(function (argument) {
-    // body...
-})
 
 Photo.find({}).remove(function() {
-    
+    Photo.create({
+        url: 'http://localhost:8000/image/info.png',
+        active: true
+    }, {
+        url: 'http://localhost:8000/image/diary.png',
+        active: true
+    });
 });
 
 Story.find({}).remove(function() {
+    Story.create({
+        info: 'This is My first Post. Awesome',
+        type: 'info',
+        active: true,
+    }, {
+        info: 'This is Diary. Just for any parent',
+        type: 'diary',
+        active: true,
+    }, function () {
+        Story.findOne({info: 'This is My first Post. Awesome'}, function (err, story) {
+            if (err) { console.log(err);};
+            //relation story to teacher
+            setTimeout(function (argument) {
+                User.findOne({ name: 'Teacher satu'}, function (err, tcr) {
+                    story._teacher = tcr._id;
+                    story.save();
 
+                    tcr._story.push(story._id);
+                    tcr.save();
+                });
+            },1500);
+
+            //relation story to class
+            setTimeout(function () {
+                Classd.findOne({name: 'Bunga Matahari'}, function (err, cls) {
+                    story._class = cls._id;
+                    story.save();
+
+                    cls._story = story._id;
+                    cls.save();
+                });
+            }, 2000);
+
+            Photo.findOne({url: 'http://localhost:8000/image/info.png'}, function (err, photo) {
+                story._photo.push(photo._id);
+                story.save();
+
+                photo._story = story._id;
+                photo.save();
+            });         
+        });
+
+        Story.findOne({info: 'This is Diary. Just for any parent'}, function (err, story) {
+            //relation story to teacher
+            setTimeout(function (argument) {
+                User.findOne({ name: 'Teacher satu'}, function (err, tcr) {
+                    story._teacher = tcr._id;
+                    story.save();
+                });
+            },1000);
+
+            //relation story to parent
+            setTimeout(function () {
+                User.findOne({ name: 'Parent dua'}, function (err, prnt) {
+                    story._parent.push(prnt._id);
+                    story.save();
+                });
+            },520)
+
+            Photo.findOne({url: 'http://localhost:8000/image/diary.png'}, function (err, photo) {
+                story._photo.push(photo._id);
+                story.save();
+
+                photo._story = story._id;
+                photo.save();
+            });      
+        });    
+
+    });
 });
 
 Reply.find({}).remove(function() {
+    Reply.create({
+        info: 'This is my first reply',
+        active: true    
+    }, function () {
+        Reply.findOne({info: 'This is my first reply'}, function (err, reply) {
+            Story.findOne({info: 'This is My first Post. Awesome'}, function (err, story) {
+                story._reply.push(reply._id);
+                story.save();
 
+                reply._story = story._id;
+                reply.save();
+            });
+
+            setTimeout(function (argument) {
+                User.findOne({ name: 'Parent satu'}, function (err, prnt) {
+                    prnt._reply.push(reply._id);
+                    prnt.save();
+
+                    reply._parent = prnt._id;
+                    reply.save();
+                });      
+            }, 1000);
+        });
+    });
 });

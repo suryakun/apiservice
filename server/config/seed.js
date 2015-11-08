@@ -87,7 +87,7 @@ Classd.find({}).remove(function() {
                 level._class.push(cls._id);
                 level.save();
             });
-        },1000);
+        },2000);
 
         //set relation to school
         setTimeout(function (argument) {

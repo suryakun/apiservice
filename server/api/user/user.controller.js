@@ -151,11 +151,11 @@ exports.updateProfile = function (req, res) {
             //move file to uploader path    
             _.each(files, function (file, index) {
                 var name = uniqid + file.name;
+                name = name.replace(/\s/g, '');
                 var targetfile = pathfile + '/' + name;
                 fs.rename(file.path, targetfile);
-                filename = name;
+                filename = req.user._id + '/' + name;
             });
-            console.log(filename);
 
             User.update({'_id': req.user._id}, {$set: {avatar: filename }}, {multi:false}, function (err, ok) {
                 console.log(ok);

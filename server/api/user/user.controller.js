@@ -72,7 +72,7 @@ exports.changePassword = function(req, res, next) {
     var oldPass = String(req.body.oldPassword);
     var newPass = String(req.body.newPassword);
 
-    User.find({_id: userId, active: true}, function (err, user) {
+    User.findById(userId, function (err, user) {
         if(user.authenticate(oldPass)) {
             user.password = newPass;
             user.save(function(err) {

@@ -724,6 +724,55 @@ setTimeout(function (argument) {
                 role: 'teacher',
                 password: 'teacher.anggi',
                 _class: id
+            }, {
+                provider: 'local',        
+                name: 'Ade',
+                email: 'adi@kidzpotentia.sch.id',
+                role: 'teacher',
+                password: 'teacher.ade',
+                _class: id
+            }, {
+                provider: 'local',
+                name: 'Suhendar',
+                email: 'suhendar@kidzpotentia.sch.id',
+                role: 'teacher',
+                password: 'teacher.suhendar',
+                _class: id
+            }, {
+                provider: 'local',        
+                name: 'Titin',
+                email: 'titin@kidzpotentia.sch.id',
+                role: 'teacher',
+                password: 'teacher.titin',
+                _class: id
+            }, {
+                provider: 'local',        
+                name: 'Fitri',
+                email: 'fitri@kidzpotentia.sch.id',
+                role: 'teacher',
+                password: 'teacher.fitri',
+                _class: id
+            }, {
+                provider: 'local',        
+                name: 'Denia',
+                email: 'denia@kidzpotentia.sch.id',
+                role: 'teacher',
+                password: 'teacher.denia',
+                _class: id
+            }, {
+                provider: 'local',        
+                name: 'Dinni',
+                email: 'dinni@kidzpotentia.sch.id',
+                role: 'teacher',
+                password: 'teacher.dinni',
+                _class: id
+            }, {
+                provider: 'local',        
+                name: 'Admin',
+                email: 'admin@kidzpotentia.sch.id',
+                role: 'teacher',
+                password: 'teacher.admin',
+                _class: id
             }], function (err) {
                 
             });

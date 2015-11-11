@@ -130,37 +130,40 @@ exports.updateProfile = function (req, res) {
     var form = new formidable.IncomingForm();
     var uniqid = Date.now();
     var pathfile = path.resolve(__dirname, "../../../client/upload/avatar/" + req.user._id);
+
+    function isEmptyObject(obj) {
+        return !Object.keys(obj).length;
+    }
     
     mkdirp(pathfile, function(err) {
         if(err) { return handleError(res, err); }
     })
     form.parse(req, function(err, fields, files) {
-        User.findById(req.user._id, function (err, user) {
-            if (files.length) {
-                var filename;
-                //move file to uploader path    
-                _.each(files, function (file, index) {
-                    var name = uniqid + file.name;
-                    var targetfile = pathfile + '/' + name;
-                    fs.rename(file.path, targetfile);
-                    filename = name;
-                });
-                user.avatar = req.user._id + '/' + filename;
-            } else {
-                user.avatar = user.avatar;
-            }
 
-            if (fields.hasOwnProperty('name')) {
-                user.name = fields.name;
-            } else {
-                user.name = user.name;
-            }
-
-            user.save();
-
-            res.status(200).send({
-                "message": "ok"
+        if (!isEmptyObject(fields)) {
+            User.update({'_id': req.user._id}, {$set: {name: fields.username }}, {multi:false}, function (err, ok) {
+                console.log(ok);
             });
+        };
+
+        if (!isEmptyObject(files)) {
+            var filename;
+            //move file to uploader path    
+            _.each(files, function (file, index) {
+                var name = uniqid + file.name;
+                var targetfile = pathfile + '/' + name;
+                fs.rename(file.path, targetfile);
+                filename = name;
+            });
+            console.log(filename);
+
+            User.update({'_id': req.user._id}, {$set: {avatar: filename }}, {multi:false}, function (err, ok) {
+                console.log(ok);
+            });
+        };
+
+        res.status(200).send({
+            "message": "ok"
         });
     });
 }

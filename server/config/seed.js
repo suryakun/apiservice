@@ -727,7 +727,7 @@ setTimeout(function (argument) {
             }, {
                 provider: 'local',        
                 name: 'Ade',
-                email: 'adi@kidzpotentia.sch.id',
+                email: 'ade@kidzpotentia.sch.id',
                 role: 'teacher',
                 password: 'teacher.ade',
                 _class: id

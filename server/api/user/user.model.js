@@ -246,13 +246,20 @@ UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
         
         if (tmp_id.length == 0) callback(null, null);
         Classd.findById(tmp_id[0]).populate('_story', null, {createdAt: {$gt: date}}).exec(function (err, data) {
-            if (err) { callback(err, null); };
             console.log(data);
-            Classd.populate(data, {
-                path: '_story._reply',
-                select: 'info _parent createdAt',
-                model: Reply
-            }, callback);
+            Story.populate(data, {
+                    path: "_story._photo",
+                    select: "url",
+                    model: Photo
+            }, function (err, str) {
+                if (err) { callback(err, null); };
+                Classd.populate(str, {
+                    path: '_story._reply',
+                    select: 'info _parent createdAt',
+                    model: Reply
+                }, callback);
+            });
+
         });
 
     });

@@ -235,34 +235,10 @@ UserSchema.statics.getStoriesForTeacher = function (id, callback) {
 
 UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
     var usr = this;
-    return usr.find({_id: id, createdAt: {$gt: date}}).populate('_student').exec(function (err, std) {
-        if (err) { callback(err, null); };
-        var tmp_id = [];
-        _.each(std, function (student, index) {
-            _.each(student._student, function (stdstory, index) {
-                tmp_id.push(stdstory._class);
-            });
-        });
-        
-        if (tmp_id.length == 0) callback(null, null);
-        Classd.findById(tmp_id[0]).populate('_story', null, {createdAt: {$gt: date}}).exec(function (err, data) {
-            console.log(data);
-            Story.populate(data, {
-                    path: "_story._photo",
-                    select: "url",
-                    model: Photo
-            }, function (err, str) {
-                if (err) { callback(err, null); };
-                Classd.populate(str, {
-                    path: '_story._reply',
-                    select: 'info _parent createdAt',
-                    model: Reply
-                }, callback);
-            });
-
-        });
-
-    });
+    return usr.findById(id).exec(function (err, parent) {
+        if (err) { console.log(err) };
+        Story.find({_parent: parent._id}).populate("_reply").populate("_photo").exec(callback);
+    })
 }
         
 

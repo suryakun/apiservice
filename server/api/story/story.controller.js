@@ -107,14 +107,16 @@ exports.create = function(req, res) {
                         }
 
                         var Cc;
-                        if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { Cc = fields.cc.split(",") };
-                        if (Cc.length > 0) {
-                            User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
-                                if (err) console.log(err);
-                                console.log(ok);
-                            });
-                            story._cc = Cc.slice();
-                            story.save();
+                        if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
+                            Cc = fields.cc.split(","); 
+                            if (Cc.length > 0) {
+                                User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                    if (err) console.log(err);
+                                    console.log(ok);
+                                });
+                                story._cc = Cc.slice();
+                                story.save();
+                            };
                         };
 
 
@@ -126,15 +128,18 @@ exports.create = function(req, res) {
 
                                 //find user for including cc user gcm_id
                                 User.find({_id: {$in: Cc}}).exec(function (err, ccer) {
-                                    var gc = ccer.filter(function (c) {
-                                        if(!c.hasOwnProperty('gcm_id')) return false;
-                                        return true;
-                                    }).map(function (c) {
-                                        return c.gcm_id;  
-                                    });
+                                    var gc;
+                                    if (ccer) {
+                                        gc = ccer.filter(function (c) {
+                                            if(!c.hasOwnProperty('gcm_id')) return false;
+                                            return true;
+                                        }).map(function (c) {
+                                            return c.gcm_id;  
+                                        }) || [];
+                                    };
 
-                                    if (gcm_ids.length > 0 || gc.length > 0) {
-                                        if(gc.length > 0) gcm_ids = gc.split();
+                                    if (gcm_ids.length > 0 || gc) {
+                                        if(gc) gcm_ids = gc.split();
                                         var message = new gcm.Message({
                                             // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
                                             registration_ids: gcm_ids,
@@ -229,14 +234,16 @@ exports.create = function(req, res) {
                             }
 
                             var Cc;
-                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { Cc = fields.cc.split(",") };
-                            if (Cc.length > 0) {
-                                User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
-                                    if (err) console.log(err);
-                                    console.log(ok);
-                                });
-                                story._cc = Cc.slice();
-                                story.save();
+                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
+                                Cc = fields.cc.split(","); 
+                                if (Cc.length > 0) {
+                                    User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                        if (err) console.log(err);
+                                        console.log(ok);
+                                    });
+                                    story._cc = Cc.slice();
+                                    story.save();
+                                };
                             };
 
                             user._story.push(mongoose.Types.ObjectId(story._id));
@@ -248,14 +255,18 @@ exports.create = function(req, res) {
                                     var t = [];                                    
                                     t.push(pgcm.gcm_id);
                                     User.find({_id: {$in: Cc}}).exec(function (err, ccer) {
-                                        var gc = ccer.filter(function (c) {
-                                            if(!c.hasOwnProperty('gcm_id')) return false;
-                                            return true;
-                                        }).map(function (c) {
-                                            return c.gcm_id;  
-                                        });
+                                        
+                                        var gc;
+                                        if (ccer) {
+                                            gc = ccer.filter(function (c) {
+                                                if(!c.hasOwnProperty('gcm_id')) return false;
+                                                return true;
+                                            }).map(function (c) {
+                                                return c.gcm_id;  
+                                            });
+                                        };
 
-                                        if (gc.length > 0) t = gc.split();
+                                        if (gc) t = gc.split() || [];
                                         if (t.length > 0) {
                                             // create new message 
                                             var message = new gcm.Message({

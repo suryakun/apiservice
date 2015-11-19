@@ -59,21 +59,22 @@
 
       <div class="box-row">
         <div class="box-cell"><!-- InstanceBeginEditable name="main_content" -->
+
           <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-              <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                  <div class="text-center">
-                    <h3 class="text-info-lt">Are You sure to remove this data</h3>
-                    <p>The removed data cannot be restored after this action</p>
-                    <div class="btn-block">
-                      <hr>
-                        <a class="md-btn md-raised m-b btn-fw waves-effect waves-effect" onclick="$('.bs-example-modal-sm').modal('hide')">No</a>
-                        <a class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect" onclick="$('.bs-example-modal-sm').modal('hide')">Yes</a>
-                    </div>
+            <div class="modal-dialog modal-md">
+              <div class="modal-content">
+                <div class="text-center">
+                  <h3 class="text-info-lt">Are You sure to remove this data</h3>
+                  <p>The removed data cannot be restored after this action</p>
+                  <div class="btn-block">
+                    <hr>
+                      <a class="md-btn md-raised m-b btn-fw waves-effect waves-effect" ng-click="closeModal()">No</a>
+                      <a class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect" onclick="$('.bs-example-modal-sm').modal('hide')">Yes</a>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
             
           <div class="box-inner padding">
             <div class="row row-sm">
@@ -83,10 +84,10 @@
                 </div>
                 <div class="row ">
                     <div class="panel-body col-sm-5">
-                      <input id="filter" type="text" ng-model="key" class="form-control input-sm w-auto inline m-r" placeholder="Search">
+                      <input id="filter" type="text" ng-model="search.name" class="form-control input-sm w-auto inline m-r" placeholder="Search">
                     </div>
                     <div class="text-right col-sm-7">
-                    <a md-ink-ripple="" href="/foundation-create" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect"><i class="fa fa-plus"></i> Add New</a>        
+                    <a md-ink-ripple="" href="/foundation/create" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect"><i class="fa fa-plus"></i> Add New</a>        
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -100,28 +101,17 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="found in foundations |  startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage | filter: key">
+                    <tr ng-repeat="found in foundations | filter:search | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
                        <td>{{ found.name }}</td>
                        <td>{{ found.owner }}</td>
                        <td>{{ found.address }}</td>
                        <td>{{ found.phone }}</td>
-                       <td class="text-center"><a href="yayasan_edit.html" class="m-r-md"><i class="fa fa-edit"></i> Edit</a> <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-trash-o"></i> Remove</a></td>
+                       <td class="text-center"><a href="/foundation/edit/{{$index}}" ng-click="setUpdate(found)" class="m-r-md"><i class="fa fa-edit"></i> Edit</a> <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-trash-o"></i> Remove</a></td>
                     </tr>
                   </tbody>
                 </table>
                 <div class="row ">
-                    <ul class="pagination">
-                      <li ng-hide="pagination.page == 0">
-                        <a href="" ng-click="pagination.prevPage()">&laquo;</a>
-                      </li>
-                      <li ng-repeat="n in [] | range: pagination.numPages" ng-class="{active: n == pagination.page}">
-                        <a href="" ng-click="pagination.toPageId(n)">{{n + 1}}</a>
-                      </li>
-                      <li ng-hide="pagination.page + 1 >= pagination.numPages">
-                        <a href="" ng-click="pagination.nextPage()">&raquo;</a>
-                      </li>
-                    </ul>
-
+                    <pagination page="currentPage" ng-model="currentPage" max-size="noOfPages" total-items="totalItems" items-per-page="entryLimit"></pagination>
                 </div>
               </div>
             </div>

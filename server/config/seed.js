@@ -773,6 +773,13 @@ setTimeout(function (argument) {
                 role: 'teacher',
                 password: 'teacher.admin',
                 _class: id
+            }, {
+                provider: 'local',        
+                name: 'Admin App',
+                email: 'admin@admin.com',
+                role: 'admin',
+                password: 'admin',
+                _class: id
             }], function (err) {
                 
             });

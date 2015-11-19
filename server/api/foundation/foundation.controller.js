@@ -32,7 +32,7 @@ exports.create = function(req, res) {
 // Updates an existing foundation in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Foundation.find({ _id: req.params.id, active: true}, function (err, foundation) {
+  Foundation.findById(req.params.id, function (err, foundation) {
     if (err) { return handleError(res, err); }
     if(!foundation) { return res.status(404).send('Not Found'); }
     var updated = _.merge(foundation, req.body);

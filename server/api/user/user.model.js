@@ -302,7 +302,7 @@ UserSchema.statics.getClassForParent = function (id, callback) {
 UserSchema.statics.getParentForTeacher = function (id, callback) {
     var user = this;
     return user.findById(id).exec(function (err, me) {
-        user.find({_school : me._school, role : 'student'}).populate("_parent").exec(callback);
+        user.find({_class : me._class, role : 'student'}).populate("_parent").exec(callback);
     });
 }
 
@@ -316,6 +316,41 @@ UserSchema.statics.updateGcmId = function (id, gcm_id, callback) {
 
 UserSchema.statics.getAllPrincipal = function (callback) {
     return this.find({role: 'principal'}).exec(callback);
+}
+
+UserSchema.statics.getParentOfMySchool = function (id, callback) {
+    var user = this;
+    return user.findById(id).populate("_class").populate("_student").exec(function (err, me) {
+        if (me.role == 'teacher') {
+            user.find({_class : me._class, role : 'student'}).populate("_parent").exec(callback);
+        };
+
+        if (me.role == 'parent') {
+            user.find({_class : me._student[0]._class, role : 'student'}).populate("_parent").exec(callback);
+        };
+    });
+}
+
+UserSchema.statics.getTeacherOfMySchool = function (id, callback) {
+    var user = this;
+    return user.findById(id).populate("_class").populate("_student").exec(function (err, me) {
+        if (me.role == 'teacher') {
+            Classd.findById(me._class).populate("_school").exec(function (err, cls) {
+                School.findById(cls._school._id).populate("_class").exec(function (err, c) {
+                    Classd.find({_id : {$in: c._class}}).populate("_teacher").exec(callback);
+                });
+            });
+        };
+
+        if (me.role == 'parent') {
+            Classd.findById(me._student[0]._class).populate("_school").exec(function (err, cls) {
+                School.findById(cls._school._id).populate("_class").exec(function (err, c) {
+                    Classd.find({_id : {$in: c._class}}).populate("_teacher").exec(callback);
+                });
+            });
+        }; 
+        
+    });
 }
 
 module.exports = mongoose.model('User', UserSchema);

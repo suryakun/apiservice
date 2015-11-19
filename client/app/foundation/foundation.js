@@ -9,8 +9,13 @@ angular.module('roomApp')
                 controller: 'FoundationCtrl'
             })
             .state('createfoundation', {
-                url: '/foundation-create',
+                url: '/foundation/create',
                 templateUrl: 'app/foundation/foundation-create.html',
                 controller: 'FoundationCtrl'
-            });
+            })
+            .state('editfoundation', {
+                url: '/foundation/edit/{id}',
+                templateUrl: 'app/foundation/foundation-edit.html',
+                controller: 'FoundationCtrl'
+            });;
     });

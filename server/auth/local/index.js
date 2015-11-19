@@ -22,13 +22,20 @@ router.post('/', function(req, res, next) {
 		    if (!clas) return res.status(404).json({message: 'Something went wrong, please try again.'});
 		    res.json({token: token, id:user._id, name: user.name, avatar:user.avatar || '', school_name: clas._school.name || '', role: user.role });
     	});
-    } else {
+    } 
+
+    if (user.role === 'parent') {
         User.findById(user._id).populate("_student").exec(function (err, user) {
             Class.findById(user._student[0]._class).populate("_school").exec(function (err, clas) {
                 res.json({token: token, id:user._id, name: user.name, avatar:user.avatar || '', school_name: clas._school.name, role: user.role });
             });
         })
     }
+
+    if (user.role === 'admin') {
+        res.json({token: token, id:user._id});
+    }
+
   })(req, res, next)
 });
 

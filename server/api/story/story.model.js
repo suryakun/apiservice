@@ -12,6 +12,7 @@ var StorySchema = new Schema({
     _class: { type: Schema.ObjectId, ref: 'Class' },
     _reply: [{ type: Schema.ObjectId, ref: 'Reply' }],
     _readed: [{ type: Schema.ObjectId, ref: 'User' }],
+    _cc: [{ type: Schema.ObjectId, ref: 'User' }],
     name: String,
     info: String,
     type: String,

@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var SchoolSchema = new Schema({
     _foundation: { type: Schema.ObjectId, ref: 'Foundation' },
-    _class: [{ type: Schema.ObjectId, ref: 'School' }],
+    _class: [{ type: Schema.ObjectId, ref: 'Class' }],
     _teacher: [{ type: Schema.ObjectId, ref: 'User' }],
     address: String,
     phone: String,

@@ -259,6 +259,24 @@ exports.getAllPrincipal = function (req, res) {
     });
 }
 
+exports.getAllParentFromMySchool = function (req, res) {
+    User.getParentOfMySchool(req.user._id, function (err, user) {
+        var parent = user.map(function (p) {
+            return p._parent;
+        });
+        res.status(200).json(parent);
+    });
+}
+
+exports.getTeacherOfMySchool = function (req, res) {
+    User.getTeacherOfMySchool(req.user._id, function (err, user) {
+        var teacher = user.map(function (p) {
+            return p._teacher;
+        });
+        res.status(200).json(teacher[0]);
+    });
+}
+
 function handleString(res, string) {
     var type = typeof string;
     if ( type !== 'string' ) res.status(401).send({message: 'Bad Request'});

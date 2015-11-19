@@ -11,6 +11,7 @@ var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var formidable = require('formidable');
 var path = require('path');
 var fs = require('fs');
+var fsx = require('fs-extra');
 var _ = require('lodash');
 var mkdirp = require('mkdirp');
 var queue = require('queue');
@@ -73,7 +74,7 @@ exports.create = function(req, res) {
                             if (parent._parent.ios_id) ios_ids.push(parent._parent.ios_id);
                         };
                     });
-                    
+
                     Story.create(dataDescription, function (err, story) {
                         var Filekeys = Object.keys(files);
                         if (Filekeys.length > 0) {
@@ -81,8 +82,7 @@ exports.create = function(req, res) {
                                 var name = uniqid + files[file]['name'];
                                 var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
                                 var targetfile = pathfile + '/' + name;
-                                // console.log(files[file]);
-                                // return false;
+                                
                                 mkdirp(pathfile, function(err) {
                                     if(err) { return handleError(res, err); }
                                 });
@@ -106,28 +106,51 @@ exports.create = function(req, res) {
                             // res.status(201).json({message: 'ok'});
                         }
 
+                        var Cc = fields.cc.split(",");
+                        if (Cc.length > 0) {
+                            User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                if (err) console.log(err);
+                                console.log(ok);
+                            });
+                            story._cc = Cc.slice();
+                            story.save();
+                        };
+
+
                         Classd.findById(fields.class_id, function (err, classd) {
                             if(err) { return handleError(res, err); }
                             if(!classd) { return res.status(404).send('Class Not Found'); }
                             classd._story.push(story._id);
                             classd.save(function (err, cls) {
-                                if (gcm_ids.length > 0) {
-                                    var message = new gcm.Message({
-                                        // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
-                                        registration_ids: gcm_ids,
-                                        data: {
-                                            type: 'story',
-                                            sender: req.user._id,
-                                            story_id: story._id
-                                        }
+
+                                //find user for including cc user gcm_id
+                                User.find({_id: {$in: Cc}}).exec(function (err, ccer) {
+                                    var gc = ccer.filter(function (c) {
+                                        if(!c.hasOwnProperty('gcm_id')) return false;
+                                        return true;
+                                    }).map(function (c) {
+                                        return c.gcm_id;  
                                     });
 
-                                    // send the message 
-                                    gcmObject.send(message, function(err, response) {
-                                        if (err) { console.log(err) };
-                                        console.log(response);
-                                    });
-                                };
+                                    if (gcm_ids.length > 0 || gc.length > 0) {
+                                        if(gc.length > 0) gcm_ids = gc.split();
+                                        var message = new gcm.Message({
+                                            // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
+                                            registration_ids: gcm_ids,
+                                            data: {
+                                                type: 'story',
+                                                sender: req.user._id,
+                                                story_id: story._id
+                                            }
+                                        });
+
+                                        // send the message 
+                                        gcmObject.send(message, function(err, response) {
+                                            if (err) { console.log(err) };
+                                            console.log(response);
+                                        });
+                                    };
+                                })
                                 return res.status(201).json({message: 'ok'});
                             });
                         });
@@ -149,28 +172,35 @@ exports.create = function(req, res) {
             var gcm_ids = [];
             var ios_ids = [];
             var dataDescription = {};
-            var filename = [];
             var uniqid = Date.now();
             var story_id;
-
-            dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
-            dataDescription.info = fields.info;
-            dataDescription.type = fields.type;
-            dataDescription.active = true;
-            dataDescription._parent = [];
-            dataDescription._photo = [];
 
             var Parents = fields.parent.split(",");
             User.findById(req.user._id).exec(function (err, user) {
                 User.find({_id : { $in : Parents }}, function (err, parents) {
+
                     _.each(parents, function (parent, index) {
+
+                        dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
+                        dataDescription.info = fields.info;
+                        dataDescription.type = fields.type;
+                        dataDescription.active = true;
+                        dataDescription._parent = [];
+                        dataDescription._photo = [];
+
+                        var filename = [];
                         Story.create(dataDescription, function (err, story) {
-                            story._parent.push(parent._id);
-                            story.save();
+                            console.log(story);
+                            
+                            Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
+                                if (err) console.log(err);
+                                console.log(ok);
+                            });
+                            
                             var Filekeys = Object.keys(files);
                             if (Filekeys.length > 0) {
                                 _.each(Filekeys, function (file, index) {
-                                    var name = uniqid + files[file]['name'];
+                                    var name = uniqid + Math.random() + files[file]['name'];
                                     var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
                                     var targetfile = pathfile + '/' + name;
                                     
@@ -178,17 +208,16 @@ exports.create = function(req, res) {
                                         if(err) { return handleError(res, err); }
                                     });
 
-                                    fs.rename(files[file]['path'], targetfile);
+                                    fsx.copySync(files[file]['path'], targetfile);
                                     filename.push({ url: story._id + '/' + name});
                                 });
 
                                 Photo.create(filename, function (err, photos) {
                                     _.each(photos, function (photo, index) {
-                                        
-                                        Story.update({_id: story._id}, {$push : {'_photo': mongoose.Types.ObjectId(photo._id)}}, {multi: false}, function (err, str) {
-                                            console.log(str);
+                                        Story.update({_id: story._id}, {$push: {_photo:photo._id}}, {multi:false}, function (err, ok) {
+                                            console.log(ok);
                                         });
-
+                                        
                                         Photo.findOne(photo, function (err, pho) {
                                             pho._user = mongoose.Types.ObjectId(req.user._id);
                                             pho._story = story._id;
@@ -196,39 +225,60 @@ exports.create = function(req, res) {
                                         });
                                     });
                                 });
+                            }
+
+                            var Cc = fields.cc.split(",");
+                            if (Cc.length > 0) {
+                                User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                    if (err) console.log(err);
+                                    console.log(ok);
+                                });
+                                story._cc = Cc.slice();
+                                story.save();
                             };
 
                             user._story.push(mongoose.Types.ObjectId(story._id));
                             user.save();
                             
-                            User.findOne(parent, function (err, p) {
+                            User.findById(parent._id, function (err, p) {
                                 p._story.push(story._id);
                                 p.save(function (err, pgcm) {
-                                    var t = [];
+                                    var t = [];                                    
                                     t.push(pgcm.gcm_id);
+                                    User.find({_id: {$in: Cc}}).exec(function (err, ccer) {
+                                        var gc = ccer.filter(function (c) {
+                                            if(!c.hasOwnProperty('gcm_id')) return false;
+                                            return true;
+                                        }).map(function (c) {
+                                            return c.gcm_id;  
+                                        });
 
-                                    // create new message 
-                                    var message = new gcm.Message({
-                                        // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
-                                        registration_ids: t,
-                                        data: {
-                                            type: 'story',
-                                            sender: req.user._id,
-                                            story_id: story._id
-                                        }
-                                    });
+                                        if (gc.length > 0) t = gc.split();
+                                        if (t.length > 0) {
+                                            // create new message 
+                                            var message = new gcm.Message({
+                                                // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
+                                                registration_ids: t,
+                                                data: {
+                                                    type: 'story',
+                                                    sender: req.user._id,
+                                                    story_id: story._id
+                                                }
+                                            });
 
-                                    // send the message 
-                                    gcmObject.send(message, function(err, response) {
-                                        if (err) { console.log(err) };
-                                        console.log(response);
+                                            // send the message 
+                                            gcmObject.send(message, function(err, response) {
+                                                if (err) { console.log(err) };
+                                                console.log(response);
+                                            });
+                                        };
                                     });
-                                    return res.status(201).json({message: 'ok'});
                                 });
                             });
 
                         });
                     });
+                    return res.send({message: 'ok'});
                 });
             });
             

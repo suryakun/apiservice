@@ -23,5 +23,7 @@ router.get('/get-my-class', auth.hasRole(['teacher','parent']), controller.getMy
 router.post('/update-gcm-id', auth.hasRole(['teacher','parent','student','principal']), controller.updateGcmId);
 router.post('/get-story-by-date', auth.hasRole(['teacher','parent']), controller.getMyStoriesByDate);
 router.post('/get-all-principal', auth.hasRole(['admin']), controller.getAllPrincipal);
+router.get('/get-all-parent-from-my-school', auth.hasRole(['teacher','parent']), controller.getAllParentFromMySchool);
+router.get('/get-all-teacher-from-my-school', auth.hasRole(['teacher','parent']), controller.getTeacherOfMySchool);
 
 module.exports = router;

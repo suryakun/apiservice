@@ -135,7 +135,7 @@ exports.create = function(req, res) {
                                             return true;
                                         }).map(function (c) {
                                             return c.gcm_id;  
-                                        }) || [];
+                                        });
                                     };
 
                                     if (gcm_ids.length > 0 || gc) {
@@ -237,6 +237,7 @@ exports.create = function(req, res) {
                             if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
                                 Cc = fields.cc.split(","); 
                                 if (Cc.length > 0) {
+                                    console.log(Cc);
                                     User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
                                         if (err) console.log(err);
                                         console.log(ok);
@@ -266,7 +267,7 @@ exports.create = function(req, res) {
                                             });
                                         };
 
-                                        if (gc) t = gc.split() || [];
+                                        if (gc.isArray && gc.length>0) t = gc.split();
                                         if (t.length > 0) {
                                             // create new message 
                                             var message = new gcm.Message({

@@ -139,7 +139,7 @@ exports.create = function(req, res) {
                                     };
 
                                     if (gcm_ids.length > 0 || gc) {
-                                        if(gc.isArray) gcm_ids = gc.split();
+                                        if(gc) gcm_ids = gc.split();
                                         var message = new gcm.Message({
                                             // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
                                             registration_ids: gcm_ids,
@@ -267,7 +267,7 @@ exports.create = function(req, res) {
                                             });
                                         };
 
-                                        if (gc.isArray && gc.length>0) t = gc.split();
+                                        if (gc && gc.length>0) t = gc.split();
                                         if (t.length > 0) {
                                             // create new message 
                                             var message = new gcm.Message({

@@ -106,7 +106,8 @@ exports.create = function(req, res) {
                             // res.status(201).json({message: 'ok'});
                         }
 
-                        var Cc = fields.cc.split(",");
+                        var Cc;
+                        if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { Cc = fields.cc.split(",") };
                         if (Cc.length > 0) {
                             User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
                                 if (err) console.log(err);
@@ -227,7 +228,8 @@ exports.create = function(req, res) {
                                 });
                             }
 
-                            var Cc = fields.cc.split(",");
+                            var Cc;
+                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { Cc = fields.cc.split(",") };
                             if (Cc.length > 0) {
                                 User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
                                     if (err) console.log(err);

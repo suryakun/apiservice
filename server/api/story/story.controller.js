@@ -61,7 +61,12 @@ exports.create = function(req, res) {
             dataDescription._photo = [];
 
             Classd.findById(dataDescription._class).populate("_student").exec(function (err, destClass) {
-                // console.log(destClass);
+                if (err) console.log(err);
+                if (!destClass) {
+                    console.log("not found")
+                    return false;
+                };
+                console.log(destClass);
                 User.populate(destClass._student, {
                     path: '_parent',
                     select: 'name gcm_id ios_id',
@@ -117,6 +122,10 @@ exports.create = function(req, res) {
                                 story._cc = Cc.slice();
                                 story.save();
                             };
+                            User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
+                                var cc_ids = _.pluck(cc_user, 'gcm_id');
+                                sendGCM (cc_ids, 'story', req.user._id, story._id);
+                            })
                         };
 
 
@@ -125,38 +134,7 @@ exports.create = function(req, res) {
                             if(!classd) { return res.status(404).send('Class Not Found'); }
                             classd._story.push(story._id);
                             classd.save(function (err, cls) {
-
-                                //find user for including cc user gcm_id
-                                User.find({_id: {$in: Cc}}).exec(function (err, ccer) {
-                                    var gc;
-                                    if (ccer) {
-                                        gc = ccer.filter(function (c) {
-                                            if(!c.hasOwnProperty('gcm_id')) return false;
-                                            return true;
-                                        }).map(function (c) {
-                                            return c.gcm_id;  
-                                        });
-                                    };
-
-                                    if (gcm_ids.length > 0 || gc) {
-                                        if(gc) gcm_ids = gc.split();
-                                        var message = new gcm.Message({
-                                            // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
-                                            registration_ids: gcm_ids,
-                                            data: {
-                                                type: 'story',
-                                                sender: req.user._id,
-                                                story_id: story._id
-                                            }
-                                        });
-
-                                        // send the message 
-                                        gcmObject.send(message, function(err, response) {
-                                            if (err) { console.log(err) };
-                                            console.log(response);
-                                        });
-                                    };
-                                })
+                                sendGCM (gcm_ids, 'story', req.user._id, story._id);
                                 return res.status(201).json({message: 'ok'});
                             });
                         });
@@ -242,8 +220,14 @@ exports.create = function(req, res) {
                                         if (err) console.log(err);
                                         console.log(ok);
                                     });
+
                                     story._cc = Cc.slice();
                                     story.save();
+
+                                    User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
+                                        var cc_ids = _.pluck(cc_user, 'gcm_id');
+                                        sendGCM (cc_ids, 'story', req.user._id, story._id);
+                                    })
                                 };
                             };
 
@@ -255,38 +239,7 @@ exports.create = function(req, res) {
                                 p.save(function (err, pgcm) {
                                     var t = [];                                    
                                     t.push(pgcm.gcm_id);
-                                    User.find({_id: {$in: Cc}}).exec(function (err, ccer) {
-                                        
-                                        var gc;
-                                        if (ccer) {
-                                            gc = ccer.filter(function (c) {
-                                                if(!c.hasOwnProperty('gcm_id')) return false;
-                                                return true;
-                                            }).map(function (c) {
-                                                return c.gcm_id;  
-                                            });
-                                        };
-
-                                        if (gc && gc.length>0) t = gc.split();
-                                        if (t.length > 0) {
-                                            // create new message 
-                                            var message = new gcm.Message({
-                                                // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
-                                                registration_ids: t,
-                                                data: {
-                                                    type: 'story',
-                                                    sender: req.user._id,
-                                                    story_id: story._id
-                                                }
-                                            });
-
-                                            // send the message 
-                                            gcmObject.send(message, function(err, response) {
-                                                if (err) { console.log(err) };
-                                                console.log(response);
-                                            });
-                                        };
-                                    });
+                                    sendGCM (t, 'story', req.user._id, story._id);
                                 });
                             });
 
@@ -400,4 +353,22 @@ function handleString(res, string) {
 
 function handleError(res, err) {
     return res.status(500).send(err);
+}
+
+function sendGCM (gcm_ids, type, sender, story_id) {
+    var message = new gcm.Message({
+        // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
+        registration_ids: gcm_ids,
+        data: {
+            type: type,
+            sender: sender,
+            story_id: story_id
+        }
+    });
+
+    // send the message 
+    gcmObject.send(message, function(err, response) {
+        if (err) { console.log(err) };
+        console.log(response);
+    });
 }

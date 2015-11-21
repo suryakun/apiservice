@@ -13,6 +13,7 @@ var Classd = require('../api/class/class.model');
 var Story = require('../api/story/story.model');
 var Photo = require('../api/photo/photo.model');
 var Reply = require('../api/reply/reply.model');
+var Group = require('../api/group/group.model');
 var async = require('async');
 var mongoose = require('mongoose');
 var _ = require('lodash');
@@ -76,6 +77,14 @@ Classd.find({}).remove(function() {
         name: 'Toddler',
         info: 'Kelas Collection',
         active: true
+    }, {
+        name: 'Playgroup',
+        info: 'Kelas Collection',
+        active: true
+    }, {
+        name: 'Bayi',
+        info: 'Kelas Collection',
+        active: true
     }, function (err, cls) {
 
         //set relation to level
@@ -110,19 +119,19 @@ setTimeout(function (argument) {
 //Student
     User.create([{
         provider: 'local',        
-        name: 'Adella Aqila Azka Hartoyo',
-        email: 'student.adella.aqila@kidzpotentia.sch.id',
+        name: 'Adelia Aqila Azka Hartoyo',
+        email: 'student.adelia.aqila@kidzpotentia.sch.id',
         role: 'student',
-        password: 'student.adella'
+        password: 'student.adelia'
     }, {
         provider: 'local',        
         name: 'Adyati Pradini Yudison',
-        email: 'adella.aqila@kidzpotentia.sch.id',
+        email: 'adelia.aqila@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.adella'
     }] , function (err) {
         setTimeout(function () {
-            User.find({name: 'Adella Aqila Azka Hartoyo'}, function (err, std) {
+            User.find({name: 'Adelia Aqila Azka Hartoyo'}, function (err, std) {
                 User.find({name: 'Adyati Pradini Yudison'}, function (err, prn) {
                     std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
                     std[0].save();
@@ -131,7 +140,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -192,14 +201,14 @@ setTimeout(function (argument) {
         setTimeout(function () {
             User.find({name: 'Alexey Setya Darmawan'}, function (err, std) {
                 User.find({name: 'Irina Aueriyanova'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
+                    std[0]._parent = mongoose   .Types.ObjectId(prn[0]._id);
                     std[0].save();
 
                     prn[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -233,7 +242,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -267,7 +276,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Bayi'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -301,7 +310,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -335,7 +344,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -369,7 +378,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -437,7 +446,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -471,7 +480,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -505,7 +514,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -539,7 +548,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -573,7 +582,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -584,39 +593,39 @@ setTimeout(function (argument) {
         },500);
     });
 
-    User.create([{
-        provider: 'local',        
-        name: 'Olivia Gabrielle Thomas',
-        email: 'student.olivia@kidzpotentia.sch.id',
-        role: 'student',
-        password: 'student.olivia'
-    }, {
-        provider: 'local',        
-        name: 'Leiny Riutsiara',
-        email: 'olivia.gabrielle@kidzpotentia.sch.id',
-        role: 'parent',
-        password: 'parent.olivia'
-    }] , function (err) {
-        setTimeout(function () {
-            User.find({name: 'Olivia Gabrielle Thomas'}, function (err, std) {
-                User.find({name: 'Leiny Riutsiara'}, function (err, prn) {
-                    std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
-                    std[0].save();
+    // User.create([{
+    //     provider: 'local',        
+    //     name: 'Olivia Gabrielle Thomas',
+    //     email: 'student.olivia@kidzpotentia.sch.id',
+    //     role: 'student',
+    //     password: 'student.olivia'
+    // }, {
+    //     provider: 'local',        
+    //     name: 'Leiny Riutsiara',
+    //     email: 'olivia.gabrielle@kidzpotentia.sch.id',
+    //     role: 'parent',
+    //     password: 'parent.olivia'
+    // }] , function (err) {
+    //     setTimeout(function () {
+    //         User.find({name: 'Olivia Gabrielle Thomas'}, function (err, std) {
+    //             User.find({name: 'Leiny Riutsiara'}, function (err, prn) {
+    //                 std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
+    //                 std[0].save();
 
-                    prn[0]._student = mongoose.Types.ObjectId(std[0]._id);
-                    prn[0].save();
-                });
+    //                 prn[0]._student = mongoose.Types.ObjectId(std[0]._id);
+    //                 prn[0].save();
+    //             });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
-                    std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
-                    std[0].save();
+    //             Classd.find({name: 'Toddler'}, function (err, cls) {
+    //                 std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
+    //                 std[0].save();
 
-                    cls[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
-                    cls[0].save(); 
-                });
-            });
-        },500);
-    });
+    //                 cls[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+    //                 cls[0].save(); 
+    //             });
+    //         });
+    //     },500);
+    // });
 
     User.create([{
         provider: 'local',        
@@ -675,7 +684,7 @@ setTimeout(function (argument) {
                     prn[0].save();
                 });
 
-                Classd.find({name: 'Toddler'}, function (err, cls) {
+                Classd.find({name: 'Playgroup'}, function (err, cls) {
                     std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
                     std[0].save();
 
@@ -802,9 +811,45 @@ setTimeout(function (argument) {
         });
     }, 3000);
 
+    setTimeout(function (argument) {
+        Group.find({}).remove(function() {
+            var management = ['ade@kidzpotentia.sch.id','suhendar@kidzpotentia.sch.id','selly@kidzpotentia.sch.id'];
+            var teachername = ['ade@kidzpotentia.sch.id',
+                                'suhendar@kidzpotentia.sch.id',
+                                'titin@kidzpotentia.sch.id',
+                                'fitri@kidzpotentia.sch.id',
+                                'denia@kidzpotentia.sch.id',
+                                'elvi@kidzpotentia.sch.id',
+                                'debi@kidzpotentia.sch.id',
+                                'ria@kidzpotentia.sch.id',
+                                'myta@kidzpotentia.sch.id',
+                                'anggi@kidzpotentia.sch.id',
+                                'admin@kidzpotentia.sch.id',
+                                'selly@kidzpotentia.sch.id'];
 
+            Group.create({name:'management'},{name:'teacher'}, function (err, group) {
+                
+                User.find({email: {$in: management}}).exec(function (err, manager) {
+                    var manager_id = _.pluck(manager, '_id');
+                    Group.update({name:'management'}, {$pushAll: {_teacher: manager_id}}, {multi: true}, function (err, ok) {
+                        console.log('group management updated');
+                    });
+                })
+
+                User.find({email: {$in: teachername}}).exec(function (err, teacher) {
+                    var teacher_id = _.pluck(teacher, '_id');
+                    Group.update({name:'management'}, {$pushAll: {_teacher: teacher_id}}, {multi: true}, function (err, ok) {
+                        console.log('group teacher updated');
+                    });
+                })
+
+            });
+        });
+
+    }, 4000);
 });
-})
+});
+
 
 Classd.find({}).remove(function (argument) {
     // body...

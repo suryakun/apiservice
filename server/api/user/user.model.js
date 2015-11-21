@@ -305,11 +305,20 @@ UserSchema.statics.getParentOfMySchool = function (id, callback) {
     var user = this;
     return user.findById(id).populate("_class").populate("_student").exec(function (err, me) {
         if (me.role == 'teacher') {
-            user.find({_class : me._class, role : 'student'}).populate("_parent").exec(callback);
+            user.find({_class : me._class, role : 'student'}).populate("_parent").exec(function (err, parents) {
+                var par = _.pluck(parents, "_parent");
+                var ids = _.pluck(par,"_id");
+                console.log(ids);
+                user.find({_id: {$in:ids}}).populate("_student").exec(callback);
+            });
         };
 
         if (me.role == 'parent') {
-            user.find({_class : me._student[0]._class, role : 'student'}).populate("_parent").exec(callback);
+            user.find({_class : me._student[0]._class, role : 'student'}).populate("_parent").exec(function (err, parents) {                
+                var par = _.pluck(parents, "_parent");
+                var ids = _.pluck(par,"_id");
+                user.find({_id: {$in:ids}}).select("-salt -hashedPassword").populate("_student").exec(callback);
+            });
         };
     });
 }

@@ -261,10 +261,10 @@ exports.getAllPrincipal = function (req, res) {
 
 exports.getAllParentFromMySchool = function (req, res) {
     User.getParentOfMySchool(req.user._id, function (err, user) {
-        var parent = user.map(function (p) {
-            return p._parent;
-        });
-        res.status(200).json(parent);
+        // var parent = user.map(function (p) {
+        //     return p._parent;
+        // });
+        res.status(200).json(user);
     });
 }
 

@@ -167,6 +167,8 @@ setTimeout(function (argument) {
         setTimeout(function () {
             User.find({name: 'Akiela Putri Arkadian'}, function (err, std) {
                 User.find({name: 'Mariska Tri Adithia'}, function (err, prn) {
+                    if (!prn) {console.log("err"); return false};
+
                     std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
                     std[0].save();
 

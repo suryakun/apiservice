@@ -209,7 +209,7 @@ UserSchema.statics.getStoriesForParent = function (id, callback) {
         }, function (err, popstory) {
                 Story.populate(story, {
                         path: "_story._photo",
-                        select: "url",
+                        select: "url thumb",
                         model: Photo
                 },callback);
         });
@@ -225,7 +225,7 @@ UserSchema.statics.getStoriesForTeacher = function (id, callback) {
                 }, function (err, popstory) {
                         Story.populate(story, {
                                 path: "_story._photo",
-                                select: "url",
+                                select: "url thumb",
                                 model: Photo
                         },callback);
                 });
@@ -251,7 +251,7 @@ UserSchema.statics.getStoriesForTeacherByDate = function (id, date, callback) {
                 }, function (err, popstory) {
                         Story.populate(popstory, {
                                 path: "_story._photo",
-                                select: "url",
+                                select: "url thumb",
                                 model: Photo
                         }, callback);
                 });

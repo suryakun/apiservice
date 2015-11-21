@@ -33,6 +33,7 @@ exports.create = function(req, res) {
     reply.info = req.body.info;
     reply._story = mongoose.Types.ObjectId(req.body.story_id);
     var receiver_message = [];
+    var receiver_cc = [];
     if (req.user.role == 'teacher') {
         reply._teacher = mongoose.Types.ObjectId(req.user._id);
     } else if (req.user.role == 'parent') {
@@ -41,7 +42,7 @@ exports.create = function(req, res) {
     
     Reply.create(reply, function (err, rep) {
         if (err) { return res.status(500).send('Something wrong, please try again') };
-        Story.findById(req.body.story_id).populate("_teacher").populate("_parent").exec(function (err, story) {
+        Story.findById(req.body.story_id).populate("_teacher").populate("_parent").populate("_cc").exec(function (err, story) {
             if(err) { return handleError(res, err); }
             if(!story) { return res.status(404).send('Story Not Found'); }
             if (req.user.role == 'teacher') {
@@ -51,6 +52,11 @@ exports.create = function(req, res) {
             } else {
                 if (story._teacher.gcm_id) receiver_message.push(story._teacher.gcm_id);
             };
+
+            _.each(story._cc, function (cc, index) {
+                if (cc.gcm_id) receiver_cc.push(cc.gcm_id);
+            });
+
             User.findById(req.user._id, function (err, user) {
                 user._reply.push(rep._id);
                 user.save();
@@ -60,22 +66,13 @@ exports.create = function(req, res) {
             story.save();
 
             if (receiver_message.length > 0) {
-                var message = new gcm.Message({
-                    // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
-                    registration_ids: receiver_message,
-                    data: {
-                        type: 'reply',
-                        sender: req.user._id,
-                        story_id: story._id
-                    }
-                });
-
-                // send the message 
-                gcmObject.send(message, function(err, response) {
-                    if (err) { console.log(err) };
-                    console.log(response);
-                });
+                sendGCM (receiver_message, 'reply', req.user._id, story_id, story._id);
             };
+
+            if (receiver_cc.length > 0) {
+                sendGCM (receiver_cc, 'reply', req.user._id, story_id, story._id);
+            };
+
             return res.status(201).json({message: 'ok'});
         });
     });
@@ -120,4 +117,22 @@ exports.getReplyByDate = function(req, res) {
 
 function handleError(res, err) {
     return res.status(500).send(err);
+}
+
+function sendGCM (gcm_ids, type, sender, story_id) {
+    var message = new gcm.Message({
+        // registration_ids: ['dtevnxDNUVk:APA91bHe1eVij45sYak0sdFPq24oF65kgcrIiiDlW3OkCfb0Yd4J-B6CdBtj5eLh5TyD5PaGt6TzzkdRQD8HQVfdjN3HTZOzhH05UVcOF9db2P9-IE8ByeNeME-0xhXbsZr7V5M5EjjU'],
+        registration_ids: gcm_ids,
+        data: {
+            type: type,
+            sender: sender,
+            story_id: story_id
+        }
+    });
+
+    // send the message 
+    gcmObject.send(message, function(err, response) {
+        if (err) { console.log(err) };
+        console.log(response);
+    });
 }

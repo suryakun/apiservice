@@ -19,6 +19,7 @@ var q = queue();
 var async = require('async');
 var gcm = require('android-gcm');
 var gcmObject = new gcm.AndroidGcm('AIzaSyBpjxJEYkAfLMhEWBq2ger2_0EV60VtdW4');
+var im = require('imagemagick');
 
 // Get list of storys
 exports.index = function(req, res) {
@@ -85,15 +86,22 @@ exports.create = function(req, res) {
                         if (Filekeys.length > 0) {
                             _.each(Filekeys, function (file, index) {
                                 var name = uniqid + files[file]['name'];
-                                var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
+                                var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/original");
+                                var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
+                                var targetthumb = paththumb + '/' + name;
                                 var targetfile = pathfile + '/' + name;
                                 
                                 mkdirp(pathfile, function(err) {
                                     if(err) { return handleError(res, err); }
+                                    fs.rename(files[file]['path'], targetfile);
+
+                                    mkdirp(paththumb, function(err) {
+                                        if(err) { return handleError(res, err); }
+                                        resizeThumb(targetfile,targetthumb);
+                                    });
                                 });
 
-                                fs.rename(files[file]['path'], targetfile);
-                                filename.push({ url: story._id + '/' + name});
+                                filename.push({ url: story._id + '/original/' + name, thumb: story._id + '/thumb/' + name });
                             });
 
                             Photo.create(filename, function (err, photos) {
@@ -184,16 +192,23 @@ exports.create = function(req, res) {
                             var Filekeys = Object.keys(files);
                             if (Filekeys.length > 0) {
                                 _.each(Filekeys, function (file, index) {
-                                    var name = uniqid + Math.random() + files[file]['name'];
-                                    var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id);
+                                    var name = uniqid + files[file]['name'];
+                                    var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/original");
+                                    var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
+                                    var targetthumb = paththumb + '/' + name;
                                     var targetfile = pathfile + '/' + name;
                                     
                                     mkdirp(pathfile, function(err) {
                                         if(err) { return handleError(res, err); }
+                                        fsx.copySync(files[file]['path'], targetfile);
+
+                                        mkdirp(paththumb, function(err) {
+                                            if(err) { return handleError(res, err); }
+                                            resizeThumb(targetfile,targetthumb);
+                                        });
                                     });
 
-                                    fsx.copySync(files[file]['path'], targetfile);
-                                    filename.push({ url: story._id + '/' + name});
+                                    filename.push({ url: story._id + '/original/' + name, thumb: story._id + '/thumb/' + name });
                                 });
 
                                 Photo.create(filename, function (err, photos) {
@@ -371,4 +386,47 @@ function sendGCM (gcm_ids, type, sender, story_id) {
         if (err) { console.log(err) };
         console.log(response);
     });
+}
+
+function resizeThumb (url, destPath) {
+    im.identify(url, function(err, file){
+        if (err) throw err;
+        var maxWidth = 750; // Max width for the image
+        var maxHeight = 750;    // Max height for the image
+        var ratio = 0;  // Used for aspect ratio
+        var width = file.width;    // Current image width
+        var height = file.height;  // Current image height
+        var resizeWidth, resizeHeight;
+
+        // Check if the current width is larger than the max
+        if(width > maxWidth){
+            ratio = maxWidth / width;   // get ratio for scaling image
+            resizeWidth = maxWidth; // Set new width
+            resizeHeight = height * ratio;  // Scale height based on ratio
+            height = height * ratio;    // Reset height to match scaled image
+            width = width * ratio;    // Reset width to match scaled image
+        }
+
+        // Check if current height is larger than max
+        if(height > maxHeight){
+            ratio = maxHeight / height; // get ratio for scaling image
+            resizeHeight = maxHeight;   // Set new height
+            resizeWidth = width * ratio; // Scale width based on ratio
+            width = width * ratio;    // Reset width to match scaled image
+            height = height * ratio;    // Reset height to match scaled image
+        }
+
+        im.resize({
+            srcPath: url,
+            dstPath: destPath,
+            width: resizeWidth,
+            height: resizeHeight,
+            quality: 0.8
+        }, function(err, stdout, stderr){
+            if (err) throw err;
+            console.log('resized kittens.jpg to fit within 256x256px');
+        });
+      
+    });
+
 }

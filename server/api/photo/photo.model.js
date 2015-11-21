@@ -7,6 +7,7 @@ var PhotoSchema = new Schema({
     _user: { type: Schema.ObjectId, ref: 'User' },
     _story: { type: Schema.ObjectId, ref: 'Story' },
     url: String,
+    thumb: String,
     active: Boolean,
     createdAt: Date,
     updatedAt: Date

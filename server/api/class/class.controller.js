@@ -19,9 +19,14 @@ exports.index = function(req, res) {
           });
       });    
   } else if (req.user.role == 'parent') {
-      User.getClassForParent(user_id, function (err, classd) {
-        console.log(classd);
-          // res.status(200).json(classd);
+      User.getClassForParent(user_id, function (err, me) {
+        if(err) { return handleError(res, err); }
+        if(!me) { return res.status(404).send('Not Found'); }
+        var school_id = mongoose.Types.ObjectId(me._class._school._id);
+        Classd.find({_school:school_id}).exec(function (err, classs) {
+          if(err) { return handleError(res, err); }
+          return res.status(200).json(classs);
+        });
       });
   }
   

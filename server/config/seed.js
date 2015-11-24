@@ -699,104 +699,104 @@ setTimeout(function (argument) {
     });
     
     setTimeout(function () {
-        Classd.find({name: 'Toddler'}, function (err, toddler) {
-            Classd.find({name: 'Playgroup'}, function (err, playgroup) {
-                Classd.find({name: 'Bayi'}, function (err, bayi) {
+        Classd.findOne({name: 'Toddler'}, function (err, toddler) {
+            Classd.findOne({name: 'Playgroup'}, function (err, playgroup) {
+                Classd.findOne({name: 'Bayi'}, function (err, bayi) {
                     var id = toddler._id;
                     User.create([{
-                    provider: 'local',        
-                    name: 'Elvi',
-                    email: 'elvi@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.elvi',
-                    _class: toddler._id
-                }, {
-                    provider: 'local',        
-                    name: 'Debi',
-                    email: 'debi@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.debi',
-                    _class: bayi._id
-                }, {
-                    provider: 'local',        
-                    name: 'Ria',
-                    email: 'ria@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.ria',
-                    _class: playgroup._id
-                }, {
-                    provider: 'local',        
-                    name: 'Myta',
-                    email: 'myta@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.myta',
-                    _class: id
-                }, {
-                    provider: 'local',        
-                    name: 'Anggi',
-                    email: 'anggi@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.anggi',
-                    _class: id
-                }, {
-                    provider: 'local',        
-                    name: 'Ade',
-                    email: 'ade@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.ade',
-                    _class: id
-                }, {
-                    provider: 'local',
-                    name: 'Suhendar',
-                    email: 'suhendar@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.suhendar',
-                    _class: id
-                }, {
-                    provider: 'local',        
-                    name: 'Titin',
-                    email: 'titin@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.titin',
-                    _class: toddler._id
-                }, {
-                    provider: 'local',        
-                    name: 'Fitri',
-                    email: 'fitri@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.fitri',
-                    _class: toddler._id
-                }, {
-                    provider: 'local',        
-                    name: 'Denia',
-                    email: 'denia@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.denia',
-                    _class: playgroup._id
-                }, {
-                    provider: 'local',        
-                    name: 'Dinni',
-                    email: 'dinni@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.dinni',
-                    _class: id
-                }, {
-                    provider: 'local',        
-                    name: 'Admin',
-                    email: 'admin@kidzpotentia.sch.id',
-                    role: 'teacher',
-                    password: 'teacher.admin',
-                    _class: id
-                }, {
-                    provider: 'local',        
-                    name: 'Admin App',
-                    email: 'admin@admin.com',
-                    role: 'admin',
-                    password: 'admin',
-                    _class: id
-                }], function (err) {
-                    
-                });
+                        provider: 'local',        
+                        name: 'Elvi',
+                        email: 'elvi@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.elvi',
+                        _class: toddler._id
+                    }, {
+                        provider: 'local',        
+                        name: 'Debi',
+                        email: 'debi@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.debi',
+                        _class: bayi._id
+                    }, {
+                        provider: 'local',        
+                        name: 'Ria',
+                        email: 'ria@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.ria',
+                        _class: playgroup._id
+                    }, {
+                        provider: 'local',        
+                        name: 'Myta',
+                        email: 'myta@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.myta',
+                        _class: id
+                    }, {
+                        provider: 'local',        
+                        name: 'Anggi',
+                        email: 'anggi@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.anggi',
+                        _class: id
+                    }, {
+                        provider: 'local',        
+                        name: 'Ade',
+                        email: 'ade@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.ade',
+                        _class: id
+                    }, {
+                        provider: 'local',
+                        name: 'Suhendar',
+                        email: 'suhendar@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.suhendar',
+                        _class: id
+                    }, {
+                        provider: 'local',        
+                        name: 'Titin',
+                        email: 'titin@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.titin',
+                        _class: toddler._id
+                    }, {
+                        provider: 'local',        
+                        name: 'Fitri',
+                        email: 'fitri@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.fitri',
+                        _class: toddler._id
+                    }, {
+                        provider: 'local',        
+                        name: 'Denia',
+                        email: 'denia@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.denia',
+                        _class: playgroup._id
+                    }, {
+                        provider: 'local',        
+                        name: 'Dinni',
+                        email: 'dinni@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.dinni',
+                        _class: id
+                    }, {
+                        provider: 'local',        
+                        name: 'Admin',
+                        email: 'admin@kidzpotentia.sch.id',
+                        role: 'teacher',
+                        password: 'teacher.admin',
+                        _class: id
+                    }, {
+                        provider: 'local',        
+                        name: 'Admin App',
+                        email: 'admin@admin.com',
+                        role: 'admin',
+                        password: 'admin',
+                        _class: id
+                    }], function (err) {
+                        
+                    });
                 });
             });
         })

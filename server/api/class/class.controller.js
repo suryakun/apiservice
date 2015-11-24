@@ -22,7 +22,8 @@ exports.index = function(req, res) {
       User.getClassForParent(user_id, function (err, me) {
         if(err) { return handleError(res, err); }
         if(!me) { return res.status(404).send('Not Found'); }
-        var school_id = mongoose.Types.ObjectId(me._class._school._id);
+        var d = me['_student'][0]['_class'].toObject();
+        var school_id = mongoose.Types.ObjectId(d._school._id);
         Classd.find({_school:school_id}).exec(function (err, classs) {
           if(err) { return handleError(res, err); }
           return res.status(200).json(classs);

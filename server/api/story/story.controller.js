@@ -120,8 +120,8 @@ exports.create = function(req, res) {
                         }
 
                         var Cc;
-                        if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
-                            Cc = fields.cc.split(","); 
+                        if (fields.hasOwnProperty('group') && fields.group.length > 0) { 
+                            Cc = fields.group.split(","); 
                             if (Cc.length > 0) {
                                 User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
                                     if (err) console.log(err);

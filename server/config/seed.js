@@ -101,7 +101,8 @@ Classd.find({}).remove(function() {
         //set relation to school
         setTimeout(function (argument) {
             School.findOne({ name: 'Kidz Potentia'}, function (err, scl) {
-                Classd.update({name: 'Toddler' }, { $set: {_school: mongoose.Types.ObjectId(scl._id)} }, {multi:false}, function (err, ok) {
+                var class_name = ['Toddler','Playgroup','Bayi'];
+                Classd.update({name: {$in: class_name} }, { $set: {_school: mongoose.Types.ObjectId(scl._id)} }, {multi:true}, function (err, ok) {
                     console.log(ok)
                 })
                 
@@ -698,101 +699,105 @@ setTimeout(function (argument) {
     });
     
     setTimeout(function () {
-        Classd.find({name: 'Toddler'}, function (err, cls) {
-            var id = mongoose.Types.ObjectId(cls[0]._id);
-            User.create([{
-                provider: 'local',        
-                name: 'Elvi',
-                email: 'elvi@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.elvi',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Debi',
-                email: 'debi@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.debi',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Ria',
-                email: 'ria@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.ria',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Myta',
-                email: 'myta@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.myta',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Anggi',
-                email: 'anggi@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.anggi',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Ade',
-                email: 'ade@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.ade',
-                _class: id
-            }, {
-                provider: 'local',
-                name: 'Suhendar',
-                email: 'suhendar@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.suhendar',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Titin',
-                email: 'titin@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.titin',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Fitri',
-                email: 'fitri@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.fitri',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Denia',
-                email: 'denia@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.denia',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Dinni',
-                email: 'dinni@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.dinni',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Admin',
-                email: 'admin@kidzpotentia.sch.id',
-                role: 'teacher',
-                password: 'teacher.admin',
-                _class: id
-            }, {
-                provider: 'local',        
-                name: 'Admin App',
-                email: 'admin@admin.com',
-                role: 'admin',
-                password: 'admin',
-                _class: id
-            }], function (err) {
-                
+        Classd.find({name: 'Toddler'}, function (err, toddler) {
+            Classd.find({name: 'Playgroup'}, function (err, playgroup) {
+                Classd.find({name: 'Bayi'}, function (err, bayi) {
+                    var id = toddler._id;
+                    User.create([{
+                    provider: 'local',        
+                    name: 'Elvi',
+                    email: 'elvi@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.elvi',
+                    _class: toddler._id
+                }, {
+                    provider: 'local',        
+                    name: 'Debi',
+                    email: 'debi@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.debi',
+                    _class: bayi._id
+                }, {
+                    provider: 'local',        
+                    name: 'Ria',
+                    email: 'ria@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.ria',
+                    _class: playgroup._id
+                }, {
+                    provider: 'local',        
+                    name: 'Myta',
+                    email: 'myta@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.myta',
+                    _class: id
+                }, {
+                    provider: 'local',        
+                    name: 'Anggi',
+                    email: 'anggi@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.anggi',
+                    _class: id
+                }, {
+                    provider: 'local',        
+                    name: 'Ade',
+                    email: 'ade@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.ade',
+                    _class: id
+                }, {
+                    provider: 'local',
+                    name: 'Suhendar',
+                    email: 'suhendar@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.suhendar',
+                    _class: id
+                }, {
+                    provider: 'local',        
+                    name: 'Titin',
+                    email: 'titin@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.titin',
+                    _class: toddler._id
+                }, {
+                    provider: 'local',        
+                    name: 'Fitri',
+                    email: 'fitri@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.fitri',
+                    _class: toddler._id
+                }, {
+                    provider: 'local',        
+                    name: 'Denia',
+                    email: 'denia@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.denia',
+                    _class: playgroup._id
+                }, {
+                    provider: 'local',        
+                    name: 'Dinni',
+                    email: 'dinni@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.dinni',
+                    _class: id
+                }, {
+                    provider: 'local',        
+                    name: 'Admin',
+                    email: 'admin@kidzpotentia.sch.id',
+                    role: 'teacher',
+                    password: 'teacher.admin',
+                    _class: id
+                }, {
+                    provider: 'local',        
+                    name: 'Admin App',
+                    email: 'admin@admin.com',
+                    role: 'admin',
+                    password: 'admin',
+                    _class: id
+                }], function (err) {
+                    
+                });
+                });
             });
         })
     },1000);
@@ -840,7 +845,7 @@ setTimeout(function (argument) {
 
                 User.find({email: {$in: teachername}}).exec(function (err, teacher) {
                     var teacher_id = _.pluck(teacher, '_id');
-                    Group.update({name:'management'}, {$pushAll: {_teacher: teacher_id}}, {multi: true}, function (err, ok) {
+                    Group.update({name:'teacher'}, {$pushAll: {_teacher: teacher_id}}, {multi: true}, function (err, ok) {
                         console.log('group teacher updated');
                     });
                 })

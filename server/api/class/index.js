@@ -2,10 +2,11 @@
 
 var express = require('express');
 var controller = require('./class.controller');
+var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
-router.get('/', controller.index);
+router.get('/', auth.hasRole('teacher', 'parent'), controller.index);
 router.get('/single/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

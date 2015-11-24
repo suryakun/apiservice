@@ -2,13 +2,29 @@
 
 var _ = require('lodash');
 var Classd = require('./class.model');
+var User = require('../user/user.model');
+var mongoose = require('mongoose');
 
 // Get list of classs
 exports.index = function(req, res) {
-  Classd.find({active: true}).exec(function (err, classs) {
-    if(err) { return handleError(res, err); }
-    return res.status(200).json(classs);
-  });
+  var user_id = req.user._id;
+  if (req.user.role == 'teacher') {
+      User.getClassForTeacher(user_id, function (err, me) {
+          if(err) { return handleError(res, err); }
+          if(!me) { return res.status(404).send('Not Found'); }
+          var school_id = mongoose.Types.ObjectId(me._class._school._id);
+          Classd.find({_school:school_id}).exec(function (err, classs) {
+            if(err) { return handleError(res, err); }
+            return res.status(200).json(classs);
+          });
+      });    
+  } else if (req.user.role == 'parent') {
+      User.getClassForParent(user_id, function (err, classd) {
+        console.log(classd);
+          // res.status(200).json(classd);
+      });
+  }
+  
 };
 
 // Get a single class

@@ -236,7 +236,7 @@ exports.create = function(req, res) {
                     });
                 });
                 break;
-                
+
             case "diary":
                 var gcm_ids = [];
                 var ios_ids = [];
@@ -323,8 +323,9 @@ exports.create = function(req, res) {
                                     };
                                 };
 
-                                user._story.push(mongoose.Types.ObjectId(story._id));
-                                user.save();
+                                User.update({_id:req.user._id}, {$push: {_story:mongoose.Types.ObjectId(story._id)}}, {multi:false}, function (err, ok) {
+                                    console.log(ok);
+                                });
                                 
                                 User.findById(parent._id, function (err, p) {
                                     p._story.push(story._id);

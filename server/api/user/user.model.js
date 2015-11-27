@@ -234,11 +234,19 @@ UserSchema.statics.getStoriesForTeacher = function (id, callback) {
 
 
 UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
-    var usr = this;
-    return usr.findById(id).exec(function (err, parent) {
-        if (err) { console.log(err) };
-        Story.find({_parent: parent._id}).populate("_reply").populate("_photo").exec(callback);
-    })
+    return this.findById(id).populate('_story', null, {createdAt: {$gt: date}} ).exec(function (err, story) {
+                Story.populate(story, {
+                        path: "_story._reply",
+                        select: "info _parent",
+                        model: Reply
+                }, function (err, popstory) {
+                        Story.populate(popstory, {
+                                path: "_story._photo",
+                                select: "url thumb",
+                                model: Photo
+                        }, callback);
+                });
+    });
 }
         
 

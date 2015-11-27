@@ -207,7 +207,7 @@ exports.getMyStoriesByDate = function (req, res) {
         User.getStoriesForParentByDate(user_id, date, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            res.status(200).json(data);
+            res.status(200).json(data._story);
         });
     }
 }

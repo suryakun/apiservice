@@ -42,7 +42,7 @@ exports.create = function(req, res) {
     
     Reply.create(reply, function (err, rep) {
         if (err) { return res.status(500).send('Something wrong, please try again') };
-        Story.findById(req.body.story_id).populate("_teacher").populate("_parent").populate("_cc").exec(function (err, story) {
+        Story.findById(req.body.story_id).populate("_teacher").populate("_parent").populate("_cc").populate("_group").exec(function (err, story) {
             if(err) { return handleError(res, err); }
             if(!story) { return res.status(404).send('Story Not Found'); }
             if (req.user.role == 'teacher') {

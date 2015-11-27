@@ -7,6 +7,7 @@ var User = require('../user/user.model');
 
 var StorySchema = new Schema({
     _teacher: { type: Schema.ObjectId, ref: 'User' },
+    _group: { type: Schema.ObjectId, ref: 'User' },
     _photo: [{ type: Schema.ObjectId, ref: 'Photo' }],
     _parent: [{ type: Schema.ObjectId, ref: 'User' }],
     _class: { type: Schema.ObjectId, ref: 'Class' },

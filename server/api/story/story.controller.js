@@ -6,6 +6,7 @@ var User = require('../user/user.model');
 var Photo = require('../photo/photo.model');
 var Teacher = require('../teacher/teacher.model');
 var Classd = require('../class/class.model');
+var Group = require('../group/group.model');
 var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var formidable = require('formidable');
@@ -34,7 +35,6 @@ exports.show = function(req, res) {
     Story.find({_id: req.params.id, active: true}, function (err, story) {
         if(err) { return handleError(res, err); }
         if(!story) { return res.status(404).send('Not Found'); }
-        if(!story) { return res.status(404).send('Not Found'); }
         return res.json(story);
     });
 };
@@ -45,43 +45,33 @@ exports.create = function(req, res) {
     
     form.parse(req, function(err, fields, files) {
 
-        if (fields.type == 'info') {
-            if (req.user.role == 'parent') { return res.status(401).send('parent cannot create info Story'); };
-            var gcm_ids = [];
-            var ios_ids = [];
-            var dataDescription = {};
-            var filename = [];
-            var uniqid = Date.now();
 
-            dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
-            dataDescription.info = fields.info;
-            dataDescription.type = fields.type;
-            dataDescription.active = true;
-            dataDescription._class = mongoose.Types.ObjectId(fields.class_id);
-            dataDescription._parent = [];
-            dataDescription._photo = [];
+        switch(fields.type){
+            case "intern":
+                if (fields.hasOwnProperty('group_id')) {
+                    if (req.user.role == 'parent') { return res.status(401).send('parent cannot create info Story'); };
+                    var gcm_ids = [], ios_ids = [], dataG = {}, filename = [], uniqid = Date.now();
+                    
+                    dataG._teacher = mongoose.Types.ObjectId(req.user._id);
+                    dataG.info = fields.info;
+                    dataG.type = fields.type;
+                    dataG.active = true;
+                    dataG._group = mongoose.Types.ObjectId(fields.group_id);
+                    dataG._parent = [];
+                    dataG._photo = [];
 
-            Classd.findById(dataDescription._class).populate("_student").exec(function (err, destClass) {
-                if (err) console.log(err);
-                if (!destClass) {
-                    console.log("not found")
-                    return false;
-                };
-                console.log(destClass);
-                User.populate(destClass._student, {
-                    path: '_parent',
-                    select: 'name gcm_id ios_id',
-                    model: User
-                }, function (err, parents) {
-                    _.each(parents, function (parent, index) {
-                        if (parent._parent) {
-                            dataDescription._parent.push(mongoose.Types.ObjectId(parent._parent._id));
-                            if (parent._parent.gcm_id) gcm_ids.push(parent._parent.gcm_id);
-                            if (parent._parent.ios_id) ios_ids.push(parent._parent.ios_id);
-                        };
-                    });
+                    Group.findById(fields.group_id).exec(getUsersFromGroup);
+                    
+                    function getUsersFromGroup (err, group) {
+                        if(err) { return handleError(res, err); }
+                        if(!group) { return res.status(404).send('Not Found'); }
+                        var user_ids = group._teacher;
+                        Story.create(dataG, processStoryForGroup);
+                    }
 
-                    Story.create(dataDescription, function (err, story) {
+                    function processStoryForGroup (err, story) {
+                        if(err) { return handleError(res, err); }
+                        if(!story) { return res.status(404).send('Not Found'); }
                         var Filekeys = Object.keys(files);
                         if (Filekeys.length > 0) {
                             _.each(Filekeys, function (file, index) {
@@ -90,7 +80,6 @@ exports.create = function(req, res) {
                                 var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
                                 var targetthumb = paththumb + '/' + name;
                                 var targetfile = pathfile + '/' + name;
-                                
                                 mkdirp(pathfile, function(err) {
                                     if(err) { return handleError(res, err); }
                                     fs.rename(files[file]['path'], targetfile);
@@ -100,95 +89,94 @@ exports.create = function(req, res) {
                                         resizeThumb(targetfile,targetthumb);
                                     });
                                 });
-
                                 filename.push({ url: story._id + '/original/' + name, thumb: story._id + '/thumb/' + name });
                             });
-
-                            Photo.create(filename, function (err, photos) {
-                                _.each(photos, function (photo, index) {
-                                    story._photo.push(photo._id);
-                                    story.save();
-
-                                    Photo.findOne(photo, function (err, pho) {
-                                        pho._user = mongoose.Types.ObjectId(req.user._id);
-                                        pho._story = story._id;
-                                        pho.save();
-                                    });
-                                });
-                            });
-                            // res.status(201).json({message: 'ok'});
+                            processPhotoForGroup (filename, story);
                         }
+                        processInsertStoryToGroupUsers (story);
+                        updateStoryToBeMine (story);
+                    }
 
-                        var Cc;
-                        if (fields.hasOwnProperty('group') && fields.group.length > 0) { 
-                            Cc = fields.group.split(","); 
-                            if (Cc.length > 0) {
-                                User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
-                                    if (err) console.log(err);
-                                    console.log(ok);
-                                });
-                                story._cc = Cc.slice();
-                                story.save();
-                            };
-                            User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
-                                var cc_ids = _.pluck(cc_user, 'gcm_id');
-                                sendGCM (cc_ids, 'story', req.user._id, story._id);
-                            })
-                        };
-
-
-                        Classd.findById(fields.class_id, function (err, classd) {
-                            if(err) { return handleError(res, err); }
-                            if(!classd) { return res.status(404).send('Class Not Found'); }
-                            classd._story.push(story._id);
-                            classd.save(function (err, cls) {
-                                sendGCM (gcm_ids, 'story', req.user._id, story._id);
-                                return res.status(201).json({message: 'ok'});
+                    function processPhotoForGroup (filename, story) {
+                        Photo.create(filename, function (err, photos) {
+                            var photo_ids = _.pluck(photos, "_id");
+                            Photo.update({_id:{$in:photo_ids}}, {_user: mongoose.Types.ObjectId(req.user._id), _story: story._id}, {multi:true}, function (err, ok) {
+                                console.log(ok);
+                            });
+                            Story.update({_id: story._id}, {$pushAll: {_photo: photo_ids}}, {multi:true}, function (err, ok) {
+                                console.log(ok);
                             });
                         });
+                    }
 
-                        User.findById(req.user._id, function (err, teacher) {
-                            teacher._story.push(mongoose.Types.ObjectId(story._id));
-                            teacher.save();
-                        });
-
-                        // console.log(dataDescription._parent);
-                        User.update({_id: { $in : dataDescription._parent }}, {$push : {'_story': mongoose.Types.ObjectId(story._id)}}, {multi: true}, function (err, parent) {
-                            console.log(parent);
-                        });
-
-                    });
-                });
-            });
-        } else {
-            var gcm_ids = [];
-            var ios_ids = [];
-            var dataDescription = {};
-            var uniqid = Date.now();
-            var story_id;
-
-            var Parents = fields.parent.split(",");
-            User.findById(req.user._id).exec(function (err, user) {
-                User.find({_id : { $in : Parents }}, function (err, parents) {
-
-                    _.each(parents, function (parent, index) {
-
-                        dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
-                        dataDescription.info = fields.info;
-                        dataDescription.type = fields.type;
-                        dataDescription.active = true;
-                        dataDescription._parent = [];
-                        dataDescription._photo = [];
-
-                        var filename = [];
-                        Story.create(dataDescription, function (err, story) {
-                            console.log(story);
-                            
-                            Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
+                    function processInsertStoryToGroupUsers (story) {
+                        Group.findById(fields.group_id).exec(function (err, group) {
+                            User.update({_id: {$in:group._teacher}}, {$push:{_story:story._id}}, {multi:true}, function (err, ok) {
                                 if (err) console.log(err);
                                 console.log(ok);
                             });
-                            
+                            Story.update({_id:story._id}, {$set:{_group:group._id}}, {multi:false}, function (err, ok) {
+                                console.log(ok);
+                            });
+                            sendGCMtoUserInGroup (story, group);
+                        });
+                    }
+
+                    function sendGCMtoUserInGroup (story, group) {
+                        User.find({_id:{$in:group._teacher}}).exec(function (err, user) {
+                            var gcm_ids_group = _.pluck(user, "gcm_id");
+                            if (gcm_ids_group.length > 0) {
+                                sendGCM (gcm_ids_group, 'story', req.user._id, story._id);
+                            };
+                        })
+                    }
+
+                    function updateStoryToBeMine (story) {
+                        User.update({_id:req.user._id}, {$push:{_story: story._id}}, {multi:false}, function (err, ok) {
+                            console.log(ok);
+                            return res.json({message:'ok'});
+                        });
+                    }
+                };
+                break;
+
+            case "info":
+                if (req.user.role == 'parent') { return res.status(401).send('parent cannot create info Story'); };
+                var gcm_ids = [];
+                var ios_ids = [];
+                var dataDescription = {};
+                var filename = [];
+                var uniqid = Date.now();
+
+                dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
+                dataDescription.info = fields.info;
+                dataDescription.type = fields.type;
+                dataDescription.active = true;
+                dataDescription._class = mongoose.Types.ObjectId(fields.class_id);
+                dataDescription._parent = [];
+                dataDescription._photo = [];
+
+                Classd.findById(dataDescription._class).populate("_student").exec(function (err, destClass) {
+                    if (err) console.log(err);
+                    if (!destClass) {
+                        console.log("not found")
+                        return false;
+                    };
+                    console.log(destClass);
+                    User.populate(destClass._student, {
+                        path: '_parent',
+                        select: 'name gcm_id ios_id',
+                        model: User
+                    }, function (err, parents) {
+                        _.each(parents, function (parent, index) {
+                            if (parent._parent) {
+                                dataDescription._parent.push(mongoose.Types.ObjectId(parent._parent._id));
+                                if (parent._parent.gcm_id) gcm_ids.push(parent._parent.gcm_id);
+                                if (parent._parent.ios_id) ios_ids.push(parent._parent.ios_id);
+                            };
+                        });
+
+                        Story.create(dataDescription, function (err, story) {
                             var Filekeys = Object.keys(files);
                             if (Filekeys.length > 0) {
                                 _.each(Filekeys, function (file, index) {
@@ -197,10 +185,9 @@ exports.create = function(req, res) {
                                     var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
                                     var targetthumb = paththumb + '/' + name;
                                     var targetfile = pathfile + '/' + name;
-                                    
                                     mkdirp(pathfile, function(err) {
                                         if(err) { return handleError(res, err); }
-                                        fsx.copySync(files[file]['path'], targetfile);
+                                        fs.rename(files[file]['path'], targetfile);
 
                                         mkdirp(paththumb, function(err) {
                                             if(err) { return handleError(res, err); }
@@ -213,10 +200,9 @@ exports.create = function(req, res) {
 
                                 Photo.create(filename, function (err, photos) {
                                     _.each(photos, function (photo, index) {
-                                        Story.update({_id: story._id}, {$push: {_photo:photo._id}}, {multi:false}, function (err, ok) {
-                                            console.log(ok);
-                                        });
-                                        
+                                        story._photo.push(photo._id);
+                                        story.save();
+
                                         Photo.findOne(photo, function (err, pho) {
                                             pho._user = mongoose.Types.ObjectId(req.user._id);
                                             pho._story = story._id;
@@ -226,46 +212,137 @@ exports.create = function(req, res) {
                                 });
                             }
 
-                            var Cc;
-                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
-                                Cc = fields.cc.split(","); 
-                                if (Cc.length > 0) {
-                                    console.log(Cc);
-                                    User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
-                                        if (err) console.log(err);
-                                        console.log(ok);
-                                    });
-
-                                    story._cc = Cc.slice();
-                                    story.save();
-
-                                    User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
-                                        var cc_ids = _.pluck(cc_user, 'gcm_id');
-                                        sendGCM (cc_ids, 'story', req.user._id, story._id);
-                                    })
-                                };
-                            };
-
-                            user._story.push(mongoose.Types.ObjectId(story._id));
-                            user.save();
-                            
-                            User.findById(parent._id, function (err, p) {
-                                p._story.push(story._id);
-                                p.save(function (err, pgcm) {
-                                    var t = [];                                    
-                                    t.push(pgcm.gcm_id);
-                                    sendGCM (t, 'story', req.user._id, story._id);
+                            Classd.findById(fields.class_id, function (err, classd) {
+                                if(err) { return handleError(res, err); }
+                                if(!classd) { return res.status(404).send('Class Not Found'); }
+                                classd._story.push(story._id);
+                                classd.save(function (err, cls) {
+                                    sendGCM (gcm_ids, 'story', req.user._id, story._id);
+                                    return res.status(201).json({message: 'ok'});
                                 });
+                            });
+
+                            User.findById(req.user._id, function (err, teacher) {
+                                teacher._story.push(mongoose.Types.ObjectId(story._id));
+                                teacher.save();
+                            });
+
+                            // console.log(dataDescription._parent);
+                            User.update({_id: { $in : dataDescription._parent }}, {$push : {'_story': mongoose.Types.ObjectId(story._id)}}, {multi: true}, function (err, parent) {
+                                console.log(parent);
                             });
 
                         });
                     });
-                    return res.send({message: 'ok'});
                 });
-            });
-            
+                break;
+                
+            case "diary":
+                var gcm_ids = [];
+                var ios_ids = [];
+                var dataDescription = {};
+                var uniqid = Date.now();
+                var story_id;
 
-        };
+                var Parents = fields.parent.split(",");
+                User.findById(req.user._id).exec(function (err, user) {
+                    User.find({_id : { $in : Parents }}, function (err, parents) {
+
+                        _.each(parents, function (parent, index) {
+
+                            dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
+                            dataDescription.info = fields.info;
+                            dataDescription.type = fields.type;
+                            dataDescription.active = true;
+                            dataDescription._parent = [];
+                            dataDescription._photo = [];
+
+                            var filename = [];
+                            Story.create(dataDescription, function (err, story) {
+                                console.log(story);
+                                
+                                Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
+                                    if (err) console.log(err);
+                                    console.log(ok);
+                                });
+                                
+                                var Filekeys = Object.keys(files);
+                                if (Filekeys.length > 0) {
+                                    _.each(Filekeys, function (file, index) {
+                                        var name = uniqid + files[file]['name'];
+                                        var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/original");
+                                        var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
+                                        var targetthumb = paththumb + '/' + name;
+                                        var targetfile = pathfile + '/' + name;
+                                        
+                                        mkdirp(pathfile, function(err) {
+                                            if(err) { return handleError(res, err); }
+                                            fsx.copySync(files[file]['path'], targetfile);
+
+                                            mkdirp(paththumb, function(err) {
+                                                if(err) { return handleError(res, err); }
+                                                resizeThumb(targetfile,targetthumb);
+                                            });
+                                        });
+
+                                        filename.push({ url: story._id + '/original/' + name, thumb: story._id + '/thumb/' + name });
+                                    });
+
+                                    Photo.create(filename, function (err, photos) {
+                                        _.each(photos, function (photo, index) {
+                                            Story.update({_id: story._id}, {$push: {_photo:photo._id}}, {multi:false}, function (err, ok) {
+                                                console.log(ok);
+                                            });
+                                            
+                                            Photo.findOne(photo, function (err, pho) {
+                                                pho._user = mongoose.Types.ObjectId(req.user._id);
+                                                pho._story = story._id;
+                                                pho.save();
+                                            });
+                                        });
+                                    });
+                                }
+
+                                var Cc;
+                                if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
+                                    Cc = fields.cc.split(","); 
+                                    if (Cc.length > 0) {
+                                        console.log(Cc);
+                                        User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                            if (err) console.log(err);
+                                            console.log(ok);
+                                        });
+
+                                        story._cc = Cc.slice();
+                                        story.save();
+
+                                        User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
+                                            var cc_ids = _.pluck(cc_user, 'gcm_id');
+                                            sendGCM (cc_ids, 'story', req.user._id, story._id);
+                                        })
+                                    };
+                                };
+
+                                user._story.push(mongoose.Types.ObjectId(story._id));
+                                user.save();
+                                
+                                User.findById(parent._id, function (err, p) {
+                                    p._story.push(story._id);
+                                    p.save(function (err, pgcm) {
+                                        var t = [];                                    
+                                        t.push(pgcm.gcm_id);
+                                        sendGCM (t, 'story', req.user._id, story._id);
+                                    });
+                                });
+
+                            });
+                        });
+                        return res.send({message: 'ok'});
+                    });
+                });
+                break;
+        }
+
     });
 }
 

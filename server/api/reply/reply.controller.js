@@ -66,11 +66,11 @@ exports.create = function(req, res) {
             story.save();
 
             if (receiver_message.length > 0) {
-                sendGCM (receiver_message, 'reply', req.user._id, req.user._id, story._id);
+                sendGCM (receiver_message, 'reply', req.user._id, story._id);
             };
 
             if (receiver_cc.length > 0) {
-                sendGCM (receiver_cc, 'reply', req.user._id, req.user._id, story._id);
+                sendGCM (receiver_cc, 'reply', req.user._id, story._id);
             };
 
             return res.status(201).json({message: 'ok'});

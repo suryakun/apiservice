@@ -59,7 +59,11 @@ angular.module('roomApp')
         }
 
         if (Object.keys($stateParams).length > 0) {
-            $scope.editparams = Foundation.foundations[$stateParams.id];
+            $http.get('/api/foundations/'+$stateParams.id)
+                .success(function (foundation) {
+                    console.log(foundation);
+                    $scope.editparams = foundation[0];
+                });
         };
 
         //execute update data foundation

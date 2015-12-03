@@ -6,8 +6,9 @@ var controller = require('./foundation.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
-router.get('/:id', controller.show);
+router.get('/single/:id', controller.show);
 router.post('/', controller.create);
+router.get('/active/:id', controller.active);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);

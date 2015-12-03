@@ -86,7 +86,6 @@ Classd.find({}).remove(function() {
         info: 'Kelas Collection',
         active: true
     }, function (err, cls) {
-
         //set relation to level
         setTimeout(function (argument) {
             Level.findOne({ grade: 'nol kecil'}, function (err, level) {
@@ -105,9 +104,17 @@ Classd.find({}).remove(function() {
                 Classd.update({name: {$in: class_name} }, { $set: {_school: mongoose.Types.ObjectId(scl._id)} }, {multi:true}, function (err, ok) {
                     console.log(ok)
                 })
+
+                Classd.find({name: {$in: class_name}}).exec(function (err, clsd) {
+                    var ids = _.map(clsd, function (n) {
+                        return n._id;
+                    })
+                    
+                    School.update({_id: scl._id}, {$pushAll: {_class:ids}}, {multi:true}).exec(function (err, ok) {
+                        console.log(ok);
+                    });
+                })
                 
-                scl._class.push(cls._id);
-                scl.save();
             });
         },2000);
 
@@ -795,7 +802,7 @@ setTimeout(function (argument) {
                         password: 'admin',
                         _class: id
                     }], function (err) {
-                        
+                                                
                     });
                 });
             });
@@ -803,20 +810,30 @@ setTimeout(function (argument) {
     },1000);
 
     setTimeout(function (argument) {
-        User.find({role: 'teacher'}, function (err, teacher) {
-            _.each(teacher, function (teach, index) {
-                Classd.update({name: 'Toddler'}, {$push : {'_teacher': mongoose.Types.ObjectId(teach._id)}}, {multi: true}, function (err, tc) {
-                    console.log(tc);
-                });
+        var teacherTodler = ['elvi@kidzpotentia.sch.id', 'myta@kidzpotentia.sch.id','anggi@kidzpotentia.sch.id', 'ade@kidzpotentia.sch.id', 'suhendar@kidzpotentia.sch.id', 'titin@kidzpotentia.sch.id', 'fitri@kidzpotentia.sch.id', 'admin@admin.com'];
+        var teacherBayi = ['debi@kidzpotentia.sch.id'];
+        var teacherPlaygroup = ['denia@kidzpotentia.sch.id'];
+        User.find({'email': {$in: teacherTodler}}).exec(function (err, tcr) {
+            var t = _.pluck(tcr, "_id");
+            Classd.update({name: 'Toddler'}, {$pushAll: {_teacher: t}}, {multi:true}, function (err, ok) {
+                console.log(ok)
             });
-        });
+        })
 
-        Classd.find({name: 'Toddler'}, function (err, cls) {
-            User.update({role: 'student'}, {$set : {'_class': mongoose.Types.ObjectId(cls[0]._id)}}, {multi: true}, function (err, tc) {
-                console.log(tc);
+        User.find({'email': {$in: teacherBayi}}).exec(function (err, tcr) {
+            var t = _.pluck(tcr, "_id");
+            Classd.update({name: 'Bayi'}, {$pushAll: {_teacher: t}}, {multi:true}, function (err, ok) {
+                console.log(ok)
             });
-        });
-    }, 3000);
+        })
+
+        User.find({'email': {$in: teacherPlaygroup}}).exec(function (err, tcr) {
+            var t = _.pluck(tcr, "_id");
+            Classd.update({name: 'Playgroup'}, {$pushAll: {_teacher: t}}, {multi:true}, function (err, ok) {
+                console.log(ok)
+            });
+        })
+    }, 4000);
 
     setTimeout(function (argument) {
         Group.find({}).remove(function() {
@@ -857,10 +874,6 @@ setTimeout(function (argument) {
 });
 });
 
-
-Classd.find({}).remove(function (argument) {
-    // body...
-})
 
 Photo.find({}).remove(function() {
     

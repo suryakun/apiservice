@@ -23,6 +23,10 @@ angular.module('roomApp')
     		return $http.put('/api/foundations/' + id, params)
     	}
 
+        base.delete = function (id, params) {
+            return $http.get('/api/foundations/active/' + id, params)
+        }
+
         return base;
 
     })

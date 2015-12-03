@@ -13,8 +13,8 @@
                     <div class="box-inner">
                             <div class="p hidden-folded blue-50" style="background-image:url(assets/images/bg.jpg); background-size:cover">
                             <div class="bg-protector"></div>
-                            <div class="rounded w-64 bg-white inline pos-rlt"> <img src="assets/images/a5.jpg" class="img-responsive rounded"> </div>
-                            <a class="block m-t-sm" ui-toggle-class="hide, show" target="#nav, #account"> <span class="block font-bold">Johny Sofyan</span> <span class="pull-right auto"> <i class="fa inline fa-caret-down"></i> <i class="fa none fa-caret-up"></i> </span> Pengurus Yayasan </a> </div>
+                            <div class="rounded w-64 bg-white inline pos-rlt"> <img src="assets/{{ (me.avatar !== '') ? me.avatar : 'images/a5.jpg' }}" class="img-responsive rounded"> </div>
+                            <a class="block m-t-sm" ui-toggle-class="hide, show" target="#nav, #account"> <span class="block font-bold">{{me.name}}</span> <span class="pull-right auto"> <i class="fa inline fa-caret-down"></i> <i class="fa none fa-caret-up"></i> </span> {{me.role}} </a> </div>
                     <div id="nav">
                             <nav ui-nav>
                                 <ul class="nav">

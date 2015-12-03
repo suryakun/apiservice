@@ -16,6 +16,7 @@ angular.module('roomApp')
         $scope.foundations = [];
         $scope.editparams;
         $scope.search = {};
+        $scope.id_delete = '';
 
         //get data for self
     	Foundation.getMe().success(function (data) {
@@ -58,8 +59,17 @@ angular.module('roomApp')
                 });
         }
 
+        $scope.modelSetDelete = function (id) {
+            $scope.id_delete = id;
+            console.log($scope.id_delete);
+        }
+
+        $scope.delete = function () {
+            Foundation.delete($scope.id_delete);
+        }
+
         if (Object.keys($stateParams).length > 0) {
-            $http.get('/api/foundations/'+$stateParams.id)
+            $http.get('/api/foundations/single/'+$stateParams.id)
                 .success(function (foundation) {
                     console.log(foundation);
                     $scope.editparams = foundation[0];

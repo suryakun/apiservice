@@ -5,7 +5,7 @@ var Foundation = require('./foundation.model');
 
 // Get list of foundations
 exports.index = function(req, res) {
-  Foundation.find({}).exec(function (err, foundations) {
+  Foundation.find({active: true}).exec(function (err, foundations) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(foundations);
   });
@@ -55,6 +55,17 @@ exports.destroy = function(req, res) {
   });
 };
 
+exports.active = function (req, res) {
+  Foundation.findById(req.params.id, function (err, foundation) {
+    if (foundation.active == true) {
+      foundation.active = false;
+      foundation.save();
+    } else {
+      foundation.active = true;
+      foundation.save();
+    }
+  })
+}
 //Get Schools By Foundation Id
 exports.getSchoolsByFoundationId = function(req, res) {
   var param = req.params.id;

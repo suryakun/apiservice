@@ -270,10 +270,14 @@ exports.getAllParentFromMySchool = function (req, res) {
 
 exports.getTeacherOfMySchool = function (req, res) {
     User.getTeacherOfMySchool(req.user._id, function (err, user) {
-        var teacher = user.map(function (p) {
-            return p._teacher;
+        console.log(user.length);
+        var tmp = [];
+        user.forEach(function (p) {
+            _.each(p._teacher, function (t) {
+                tmp.push(t);
+            })
         });
-        res.status(200).json(teacher[0]);
+        res.status(200).json(tmp);
     });
 }
 

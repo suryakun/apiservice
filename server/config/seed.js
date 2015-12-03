@@ -810,7 +810,14 @@ setTimeout(function (argument) {
     },1000);
 
     setTimeout(function (argument) {
-        var teacherTodler = ['elvi@kidzpotentia.sch.id', 'myta@kidzpotentia.sch.id','anggi@kidzpotentia.sch.id', 'ade@kidzpotentia.sch.id', 'suhendar@kidzpotentia.sch.id', 'titin@kidzpotentia.sch.id', 'fitri@kidzpotentia.sch.id', 'admin@admin.com'];
+        var teacherTodler = ['elvi@kidzpotentia.sch.id', 
+                            'myta@kidzpotentia.sch.id',
+                            'anggi@kidzpotentia.sch.id', 
+                            'ade@kidzpotentia.sch.id', 
+                            'suhendar@kidzpotentia.sch.id', 
+                            'titin@kidzpotentia.sch.id', 
+                            'fitri@kidzpotentia.sch.id', 
+                            'admin@admin.com'];
         var teacherBayi = ['debi@kidzpotentia.sch.id'];
         var teacherPlaygroup = ['denia@kidzpotentia.sch.id'];
         User.find({'email': {$in: teacherTodler}}).exec(function (err, tcr) {

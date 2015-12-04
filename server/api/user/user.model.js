@@ -313,19 +313,36 @@ UserSchema.statics.getParentOfMySchool = function (id, callback) {
     var user = this;
     return user.findById(id).populate("_class").populate("_student").exec(function (err, me) {
         if (me.role == 'teacher') {
-            user.find({_class : me._class, role : 'student'}).populate("_parent").exec(function (err, parents) {
-                var par = _.pluck(parents, "_parent");
-                var ids = _.pluck(par,"_id");
-                console.log(ids);
-                user.find({_id: {$in:ids}}).populate("_student").exec(callback);
+            Classd.findById(me._class).populate("_school").exec(function (err, cls) {
+                School.findById(cls._school._id).populate("_class").exec(function (err, c) {
+                    Classd.find({_id : {$in: c._class}}).populate("_student").exec(function (err, clas) {
+                        var tmp = [];
+                        clas.forEach(function (p) {
+                            _.each(p._student, function (t) {
+                                tmp.push(t);
+                            })
+                        });
+                        var student_ids = _.pluck(tmp, "_id");
+                        user.find({_id: {$in: student_ids}}).populate("_parent").exec(callback);
+                    });
+                });
             });
         };
 
         if (me.role == 'parent') {
-            user.find({_class : me._student[0]._class, role : 'student'}).populate("_parent").exec(function (err, parents) {                
-                var par = _.pluck(parents, "_parent");
-                var ids = _.pluck(par,"_id");
-                user.find({_id: {$in:ids}}).select("-salt -hashedPassword").populate("_student").exec(callback);
+            Classd.findById(me._student[0]._class).populate("_school").exec(function (err, cls) {
+                School.findById(cls._school._id).populate("_class").exec(function (err, c) {
+                    Classd.find({_id : {$in: c._class}}).populate("_student").exec(function (err, clas) {
+                        var tmp = [];
+                        clas.forEach(function (p) {
+                            _.each(p._student, function (t) {
+                                tmp.push(t);
+                            })
+                        });
+                        var student_ids = _.pluck(tmp, "_id");
+                        user.find({_id: {$in: student_ids}}).populate("_parent").exec(callback);
+                    });
+                });
             });
         };
     });

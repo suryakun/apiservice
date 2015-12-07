@@ -152,18 +152,28 @@ exports.create = function(req, res) {
                 dataDescription.info = fields.info;
                 dataDescription.type = fields.type;
                 dataDescription.active = true;
-                dataDescription._class = mongoose.Types.ObjectId(fields.class_id);
+                dataDescription._class = fields.class_id.split(",");
                 dataDescription._parent = [];
                 dataDescription._photo = [];
+                if (fields.hasOwnProperty("group")) {
+                    dataDescription._group = fields.group.split(",");;
+                };
 
-                Classd.findById(dataDescription._class).populate("_student").exec(function (err, destClass) {
+                Classd.find({_id: {$in:dataDescription._class}}).populate("_student").exec(function (err, destClass) {
+                    var ids_parent = [];
                     if (err) console.log(err);
                     if (!destClass) {
                         console.log("not found")
                         return false;
                     };
-                    console.log(destClass);
-                    User.populate(destClass._student, {
+                    var student_id = _.pluck(destClass, "_student");
+                    for (var i = 0; i < student_id.length; i++) {
+                        for (var j = 0; j < student_id[i].length; j++) {
+                            ids_parent.push(student_id[i][j]);
+                        };
+                    };
+
+                    User.populate(ids_parent, {
                         path: '_parent',
                         select: 'name gcm_id ios_id',
                         model: User
@@ -212,14 +222,10 @@ exports.create = function(req, res) {
                                 });
                             }
 
-                            Classd.findById(fields.class_id, function (err, classd) {
-                                if(err) { return handleError(res, err); }
-                                if(!classd) { return res.status(404).send('Class Not Found'); }
-                                classd._story.push(story._id);
-                                classd.save(function (err, cls) {
-                                    sendGCM (gcm_ids, 'story', req.user._id, story._id);
-                                    return res.status(201).json({message: 'ok'});
-                                });
+                            Classd.update({_id: {$in:dataDescription._class}}, {$push: {_story:story._id}}, {multi:true}).exec(function function_name (err, classd) {
+                                console.log(req.user._id, story._id);
+                                sendGCM (gcm_ids, 'story', req.user._id, story._id);
+                                return res.status(201).json({message: 'ok'});
                             });
 
                             User.findById(req.user._id, function (err, teacher) {
@@ -231,6 +237,47 @@ exports.create = function(req, res) {
                             User.update({_id: { $in : dataDescription._parent }}, {$push : {'_story': mongoose.Types.ObjectId(story._id)}}, {multi: true}, function (err, parent) {
                                 console.log(parent);
                             });
+
+                            var Cc;
+                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
+                                Cc = fields.cc.split(","); 
+                                if (Cc.length > 0) {
+                                    User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                        if (err) console.log(err);
+                                        console.log(ok);
+                                    });
+
+                                    story._cc = Cc.slice();
+                                    story.save();
+
+                                    User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
+                                        var cc_ids = _.pluck(cc_user, 'gcm_id');
+                                        sendGCM (cc_ids, 'story', req.user._id, story._id);
+                                    })
+                                };
+                            };
+
+                            function processInsertStoryToGroupUsers (story) {
+                                Group.findById(fields.group_id).exec(function (err, group) {
+                                    User.update({_id: {$in:group._teacher}}, {$push:{_story:story._id}}, {multi:true}, function (err, ok) {
+                                        if (err) console.log(err);
+                                        console.log(ok);
+                                    });
+                                    Story.update({_id:story._id}, {$set:{_group:group._id}}, {multi:false}, function (err, ok) {
+                                        console.log(ok);
+                                    });
+                                    sendGCMtoUserInGroup (story, group);
+                                });
+                            }
+
+                            function sendGCMtoUserInGroup (story, group) {
+                                User.find({_id:{$in:group._teacher}}).exec(function (err, user) {
+                                    var gcm_ids_group = _.pluck(user, "gcm_id");
+                                    if (gcm_ids_group.length > 0) {
+                                        sendGCM (gcm_ids_group, 'story', req.user._id, story._id);
+                                    };
+                                })
+                            }
 
                         });
                     });
@@ -259,7 +306,6 @@ exports.create = function(req, res) {
 
                             var filename = [];
                             Story.create(dataDescription, function (err, story) {
-                                console.log(story);
                                 
                                 Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
                                     if (err) console.log(err);
@@ -307,7 +353,6 @@ exports.create = function(req, res) {
                                 if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
                                     Cc = fields.cc.split(","); 
                                     if (Cc.length > 0) {
-                                        console.log(Cc);
                                         User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
                                             if (err) console.log(err);
                                             console.log(ok);
@@ -355,18 +400,28 @@ exports.create = function(req, res) {
                 dataDescription.info = fields.info;
                 dataDescription.type = fields.type;
                 dataDescription.active = true;
-                dataDescription._class = mongoose.Types.ObjectId(fields.class_id);
+                dataDescription._class = fields.class_id.split(",");
                 dataDescription._parent = [];
                 dataDescription._photo = [];
+                if (fields.hasOwnProperty("group")) {
+                    dataDescription._group = fields.group.split(",");;
+                };
 
-                Classd.findById(dataDescription._class).populate("_student").exec(function (err, destClass) {
+                Classd.find({_id: {$in:dataDescription._class}}).populate("_student").exec(function (err, destClass) {
+                    var ids_parent = [];
                     if (err) console.log(err);
                     if (!destClass) {
                         console.log("not found")
                         return false;
                     };
-                    console.log(destClass);
-                    User.populate(destClass._student, {
+                    var student_id = _.pluck(destClass, "_student");
+                    for (var i = 0; i < student_id.length; i++) {
+                        for (var j = 0; j < student_id[i].length; j++) {
+                            ids_parent.push(student_id[i][j]);
+                        };
+                    };
+
+                    User.populate(ids_parent, {
                         path: '_parent',
                         select: 'name gcm_id ios_id',
                         model: User
@@ -415,14 +470,9 @@ exports.create = function(req, res) {
                                 });
                             }
 
-                            Classd.findById(fields.class_id, function (err, classd) {
-                                if(err) { return handleError(res, err); }
-                                if(!classd) { return res.status(404).send('Class Not Found'); }
-                                classd._story.push(story._id);
-                                classd.save(function (err, cls) {
-                                    sendGCM (gcm_ids, 'story', req.user._id, story._id);
-                                    return res.status(201).json({message: 'ok'});
-                                });
+                            Classd.update({_id: {$in:dataDescription._class}}, {$push: {_story:story._id}}, {multi:true}).exec(function function_name (err, classd) {
+                                sendGCM (gcm_ids, 'story', req.user._id, story._id);
+                                return res.status(201).json({message: 'ok'});
                             });
 
                             User.findById(req.user._id, function (err, teacher) {
@@ -434,6 +484,47 @@ exports.create = function(req, res) {
                             User.update({_id: { $in : dataDescription._parent }}, {$push : {'_story': mongoose.Types.ObjectId(story._id)}}, {multi: true}, function (err, parent) {
                                 console.log(parent);
                             });
+
+                            var Cc;
+                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
+                                Cc = fields.cc.split(","); 
+                                if (Cc.length > 0) {
+                                    User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                        if (err) console.log(err);
+                                        console.log(ok);
+                                    });
+
+                                    story._cc = Cc.slice();
+                                    story.save();
+
+                                    User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
+                                        var cc_ids = _.pluck(cc_user, 'gcm_id');
+                                        sendGCM (cc_ids, 'story', req.user._id, story._id);
+                                    })
+                                };
+                            };
+                            
+                            function processInsertStoryToGroupUsers (story) {
+                                Group.findById(fields.group_id).exec(function (err, group) {
+                                    User.update({_id: {$in:group._teacher}}, {$push:{_story:story._id}}, {multi:true}, function (err, ok) {
+                                        if (err) console.log(err);
+                                        console.log(ok);
+                                    });
+                                    Story.update({_id:story._id}, {$set:{_group:group._id}}, {multi:false}, function (err, ok) {
+                                        console.log(ok);
+                                    });
+                                    sendGCMtoUserInGroup (story, group);
+                                });
+                            }
+
+                            function sendGCMtoUserInGroup (story, group) {
+                                User.find({_id:{$in:group._teacher}}).exec(function (err, user) {
+                                    var gcm_ids_group = _.pluck(user, "gcm_id");
+                                    if (gcm_ids_group.length > 0) {
+                                        sendGCM (gcm_ids_group, 'story', req.user._id, story._id);
+                                    };
+                                })
+                            }
 
                         });
                     });
@@ -462,7 +553,6 @@ exports.create = function(req, res) {
 
                             var filename = [];
                             Story.create(dataDescription, function (err, story) {
-                                console.log(story);
                                 
                                 Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
                                     if (err) console.log(err);
@@ -510,7 +600,6 @@ exports.create = function(req, res) {
                                 if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
                                     Cc = fields.cc.split(","); 
                                     if (Cc.length > 0) {
-                                        console.log(Cc);
                                         User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
                                             if (err) console.log(err);
                                             console.log(ok);

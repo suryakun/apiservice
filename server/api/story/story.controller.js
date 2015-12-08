@@ -223,7 +223,6 @@ exports.create = function(req, res) {
                             }
 
                             Classd.update({_id: {$in:dataDescription._class}}, {$push: {_story:story._id}}, {multi:true}).exec(function function_name (err, classd) {
-                                console.log(req.user._id, story._id);
                                 sendGCM (gcm_ids, 'story', req.user._id, story._id);
                                 return res.status(201).json({message: 'ok'});
                             });
@@ -257,19 +256,6 @@ exports.create = function(req, res) {
                                 };
                             };
 
-                            function processInsertStoryToGroupUsers (story) {
-                                Group.findById(fields.group_id).exec(function (err, group) {
-                                    User.update({_id: {$in:group._teacher}}, {$push:{_story:story._id}}, {multi:true}, function (err, ok) {
-                                        if (err) console.log(err);
-                                        console.log(ok);
-                                    });
-                                    Story.update({_id:story._id}, {$set:{_group:group._id}}, {multi:false}, function (err, ok) {
-                                        console.log(ok);
-                                    });
-                                    sendGCMtoUserInGroup (story, group);
-                                });
-                            }
-
                             function sendGCMtoUserInGroup (story, group) {
                                 User.find({_id:{$in:group._teacher}}).exec(function (err, user) {
                                     var gcm_ids_group = _.pluck(user, "gcm_id");
@@ -278,6 +264,22 @@ exports.create = function(req, res) {
                                     };
                                 })
                             }
+                            
+                            if (fields.hasOwnProperty("group_id")) {
+                                var grp_id = fields.group_id.split(",");
+                                Group.find({_id: {$in:grp_id}}).exec(function (err, g) {
+                                    _.each(g, function (group, index) {
+                                        User.update({_id: {$in:group._teacher}}, {$push:{_story:story._id}}, {multi:true}, function (err, ok) {
+                                            if (err) console.log(err);
+                                            console.log(ok);
+                                        });
+                                        Story.update({_id:story._id}, {$set:{_group:group._id}}, {multi:false}, function (err, ok) {
+                                            console.log(ok);
+                                        });
+                                        sendGCMtoUserInGroup (story, group);
+                                    })
+                                });
+                            };
 
                         });
                     });
@@ -503,19 +505,6 @@ exports.create = function(req, res) {
                                     })
                                 };
                             };
-                            
-                            function processInsertStoryToGroupUsers (story) {
-                                Group.findById(fields.group_id).exec(function (err, group) {
-                                    User.update({_id: {$in:group._teacher}}, {$push:{_story:story._id}}, {multi:true}, function (err, ok) {
-                                        if (err) console.log(err);
-                                        console.log(ok);
-                                    });
-                                    Story.update({_id:story._id}, {$set:{_group:group._id}}, {multi:false}, function (err, ok) {
-                                        console.log(ok);
-                                    });
-                                    sendGCMtoUserInGroup (story, group);
-                                });
-                            }
 
                             function sendGCMtoUserInGroup (story, group) {
                                 User.find({_id:{$in:group._teacher}}).exec(function (err, user) {
@@ -525,6 +514,22 @@ exports.create = function(req, res) {
                                     };
                                 })
                             }
+                            
+                            if (fields.hasOwnProperty("group_id")) {
+                                var grp_id = fields.group_id.split(",");
+                                Group.find({_id: {$in:grp_id}}).exec(function (err, g) {
+                                    _.each(g, function (group, index) {
+                                        User.update({_id: {$in:group._teacher}}, {$push:{_story:story._id}}, {multi:true}, function (err, ok) {
+                                            if (err) console.log(err);
+                                            console.log(ok);
+                                        });
+                                        Story.update({_id:story._id}, {$set:{_group:group._id}}, {multi:false}, function (err, ok) {
+                                            console.log(ok);
+                                        });
+                                        sendGCMtoUserInGroup (story, group);
+                                    })
+                                });
+                            };
 
                         });
                     });

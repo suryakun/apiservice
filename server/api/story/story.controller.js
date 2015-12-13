@@ -210,8 +210,9 @@ exports.create = function(req, res) {
 
                                 Photo.create(filename, function (err, photos) {
                                     _.each(photos, function (photo, index) {
-                                        story._photo.push(photo._id);
-                                        story.save();
+                                        Story.update({_id: story._id}, {$push: {_photo: photo._id}}, {multi:false}, function (err, ok) {
+                                            console.log(ok);
+                                        });
 
                                         Photo.findOne(photo, function (err, pho) {
                                             pho._user = mongoose.Types.ObjectId(req.user._id);
@@ -221,6 +222,27 @@ exports.create = function(req, res) {
                                     });
                                 });
                             }
+
+                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
+                                var Cc = fields.cc.split(","); 
+                                if (Cc.length > 0) {
+                                    User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                        if (err) console.log(err);
+                                        console.log(ok);
+                                    });
+
+                                    _.each(Cc, function (c, i) {
+                                        Story.update({_id: story._id}, {$push: {_cc: c}}, {multi:false}, function (err, ok) {
+                                            console.log(ok);
+                                        });
+                                    });
+                                    
+                                    User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
+                                        var cc_ids = _.pluck(cc_user, 'gcm_id');
+                                        sendGCM (cc_ids, 'story', req.user._id, story._id);
+                                    })
+                                };
+                            };
 
                             Classd.update({_id: {$in:dataDescription._class}}, {$push: {_story:story._id}}, {multi:true}).exec(function function_name (err, classd) {
                                 sendGCM (gcm_ids, 'story', req.user._id, story._id);
@@ -236,25 +258,6 @@ exports.create = function(req, res) {
                             User.update({_id: { $in : dataDescription._parent }}, {$push : {'_story': mongoose.Types.ObjectId(story._id)}}, {multi: true}, function (err, parent) {
                                 console.log(parent);
                             });
-
-                            var Cc;
-                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
-                                Cc = fields.cc.split(","); 
-                                if (Cc.length > 0) {
-                                    User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
-                                        if (err) console.log(err);
-                                        console.log(ok);
-                                    });
-
-                                    story._cc = Cc.slice();
-                                    story.save();
-
-                                    User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
-                                        var cc_ids = _.pluck(cc_user, 'gcm_id');
-                                        sendGCM (cc_ids, 'story', req.user._id, story._id);
-                                    })
-                                };
-                            };
 
                             function sendGCMtoUserInGroup (story, group) {
                                 User.find({_id:{$in:group._teacher}}).exec(function (err, user) {
@@ -460,8 +463,9 @@ exports.create = function(req, res) {
 
                                 Photo.create(filename, function (err, photos) {
                                     _.each(photos, function (photo, index) {
-                                        story._photo.push(photo._id);
-                                        story.save();
+                                        Story.update({_id: story._id}, {$push: {_photo: photo._id}}, {multi:false}, function (err, ok) {
+                                            console.log(ok);
+                                        });
 
                                         Photo.findOne(photo, function (err, pho) {
                                             pho._user = mongoose.Types.ObjectId(req.user._id);
@@ -471,6 +475,27 @@ exports.create = function(req, res) {
                                     });
                                 });
                             }
+
+                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
+                                var Cc = fields.cc.split(","); 
+                                if (Cc.length > 0) {
+                                    User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
+                                        if (err) console.log(err);
+                                        console.log(ok);
+                                    });
+
+                                    _.each(Cc, function (c, i) {
+                                        Story.update({_id: story._id}, {$push: {_cc: c}}, {multi:false}, function (err, ok) {
+                                            console.log(ok);
+                                        });
+                                    });
+                                    
+                                    User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
+                                        var cc_ids = _.pluck(cc_user, 'gcm_id');
+                                        sendGCM (cc_ids, 'story', req.user._id, story._id);
+                                    })
+                                };
+                            };
 
                             Classd.update({_id: {$in:dataDescription._class}}, {$push: {_story:story._id}}, {multi:true}).exec(function function_name (err, classd) {
                                 sendGCM (gcm_ids, 'story', req.user._id, story._id);
@@ -486,25 +511,6 @@ exports.create = function(req, res) {
                             User.update({_id: { $in : dataDescription._parent }}, {$push : {'_story': mongoose.Types.ObjectId(story._id)}}, {multi: true}, function (err, parent) {
                                 console.log(parent);
                             });
-
-                            var Cc;
-                            if (fields.hasOwnProperty('cc') && fields.cc.length > 0) { 
-                                Cc = fields.cc.split(","); 
-                                if (Cc.length > 0) {
-                                    User.update({ _id : { $in : Cc}}, {$push : { _story : story._id }}, {multi: true}, function (err, ok) {
-                                        if (err) console.log(err);
-                                        console.log(ok);
-                                    });
-
-                                    story._cc = Cc.slice();
-                                    story.save();
-
-                                    User.find({_id : {$in: Cc}}).exec(function (err, cc_user) {
-                                        var cc_ids = _.pluck(cc_user, 'gcm_id');
-                                        sendGCM (cc_ids, 'story', req.user._id, story._id);
-                                    })
-                                };
-                            };
 
                             function sendGCMtoUserInGroup (story, group) {
                                 User.find({_id:{$in:group._teacher}}).exec(function (err, user) {

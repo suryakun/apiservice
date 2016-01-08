@@ -32,7 +32,6 @@ exports.index = function(req, res) {
 exports.create = function (req, res, next) {
     var newUser = new User(req.body);
     newUser.provider = 'local';
-    newUser.role = 'user';
     newUser.save(function(err, user) {
         if (err) return validationError(res, err);
         var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
@@ -276,6 +275,14 @@ exports.getTeacherOfMySchool = function (req, res) {
             })
         });
         res.status(200).json(tmp);
+    });
+}
+
+exports.getModerator = function (req, res) {
+    User.getModerator(req.params.id, function (err, mod) {
+        if(err) { return handleError(res, err); }
+        if(!mod) { return res.status(404).send('Not Found'); }
+        res.status(200).json(mod);
     });
 }
 

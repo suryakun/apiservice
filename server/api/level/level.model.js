@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var LevelSchema = new Schema({
   _class: [{ type: Schema.ObjectId, ref: 'Class' }],
+  _school: { type: Schema.ObjectId, ref: 'Class' },
   grade: String,
   info: String,
   active: Boolean,

@@ -14,7 +14,7 @@ exports.index = function(req, res) {
 
 // Get a single school
 exports.show = function(req, res) {
-  School.findd({_id: req.params.id, active: true}, function (err, school) {
+  School.find({_id: req.params.id, active: true}, function (err, school) {
     if(err) { return handleError(res, err); }
     if(!school) { return res.status(404).send('Not Found'); }
     return res.json(school);
@@ -33,10 +33,11 @@ exports.create = function(req, res) {
 // Updates an existing school in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  School.find({_id: req.params.id, active: true}, function (err, school) {
+  School.findById(req.params.id, function (err, school) {
     if (err) { return handleError(res, err); }
     if(!school) { return res.status(404).send('Not Found'); }
     var updated = _.merge(school, req.body);
+    console.log(updated)
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(school);
@@ -74,6 +75,28 @@ exports.getClassBySchoolId = function (req, res) {
     if(!data) { return res.status(404).send('Not Found'); }
     res.status(200).json(data);
   });
+}
+
+exports.getSchoolsByFoundationId = function (req, res) {
+  var foundation_id = req.params.id;
+  handleString(res, foundation_id);
+  School.find({_foundation:foundation_id, active:true}).exec(function (err, school) {
+    if(err) { return handleError(res, err); }
+    if(!school) { return res.status(404).send('Not Found'); }
+    res.status(200).json(school);
+  })
+}
+
+exports.active = function (req, res) {
+  School.findById(req.params.id, function (err, school) {
+    if (school.active == true) {
+      school.active = false;
+      school.save();
+    } else {
+      school.active = true;
+      school.save();
+    }
+  })
 }
 
 function handleString(res, string) {

@@ -1,0 +1,142 @@
+<div ng-include="'components/navbar/headerschool/headerschool.html'" class="app-aside"></div>
+<!-- content -->
+  <div id="content" class="app-content" role="main">
+    <div class="box">
+          <!-- Content Navbar -->
+    <div class="navbar no-radius blue">
+      <!-- Open side - Naviation on mobile -->
+      <a md-ink-ripple  data-toggle="modal" data-target="#aside" class="navbar-item pull-left visible-xs visible-sm"><i class="mdi-navigation-menu i-24"></i></a>
+      <!-- / -->
+      <!-- Page title - Bind to $state's title -->
+      <div class="navbar-item pull-left title-page h4">Classes</div>
+
+      <!-- / -->
+      <!-- Common tools -->
+      <ul class="nav nav-sm navbar-tool pull-right">
+        <li>
+          <a md-ink-ripple ui-toggle-class="show" target="#search">
+            <i class="mdi-action-search i-24"></i>
+          </a>
+        </li>
+        <li>
+          <a md-ink-ripple data-toggle="modal" data-target="#user">
+            <i class="mdi-social-person-outline i-24"></i>
+            Help &amp; Support
+          </a>
+        </li>
+        <li class="dropdown">
+          <a md-ink-ripple data-toggle="dropdown">
+            <i class="mdi-action-info i-24"></i>
+            <b class="badge bg-danger">14</b>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up text-color">
+            <li><a href>Lorem ipsum</a></li>
+            <li><a href>Dolor Sit amet</a></li>
+            <li><a href>Qwewerty Ab</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="pull-right" ui-view="navbar@"></div>
+      <!-- / -->
+      <!-- Search form -->
+      <div id="search" class="pos-abt w-full h-full blue hide">
+        <div class="box">
+          <div class="box-col w-56 text-center">
+            <!-- hide search form -->
+            <a md-ink-ripple class="navbar-item inline"  ui-toggle-class="show" target="#search"><i class="mdi-navigation-arrow-back i-24"></i></a>
+          </div>
+          <div class="box-col v-m">
+            <!-- bind to app.search.content -->
+            <input class="form-control input-lg no-bg no-border" placeholder="Search" ng-model="app.search.content">
+          </div>
+          <div class="box-col w-56 text-center">
+            <a md-ink-ripple class="navbar-item inline"><i class="mdi-av-mic i-24"></i></a>
+          </div>
+        </div>
+      </div>
+      <!-- / -->
+    </div>
+    <!-- Content -->
+
+      <div class="box-row">
+        <div class="box-cell">
+            <div class="box-inner padding">
+          	 <ol class="breadcrumb">
+              <li><a href="/"><i class="mdi-hardware-keyboard-arrow-left text-md pull-left"></i>Level</a></li>
+              <li><a href="#">Edit</a></li>
+            </ol>
+               <div class="row">
+               	<section class="col-md-6">
+                	<div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>Edit Class</strong>
+                        </div>
+                        <div class="panel-heading bg-white">
+                          <small class="text-muted">Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis.</small>
+                        </div>
+                        
+                        <div class="panel-body">
+                          <form role="form" name="formedit" ng-submit="editClass(editparams._id)" novalidate>
+                            <div class="form-group">
+                              <label>Class Name</label>
+                              <input class="form-control" type="text" name="name" placeholder="Class Name" ng-model="editparams.name" required/>
+                              <span class="help-block" ng-show="formedit.name.$error.required && formedit.name.$dirty">
+                                Invalid data name
+                              </span>
+                            </div>
+                            <div class="form-group">
+                              <label>Class Description</label>
+                              <input class="form-control" type="text" placeholder="Class Description" name="principal" ng-model="editparams.info" required/>
+                              <span class="help-block" ng-show="formedit.info.$error.required && formedit.info.$dirty">
+                                Invalid data info
+                              </span>
+                            </div>
+                            <div class="form-group">
+                              <label>Class Level</label>
+                              <input class="form-control" type="text" placeholder="Class Level" name="_level" ng-model="editparams._level" required disabled />
+                              <span class="help-block" ng-show="form._level.$error.required && form._level.$dirty">
+                                Invalid data info
+                              </span>
+                              <a href="#" data-toggle="modal" ng-click="modelSetDelete(class._id)" data-target=".bs-example-modal-sm"><i class="fa fa-edit"></i> Choose Level</a>
+                            </div>
+                            <div class="btn-block text-center">
+                                 <button type="submit" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect" ng-disabled="!formedit.$valid" >Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                	</div>
+                </section>
+              </div>
+          </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / content -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="text-center">
+        <h3 class="text-info-lt">Choose Level</h3>
+        <input class="form-control input-lg no-bg no-border" placeholder="Search" ng-model="search">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="">Level name</th>  
+              <th class="">Description</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="level in levels | filter:{grade:search}">
+               <td>{{ level.grade }}</td>
+               <td>{{ level.info }}</td>
+               <td class="text-center"><a href="#" ng-click="setAddLevel(level._id, level.grade)" class="m-r-md"><i class="fa fa-edit"></i> Select</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

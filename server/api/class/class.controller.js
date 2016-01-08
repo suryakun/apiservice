@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Classd = require('./class.model');
 var User = require('../user/user.model');
+var Level = require('../level/level.model');
 var mongoose = require('mongoose');
 
 // Get list of classs
@@ -33,6 +34,13 @@ exports.index = function(req, res) {
   
 };
 
+exports.getClassBySchool = function (req, res) {
+  Classd.find({active: true, _school:req.params.id}, function (err, classs) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(classs);
+  });
+}
+
 // Get a single class
 exports.show = function(req, res) {
   Classd.find({ _id: req.params.id, active: true}, function (err, classd) {
@@ -46,6 +54,9 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   Classd.create(req.body, function(err, classd) {
     if(err) { return handleError(res, err); }
+    Level.update({_id:req.body._level}, {$push:{_class:classd._id}}, {multi:false}, function (err, ok) {
+      console.log(ok);
+    });
     return res.status(201).json(classd);
   });
 };
@@ -53,7 +64,7 @@ exports.create = function(req, res) {
 // Updates an existing class in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Classd.find({ _id: req.params.id, active: true}, function (err, classd) {
+  Classd.findOne({ _id: req.params.id, active: true}, function (err, classd) {
     if (err) { return handleError(res, err); }
     if(!classd) { return res.status(404).send('Not Found'); }
     var updated = _.merge(classd, req.body);

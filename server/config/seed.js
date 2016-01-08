@@ -60,15 +60,21 @@ School.find({}).remove(function() {
 });
 
 Level.find({}).remove(function() {
-    Level.create({
-        grade: 'nol kecil',
-        info: 'nol kecil TK',
-        active: true
-    }, {
-        grade: 'nol besar',
-        info: 'nol besar TK',
-        active: true
-    });
+    setTimeout(function (argument) {
+        School.findOne({ name: 'Kidz Potentia' }, function (err, school) {
+            Level.create({
+                _school: school._id,
+                grade: 'nol kecil',
+                info: 'nol kecil TK',
+                active: true
+            }, {
+                _school: school._id,
+                grade: 'nol besar',
+                info: 'nol besar TK',
+                active: true
+            });
+        });
+    }, 500);
 });
 
 Classd.find({}).remove(function() {
@@ -808,6 +814,19 @@ setTimeout(function (argument) {
             });
         })
     },1000);
+
+    setTimeout(function (argument) {
+        School.findOne({name: 'Kidz Potentia'}).exec(function (err, school) {
+            User.create({
+                provider: 'local',        
+                name: 'Moderator Kidz',
+                email: 'moderator@kidzpotentia.sch.id',
+                role: 'moderator',
+                password: 'moderator',
+                _school: school._id
+            });
+        });
+    }, 2000);
 
     setTimeout(function (argument) {
         var teacherTodler = ['elvi@kidzpotentia.sch.id', 

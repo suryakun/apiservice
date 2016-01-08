@@ -1,0 +1,130 @@
+<div ng-include="'components/navbar/header/header.html'" class="app-aside"></div>
+  <!-- content -->
+  <div id="content" class="app-content" role="main">
+    <div class="box">
+          <!-- Content Navbar -->
+    <div class="navbar no-radius blue">
+      <!-- Open side - Naviation on mobile -->
+      <a md-ink-ripple  data-toggle="modal" data-target="#aside" class="navbar-item pull-left visible-xs visible-sm"><i class="mdi-navigation-menu i-24"></i></a>
+      <!-- / -->
+      <!-- Page title - Bind to $state's title -->
+      <div class="navbar-item pull-left title-page h4">Schools</div>
+      <!-- / -->
+      <!-- Common tools -->
+      <ul class="nav nav-sm navbar-tool pull-right">
+        <li>
+          <a md-ink-ripple ui-toggle-class="show" target="#search">
+            <i class="mdi-action-search i-24"></i>
+          </a>
+        </li>
+        <li>
+          <a md-ink-ripple data-toggle="modal" data-target="#user">
+            <i class="mdi-social-person-outline i-24"></i>
+            Help &amp; Support
+          </a>
+        </li>
+        <li class="dropdown">
+          <a md-ink-ripple data-toggle="dropdown">
+            <i class="mdi-action-info i-24"></i>
+            <b class="badge bg-danger">14</b>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up text-color">
+            <li><a href>Lorem ipsum</a></li>
+            <li><a href>Dolor Sit amet</a></li>
+            <li><a href>Qwewerty Ab</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="pull-right" ui-view="navbar@"></div>
+      <!-- / -->
+      <!-- Search form -->
+      <div id="search" class="pos-abt w-full h-full blue hide">
+        <div class="box">
+          <div class="box-col w-56 text-center">
+            <!-- hide search form -->
+            <a md-ink-ripple class="navbar-item inline"  ui-toggle-class="show" target="#search"><i class="mdi-navigation-arrow-back i-24"></i></a>
+          </div>
+          <div class="box-col v-m">
+            <!-- bind to app.search.content -->
+            <input class="form-control input-lg no-bg no-border" placeholder="Search" ng-model="app.search.content">
+          </div>
+          <div class="box-col w-56 text-center">
+            <a md-ink-ripple class="navbar-item inline"><i class="mdi-av-mic i-24"></i></a>
+          </div>
+        </div>
+      </div>
+      <!-- / -->
+    </div>
+    <!-- Content -->
+
+      <div class="box-row">
+        <div class="box-cell"><!-- InstanceBeginEditable name="main_content" -->
+
+          <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-md">
+              <div class="modal-content">
+                <div class="text-center">
+                  <h3 class="text-info-lt">Are You sure to remove this data</h3>
+                  <p>The removed data cannot be restored after this action</p>
+                  <div class="btn-block">
+                    <hr>
+                      <a class="md-btn md-raised m-b btn-fw waves-effect waves-effect" ng-click="closeModal()">No</a>
+                      <a class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect" ng-click="delete()" onclick="$('.bs-example-modal-sm').modal('hide')">Yes</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            
+          <div class="box-inner padding">
+            <div class="row row-sm">
+              <div class="panel panel-card">
+                <div class="panel-heading">
+                    <strong>School List</strong>
+                </div>
+                <div class="row ">
+                    <div class="panel-body col-sm-5">
+                      <input id="filter" type="text" ng-model="search.name" class="form-control input-sm w-auto inline m-r" placeholder="Search">
+                    </div>
+                    <div class="text-right col-sm-7">
+                    <a md-ink-ripple="" href="/school/create/{{found_id}}" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect"><i class="fa fa-plus"></i> Add New</a>        
+                    </div>
+                </div>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th class="">School Name</th>  
+                      <th class="">Address</th>
+                      <th class="">Phone</th>
+                      <th class="text-center">Actions</th>
+                      <th class="text-center">Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="school in schools | filter:search | schoolStartFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+                       <td>{{ school.name }}</td>
+                       <td>{{ school.address }}</td>
+                       <td>{{ school.phone }}</td>
+                       <td class="text-center">
+                        <a href="/school/edit/{{school._id}}" ng-click="setUpdate(school)" class="m-r-md"><i class="fa fa-edit"></i> Edit</a> 
+                        <a href="#" data-toggle="modal" ng-click="modelSetDelete(school._id)" data-target=".bs-example-modal-sm"><i class="fa fa-trash-o"></i> Remove</a>
+                      </td>
+                      <td class="text-center">
+                        <a href="/dashboard/{{school._id}}" class="m-r-md"><i class="fa fa-anchor"></i> Manage</a> 
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="row">
+                    <pagination page="currentPage" ng-model="currentPage" max-size="noOfPages" total-items="totalItems" items-per-page="entryLimit"></pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- InstanceEndEditable --></div>
+      </div>
+
+    </div>
+  </div>
+  <!-- / content -->
+</div>

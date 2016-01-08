@@ -10,6 +10,7 @@ angular.module('roomApp')
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.isAdmin = Auth.isAdmin;
+    $scope.isModerator = Auth.isModerator;
     $scope.getCurrentUser = Auth.getCurrentUser;
 
     $scope.logout = function() {

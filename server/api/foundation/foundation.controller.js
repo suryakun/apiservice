@@ -2,13 +2,26 @@
 
 var _ = require('lodash');
 var Foundation = require('./foundation.model');
+var User = require('../user/user.model');
 
 // Get list of foundations
 exports.index = function(req, res) {
-  Foundation.find({active: true}).exec(function (err, foundations) {
-    if(err) { return handleError(res, err); }
-    return res.status(200).json(foundations);
-  });
+  if (req.user.role == 'moderator') {
+    User.findById(req.user._id).populate("_school").exec(function (err, user) {
+      var school = user._school;
+      Foundation.find({_id: school._foundation, active: true}).exec(function (err, foundations) {
+        if(err) { return handleError(res, err); }
+        return res.status(200).json(foundations);
+      });
+    });
+  };
+
+  if (req.user.role == 'admin') {
+    Foundation.find({active: true}).exec(function (err, foundations) {
+      if(err) { return handleError(res, err); }
+      return res.status(200).json(foundations);
+    });
+  }
 };
 
 // Get a single foundation

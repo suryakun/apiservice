@@ -7,6 +7,7 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 router.get('/', auth.hasRole('teacher', 'parent'), controller.index);
+router.get('/:id', auth.hasRole('admin', 'moderator'), controller.getClassBySchool);
 router.get('/single/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

@@ -5,7 +5,7 @@ var Level = require('./level.model');
 
 // Get list of levels
 exports.index = function(req, res) {
-  Level.find({active: true}, function (err, levels) {
+  Level.find({active: true, _school:req.params.id}, function (err, levels) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(levels);
   });
@@ -31,7 +31,7 @@ exports.create = function(req, res) {
 // Updates an existing level in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Level.find({_id: req.params.id, active: true}, function (err, level) {
+  Level.findOne({_id: req.params.id, active: true}, function (err, level) {
     if (err) { return handleError(res, err); }
     if(!level) { return res.status(404).send('Not Found'); }
     var updated = _.merge(level, req.body);
@@ -62,6 +62,18 @@ exports.getClassByLevelId = function (req, res) {
     if(!data) { return res.status(404).send('Not Found'); }
     res.status(200).json(data);
   });
+}
+
+exports.active = function (req, res) {
+  Level.findById(req.params.id, function (err, level) {
+    if (level.active == true) {
+      level.active = false;
+      level.save();
+    } else {
+      level.active = true;
+      level.save();
+    }
+  })
 }
 
 function handleString(res, string) {

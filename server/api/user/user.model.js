@@ -370,4 +370,8 @@ UserSchema.statics.getTeacherOfMySchool = function (id, callback) {
     });
 }
 
+UserSchema.statics.getModerator = function (id, callback) {
+    return this.find({role: 'moderator', _school:id}).exec(callback);
+}
+
 module.exports = mongoose.model('User', UserSchema);

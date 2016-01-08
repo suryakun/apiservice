@@ -8,6 +8,7 @@ var SchoolSchema = new Schema({
     _class: [{ type: Schema.ObjectId, ref: 'Class' }],
     _teacher: [{ type: Schema.ObjectId, ref: 'User' }],
     address: String,
+    logo: String,
     phone: String,
     principal: String,
     name: String,

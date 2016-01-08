@@ -17,23 +17,11 @@
                             <a class="block m-t-sm" ui-toggle-class="hide, show" target="#nav, #account"> <span class="block font-bold">{{me.name}}</span> <span class="pull-right auto"> <i class="fa inline fa-caret-down"></i> <i class="fa none fa-caret-up"></i> </span> {{me.role}} </a> </div>
                     <div id="nav">
                             <nav ui-nav>
-                                <ul class="nav">
+                                <ul class="nav" ng-if="typeController == 'FoundationCtrl'">
                                     <li>
                                         <a href="dashboard_yayasan.html" md-ink-ripple>
                                             <i class="icon mdi-action-home i-20"></i>
                                             <span class="font-normal">Dashboard</span>
-                                        </a>
-                                    </li>
-                                     <li>
-                                        <a href="yayasan_list.html" md-ink-ripple>
-                                            <i class="icon mdi-social-location-city i-20"></i>
-                                            <span class="font-normal">Foundation</span>
-                                        </a>
-                                    </li>
-                                    <li class="active">
-                                        <a md-ink-ripple>
-                                            <i class="icon mdi-social-location-city i-20"></i>
-                                            <span class="font-normal">Schools</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -45,7 +33,7 @@
                                     <li>
                                         <a md-ink-ripple href="page.profile.html">
                                             <i class="icon mdi-action-perm-contact-cal i-20"></i>
-                                            <span>My Profile</span>
+                                            <span>My Profile {{}}</span>
                                         </a>
                                     </li>
                                     <li>

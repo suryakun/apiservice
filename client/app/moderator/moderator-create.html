@@ -1,0 +1,68 @@
+<div ng-include="'components/navbar/headerschool/headerschool.html'" class="app-aside"></div>
+
+<!-- content -->
+  <div id="content" class="app-content" role="main">
+    <div class="box">
+          <!-- Content Navbar -->
+    <div class="navbar no-radius blue">
+      <!-- Open side - Naviation on mobile -->
+      <a md-ink-ripple  data-toggle="modal" data-target="#aside" class="navbar-item pull-left visible-xs visible-sm"><i class="mdi-navigation-menu i-24"></i></a>
+      <!-- / -->
+      <!-- Page title - Bind to $state's title -->
+      <div class="navbar-item pull-left title-page h4">Create Moderator</div>
+      <!-- / -->
+      <!-- Common tools -->
+      <div class="pull-right" ui-view="navbar@"></div>
+      <!-- / -->
+    </div>
+    <!-- Content -->
+
+      <div class="box-row">
+        <div class="box-cell">
+            <div class="box-inner padding">
+             <ol class="breadcrumb">
+              <li><a href="/"><i class="mdi-hardware-keyboard-arrow-left text-md pull-left"></i>Moderator</a></li>
+              <li><a href="#">New</a></li>
+            </ol>
+               <div class="row">
+                <section class="col-md-6">
+                  <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>Add Moderator</strong>
+                        </div>
+                        <div class="panel-heading bg-white">
+                          <small class="text-muted">Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis.</small>
+                        </div>
+                        
+                        <div class="panel-body">
+                          <form role="form" name="form" ng-submit="addClass()" novalidate>
+                            <div class="form-group">
+                              <label>Moderator Name</label>
+                              <input class="form-control" type="text" name="name" placeholder="Class Name" ng-model="params.name" required/>
+                              <span class="help-block" ng-show="form.name.$error.required && form.name.$dirty">
+                                Invalid data name
+                              </span>
+                            </div>
+                            <div class="form-group">
+                              <label>Moderator Email</label>
+                              <input class="form-control" type="email" placeholder="Moderator Email" name="email" ng-model="params.email" required/>
+                              <span class="help-block" ng-show="form.email.$error.required && form.email.$dirty">
+                                Invalid data email
+                              </span>
+                            </div>
+                            <div class="btn-block text-center">
+                                 <button type="submit" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect" ng-disabled="!form.$valid" >Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                            
+                  </div>
+                </section>
+              </div>
+          </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / content -->

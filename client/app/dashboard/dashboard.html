@@ -1,0 +1,316 @@
+<div ng-include="'components/navbar/headerschool/headerschool.html'" class="app-aside"></div>
+<!-- content -->
+  <div id="content" class="app-content" role="main">
+    <div class="box">
+          <!-- Content Navbar -->
+    <div class="navbar no-radius blue">
+      <!-- Open side - Naviation on mobile -->
+      <a md-ink-ripple  data-toggle="modal" data-target="#aside" class="navbar-item pull-left visible-xs visible-sm"><i class="mdi-navigation-menu i-24"></i></a>
+      <!-- / -->
+      <!-- Page title - Bind to $state's title --><!-- InstanceBeginEditable name="main_title" -->
+      <div class="navbar-item pull-left title-page h4">Dashboard</div>
+      <!-- InstanceEndEditable --><!-- / -->
+      <!-- Common tools -->
+      <ul class="nav nav-sm navbar-tool pull-right">
+        <li>
+          <a md-ink-ripple ui-toggle-class="show" target="#search">
+            <i class="mdi-action-search i-24"></i>
+          </a>
+        </li>
+        <li>
+          <a md-ink-ripple data-toggle="modal" data-target="#user">
+            <i class="mdi-social-person-outline i-24"></i>
+            Help &amp; Support
+          </a>
+        </li>
+        <li class="dropdown">
+          <a md-ink-ripple data-toggle="dropdown">
+            <i class="mdi-action-info i-24"></i>
+            <b class="badge bg-danger">14</b>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up text-color">
+            <li><a href>Lorem ipsum</a></li>
+            <li><a href>Dolor Sit amet</a></li>
+            <li><a href>Qwewerty Ab</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="pull-right" ui-view="navbar@"></div>
+      <!-- / -->
+      <!-- Search form -->
+      <div id="search" class="pos-abt w-full h-full blue hide">
+        <div class="box">
+          <div class="box-col w-56 text-center">
+            <!-- hide search form -->
+            <a md-ink-ripple class="navbar-item inline"  ui-toggle-class="show" target="#search"><i class="mdi-navigation-arrow-back i-24"></i></a>
+          </div>
+          <div class="box-col v-m">
+            <!-- bind to app.search.content -->
+            <input class="form-control input-lg no-bg no-border" placeholder="Search" ng-model="app.search.content">
+          </div>
+          <div class="box-col w-56 text-center">
+            <a md-ink-ripple class="navbar-item inline"><i class="mdi-av-mic i-24"></i></a>
+          </div>
+        </div>
+      </div>
+      <!-- / -->
+    </div>
+    <!-- Content -->
+
+      <div class="box-row">
+        <div class="box-cell"><!-- InstanceBeginEditable name="main_content" -->
+          <div class="box-inner padding">
+            <div class="row row-sm">
+              <div class="col-sm-4">
+                <div class="panel panel-card">
+                  <div class="r-t pos-rlt waves-effect" md-ink-ripple="" style="background:url(images/bg/s4.jpg) center center; background-size:cover">
+                    <div class="p-sm bg-white-overlay text-center r-t">
+                      <a href="" class="w-xs inline">
+                        <img src="assets/images/logo5.jpg" class="img-circle img-responsive">
+                      </a>
+                      <div class="m-b m-t-sm h2">
+                        <span class="name">SD Tridaya 01</span>
+                      </div>
+                      <p>
+                        Jl.Katamsi Bandung no.27
+                      </p>
+                    </div>
+                  </div>
+                  <div class="list-group no-radius no-border">
+                  	<a class="list-group-item">
+                      <span class="pull-right"><strong class="text-info-lt">Jane Sofyan</strong></span> <strong>Kepala Sekolah</strong>
+                    </a>
+                    <a class="list-group-item">
+                      <span class="pull-right"><strong class="text-info-lt">Anne Doe</strong></span> <strong>Wakil Kepala Sekolah</strong>
+                    </a>
+                    <hr />
+                    <a class="list-group-item">
+                      <span class="pull-right">Tom John</span> Admin
+                    </a>
+                    <a class="list-group-item">
+                      <span class="pull-right badge">12</span> Jumlah Kelas
+                    </a>
+                    <a class="list-group-item">
+                      <span class="pull-right badge">126</span> Jumlah Siswa
+                    </a>
+                    <a class="list-group-item">
+                      <span class="pull-right badge">80</span> Jumlah Karyawan
+                    </a>
+                  </div>
+                  <div class="p">
+                    <p>About</p>
+                    <p>Lorem ipsum dolor sit amet, consecteter adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet. </p>
+                    <div class="m-v">
+                      <a class="text-muted">
+                        <i class="fa ui-icon fa-facebook"></i>
+                      </a>
+                      <a class="text-muted">
+                        <i class="fa ui-icon fa-twitter"></i>
+                      </a>
+                      <a class="text-muted">
+                        <i class="fa ui-icon fa-youtube"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-sm-4" id="activities">
+              	<div class="panel panel-default">
+                	<div class="panel-heading">
+                    	<strong>Activities</strong>
+                    	<select class="pull-right">
+                        	<option>Today</option>
+                            <option>Yesterday</option>
+                            <option>Last Week</option>
+                            <option>Last Month</option>
+                        </select>
+                    </div>
+                    <section class="list-group no-border no-radius">
+                      <div class="list-group-item">
+                        <span class="pull-right">93</span>
+                        <i class="fa fa-fw fa-user m-r-sm text-green"></i>
+                        Login
+                      </div>
+                      <div class="list-group-item">
+                        <span class="pull-right">100</span>
+                        <i class="fa fa-fw fa-info-circle m-r-sm text-green"></i>
+                        Information
+                      </div>
+                      <div class="list-group-item">
+                        <span class="pull-right">130</span>
+                        <i class="fa fa-fw fa-book m-r-sm text-green"></i>
+                        Diary
+                      </div>
+                    </section>
+                </div>
+                
+                
+                <div class="panel panel-default">
+                	<div class="panel-heading">
+                    	<strong>Active Class</strong>
+                    	<select class="pull-right">
+                        	<option>Today</option>
+                            <option>Yesterday</option>
+                            <option>Last Week</option>
+                            <option>Last Month</option>
+                        </select>
+                    </div>
+                    <section class="list-group no-border no-radius">
+                      <div class="list-group-item">
+                        <span class="pull-right">1000</span>
+                        <i class="fa fa-fw fa-circle m-r-sm text-info"></i>
+                        SA
+                      </div>
+                      <div class="list-group-item">
+                        <span class="pull-right">100</span>
+                        <i class="fa fa-fw fa-circle m-r-sm text-warning"></i>
+                        Preschool
+                      </div>
+                      <div class="list-group-item">
+                        <span class="pull-right">130</span>
+                        <i class="fa fa-fw fa-circle m-r-sm text-green"></i>
+                        1A
+                      </div>
+                    </section>
+                </div>
+                
+                <div class="panel panel-default">
+                	<div class="panel-heading">
+                    	<strong>Active User</strong>
+                    	<select class="pull-right">
+                        	<option>Today</option>
+                            <option>Yesterday</option>
+                            <option>Last Week</option>
+                            <option>Last Month</option>
+                        </select>
+                    </div>
+                    <section class="list-group no-border no-radius">
+                      <div class="md-list-item">
+                          <div class="md-list-item-left">
+                            <img src="assets/images/a3.jpg" class="w-full circle">
+                          </div>
+                          <div class="md-list-item-content">
+                            <h3 class="text-md">Mika Sofyan</h3>
+                            <small class="font-thin">Teacher</small>
+                          </div>
+                        </div>
+                        <div class="md-list-item">
+                          <div class="md-list-item-left">
+                            <img src="assets/images/a6.jpg" class="w-full circle">
+                          </div>
+                          <div class="md-list-item-content">
+                            <h3 class="text-md">John Doe</h3>
+                            <small class="font-thin">Teacher</small>
+                          </div>
+                        </div>
+                        <div class="md-list-item">
+                          <div class="md-list-item-left">
+                            <img src="assets/images/a5.jpg" class="w-full circle">
+                          </div>
+                          <div class="md-list-item-content">
+                            <h3 class="text-md">Dede Malik</h3>
+                            <small class="font-thin">Parent</small>
+                          </div>
+                        </div>
+                    </section>
+                </div>
+              </div>
+              
+              <div class="col-sm-4">                
+                <div class="panel panel-default">
+                	<div class="panel-heading">
+                    	<strong>Latest Activities</strong>
+                    </div>
+                    <section class="p-h-lg m-b-lg">
+                    	<div class="streamline b-l p-v m-l-xs">
+                          <div>
+                            <a class="pull-left w-32 m-l-n m-t-xs m-r">
+                              <img src="assets/images/a2.jpg" class="img-responsive rounded" alt="...">
+                            </a>
+                            <div class="clear">
+                              <div class="m-b-xs">
+                                <a href="">James</a> said
+                                <span class="text-muted block text-xs">
+                                  Just now
+                                </span>
+                              </div>
+                              <div class="m-b">
+                                <div>Lorem ipsum dolor sit amet, consecteter adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet. ullamcorper sodales nisi nec adipiscing elit. Morbi id neque quam. Aliquam sollicitudin </div>
+                                <div class="m-t-sm">
+                                  <a href="" class="text-muted m-xs">Like</a>
+                                  <a href="" class="text-muted m-xs">Comment</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                			
+                          <div>
+                            <a class="pull-left w-32 m-l-n m-t-xs m-r">
+                              <img src="assets/images/a3.jpg" class="img-responsive rounded" alt="...">
+                            </a>
+                            <div class="clear">
+                              <div class="m-b-xs">
+                                <a href="">Oscar</a> upload a file
+                                <span class="text-muted block text-xs">
+                                  3 minutes ago
+                                </span>
+                              </div>
+                              <div class="m-b">
+                                <div class="w-xl w-auto-xs">
+                                  <div class="box bg-light">
+                                    <div class="box-col w-xs text-center dk p-md v-m">
+                                      <i class="fa fa-file-text-o text-3x text-muted-lt"></i>
+                                    </div>
+                                    <div class="box-col p">
+                                      <a href="">Geuismod tincidunt</a>
+                                      <div>Diam nonummy nibh euismod tincidunt ut laoreet. </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="m-t-sm">
+                                  <a href="" class="text-muted m-xs">Like</a>
+                                  <a href="" class="text-muted m-xs">Comment</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>  
+                            
+                          <div>
+                            <a class="pull-left w-32 m-l-n m-t-xs m-r">
+                              <img src="assets/images/a5.jpg" class="img-responsive rounded" alt="...">
+                            </a>
+                            <div class="clear">
+                              <div class="m-b-xs">
+                                <a href="">Michel</a> post a comment
+                                <span class="text-muted block text-xs">
+                                  10 minutes ago
+                                </span>
+                              </div>
+                              <div class="m-b bg-light">
+                                <div class="p-sm b-b b-white">
+                                  <img src="assets/images/a4.jpg" class="rounded w-20 pull-left m-r-sm" alt="...">
+                                  <a href="">Tony</a> liked it
+                                </div>
+                                <div class="p-sm">
+                                  <img src="assets/images/a6.jpg" class="rounded w-20 pull-left m-r-sm" alt="...">
+                                  <a href="">Anney</a> Commented it
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                
+                        </div>
+                    </section>
+                    
+                </div>
+                
+              </div>
+
+            </div>
+          </div>
+        <!-- InstanceEndEditable --></div>
+      </div>
+    </div>
+  </div>
+  <!-- / content -->

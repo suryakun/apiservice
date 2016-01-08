@@ -32,7 +32,7 @@ router.post('/', function(req, res, next) {
         })
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'moderator') {
         res.json({token: token, id:user._id});
     }
 

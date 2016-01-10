@@ -140,9 +140,9 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Adyati Pradini Yudison',
-        email: 'adelia.aqila@kidzpotentia.sch.id',
+        email: 'adelia@kidzpotentia.sch.id',
         role: 'parent',
-        password: 'parent.adella'
+        password: 'parent.adelia'
     }] , function (err) {
         setTimeout(function () {
             User.find({name: 'Adelia Aqila Azka Hartoyo'}, function (err, std) {
@@ -174,13 +174,121 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Mariska Tri Adithia',
-        email: 'akiela.putri@kidzpotentia.sch.id',
+        email: 'akiela@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.akiela'
     }] , function (err) {
         setTimeout(function () {
             User.find({name: 'Akiela Putri Arkadian'}, function (err, std) {
                 User.find({name: 'Mariska Tri Adithia'}, function (err, prn) {
+                    if (!prn) {console.log("err"); return false};
+
+                    std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
+                    std[0].save();
+
+                    prn[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+                    prn[0].save();
+                });
+
+                Classd.find({name: 'Toddler'}, function (err, cls) {
+                    std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
+                    std[0].save();
+
+                    cls[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+                    cls[0].save(); 
+                });
+            });
+        },500);
+    });
+
+    User.create([{
+        provider: 'local',        
+        name: 'Kenzie Xavier Abrizan Jaelani',
+        email: 'student.kenzie@kidzpotentia.sch.id',
+        role: 'student',
+        password: 'student.kenzie'
+    }, {
+        provider: 'local',        
+        name: "Kenzie's Parent",
+        email: 'kenzie@kidzpotentia.sch.id',
+        role: 'parent',
+        password: 'parent.kenzie'
+    }] , function (err) {
+        setTimeout(function () {
+            User.find({name: 'Kenzie Xavier Abrizan Jaelani'}, function (err, std) {
+                User.find({name: "Kenzie's Parent"}, function (err, prn) {
+                    if (!prn) {console.log("err"); return false};
+
+                    std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
+                    std[0].save();
+
+                    prn[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+                    prn[0].save();
+                });
+
+                Classd.find({name: 'Toddler'}, function (err, cls) {
+                    std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
+                    std[0].save();
+
+                    cls[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+                    cls[0].save(); 
+                });
+            });
+        },500);
+    });
+
+    User.create([{
+        provider: 'local',        
+        name: 'Syaika Syuhda Suganda',
+        email: 'student.syaika@kidzpotentia.sch.id',
+        role: 'student',
+        password: 'student.syaika'
+    }, {
+        provider: 'local',        
+        name: "Syaika's Parent",
+        email: 'syaika@kidzpotentia.sch.id',
+        role: 'parent',
+        password: 'parent.syaika'
+    }] , function (err) {
+        setTimeout(function () {
+            User.find({name: 'Syaika Syuhda Suganda'}, function (err, std) {
+                User.find({name: "Syaika's Parent"}, function (err, prn) {
+                    if (!prn) {console.log("err"); return false};
+
+                    std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
+                    std[0].save();
+
+                    prn[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+                    prn[0].save();
+                });
+
+                Classd.find({name: 'Toddler'}, function (err, cls) {
+                    std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
+                    std[0].save();
+
+                    cls[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+                    cls[0].save(); 
+                });
+            });
+        },500);
+    });
+
+    User.create([{
+        provider: 'local',        
+        name: 'Abdullah Rasyiqul Abid',
+        email: 'student.abdullah@kidzpotentia.sch.id',
+        role: 'student',
+        password: 'student.abdullah'
+    }, {
+        provider: 'local',        
+        name: "Rasyiq's Parent",
+        email: 'rasyiq@kidzpotentia.sch.id',
+        role: 'parent',
+        password: 'parent.rasyiq'
+    }] , function (err) {
+        setTimeout(function () {
+            User.find({name: 'Abdullah Rasyiqul Abid'}, function (err, std) {
+                User.find({name: "Rasyiq's Parent"}, function (err, prn) {
                     if (!prn) {console.log("err"); return false};
 
                     std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
@@ -210,7 +318,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Irina Aueriyanova',
-        email: 'alexey.setya@kidzpotentia.sch.id',
+        email: 'alexey@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.alexey'
     }] , function (err) {
@@ -244,7 +352,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Grace Puspasari',
-        email: 'audrey.ardelia@kidzpotentia.sch.id',
+        email: 'audrey@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.audrey'
     }] , function (err) {
@@ -278,13 +386,47 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Irrisa Rosyid',
-        email: 'azzaran.taaza@kidzpotentia.sch.id',
+        email: 'azza@kidzpotentia.sch.id',
         role: 'parent',
-        password: 'parent.azzaran'
+        password: 'parent.azza'
     }] , function (err) {
         setTimeout(function () {
             User.find({name: 'Azzaren Taaza Pangsumadi'}, function (err, std) {
                 User.find({name: 'Irrisa Rosyid'}, function (err, prn) {
+                    std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
+                    std[0].save();
+
+                    prn[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+                    prn[0].save();
+                });
+
+                Classd.find({name: 'Bayi'}, function (err, cls) {
+                    std[0]._class = mongoose.Types.ObjectId(cls[0]._id);
+                    std[0].save();
+
+                    cls[0]._student.push(mongoose.Types.ObjectId(std[0]._id));
+                    cls[0].save(); 
+                });
+            });
+        },500);
+    });
+
+    User.create([{
+        provider: 'local',        
+        name: 'Shanaya Neema Alzire',
+        email: 'student.shanaya@kidzpotentia.sch.id',
+        role: 'student',
+        password: 'student.shanaya'
+    }, {
+        provider: 'local',        
+        name: "Neema's Parent",
+        email: 'neema@kidzpotentia.sch.id',
+        role: 'parent',
+        password: 'parent.neema'
+    }] , function (err) {
+        setTimeout(function () {
+            User.find({name: 'Shanaya Neema Alzire'}, function (err, std) {
+                User.find({name: "Neema's Parent"}, function (err, prn) {
                     std[0]._parent = mongoose.Types.ObjectId(prn[0]._id);
                     std[0].save();
 
@@ -312,7 +454,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Juli Ance Sibajat',
-        email: 'cleo.adriani@kidzpotentia.sch.id',
+        email: 'cleo@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.cleo'
     }] , function (err) {
@@ -346,7 +488,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Septyani P Putri',
-        email: 'dastan.pranaja@kidzpotentia.sch.id',
+        email: 'dastan@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.dastan'
     }] , function (err) {
@@ -380,7 +522,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Nuri Husna',
-        email: 'giftan.aqila@kidzpotentia.sch.id',
+        email: 'giftan@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.giftan'
     }] , function (err) {
@@ -414,9 +556,9 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Sarah Asriyani',
-        email: 'hadranura.mahadirga@kidzpotentia.sch.id',
+        email: 'dirga@kidzpotentia.sch.id',
         role: 'parent',
-        password: 'parent.hadranura'
+        password: 'parent.dirga'
     }] , function (err) {
         setTimeout(function () {
             User.find({name: 'Hadranura Mahadirga Azlan Harahap'}, function (err, std) {
@@ -448,7 +590,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Melati Astri Maharani',
-        email: 'kaleen.nadindra@kidzpotentia.sch.id',
+        email: 'kaleen@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.kaleen'
     }] , function (err) {
@@ -482,7 +624,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Aprilia Grace Sweetasari',
-        email: 'karl.theodore@kidzpotentia.sch.id',
+        email: 'karl@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.karl'
     }] , function (err) {
@@ -516,7 +658,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Yenny Rachmawati',
-        email: 'khansa.tabina@kidzpotentia.sch.id',
+        email: 'khansa@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.khansa'
     }] , function (err) {
@@ -550,7 +692,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Sendra Ayu Prinastuti',
-        email: 'm.faza@kidzpotentia.sch.id',
+        email: 'faza@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.faza'
     }] , function (err) {
@@ -584,9 +726,9 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Riana Sary Aditya',
-        email: 'm.rajendra@kidzpotentia.sch.id',
+        email: 'farras@kidzpotentia.sch.id',
         role: 'parent',
-        password: 'parent.rajendra'
+        password: 'parent.farras'
     }] , function (err) {
         setTimeout(function () {
             User.find({name: 'M Rajendra Farras Atari'}, function (err, std) {
@@ -686,7 +828,7 @@ setTimeout(function (argument) {
     }, {
         provider: 'local',        
         name: 'Susi Meilani',
-        email: 'ruby.pratama@kidzpotentia.sch.id',
+        email: 'ruby@kidzpotentia.sch.id',
         role: 'parent',
         password: 'parent.ruby'
     }] , function (err) {

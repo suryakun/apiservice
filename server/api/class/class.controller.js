@@ -90,7 +90,7 @@ exports.destroy = function(req, res) {
 exports.getAllStudentByClassdId = function (req, res) {
   var class_id = req.params.id;
   handleString(res, class_id);
-  Classd.getAllStudentByClassdId(class_id, function (err, data) {
+  Classd.getAllStudentByClassId(class_id, function (err, data) {
     if(err) { return handleError(res, err); }
     if(!data) { return res.status(404).send('Not Found'); }
     res.status(200).json(data);

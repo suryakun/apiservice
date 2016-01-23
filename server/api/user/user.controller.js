@@ -193,6 +193,32 @@ exports.getMyStories = function (req, res) {
     }
 }
 
+exports.getStoryFilter = function (req, res) {
+    var user_id = req.user._id;
+    var params = {};
+    if (req.params.type != '0') {
+        params["type"] = req.params.type;
+    };
+
+    if (req.params.parent != '0') {
+        params["_parent"] = {$in:[req.params.parent]};
+    };
+
+    if (req.user.role == 'teacher') {
+        User.getStoriesForTeacherWithFilter(user_id, params, function (err, data) {
+            if(err) { return handleError(res, err); }
+            if(!data) { return res.status(404).send('Not Found'); }
+            res.status(200).json(data._story);
+        });
+    } else if (req.user.role == 'parent') {
+        User.getStoriesForParentWithFilter(user_id, params, function (err, data) {
+            if(err) { return handleError(res, err); }
+            if(!data) { return res.status(404).send('Not Found'); }
+            res.status(200).json(data._story);
+        });
+    }
+}
+
 exports.getMyStoriesByDate = function (req, res) {
     var user_id = req.user._id;
     var date = new Date(req.body.date);

@@ -25,6 +25,7 @@ router.post('/get-story-by-date', auth.hasRole(['teacher','parent']), controller
 router.post('/get-all-principal', auth.hasRole(['admin']), controller.getAllPrincipal);
 router.get('/get-all-parent-from-my-school', auth.hasRole(['teacher','parent']), controller.getAllParentFromMySchool);
 router.get('/get-all-teacher-from-my-school', auth.hasRole(['teacher','parent']), controller.getTeacherOfMySchool);
+router.get('/get-story-filter/:type/:parent', auth.hasRole(['teacher','parent']), controller.getStoryFilter);
 
 router.get('/get-moderators/:id', auth.hasRole(['admin']), controller.getModerator);
 

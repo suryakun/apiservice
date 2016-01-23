@@ -221,7 +221,13 @@ UserSchema.statics.getStoriesForParent = function (id, callback) {
                             path: "_story._parent._student",
                             select: "name email avatar role",
                             model: usr
-                        }, callback);
+                        }, function (err, popstory) {
+                            Story.populate(story, {
+                                path: "_story._teacher",
+                                select: "name email avatar role",
+                                model: usr
+                            }, callback);
+                        });
                     });
                 });
         });
@@ -236,24 +242,101 @@ UserSchema.statics.getStoriesForTeacher = function (id, callback) {
                         select: "info _parent",
                         model: Reply
                 }, function (err, popstory) {
+                            Story.populate(story, {
+                            path: "_story._photo",
+                            select: "url thumb",
+                            model: Photo
+                    }, function (err, popstory) {
                         Story.populate(story, {
-                                path: "_story._photo",
-                                select: "url thumb",
-                                model: Photo
+                            path: "_story._parent",
+                            select: "name email avatar role _student",
+                            model: usr
                         }, function (err, popstory) {
                             Story.populate(story, {
-                                path: "_story._parent",
-                                select: "name email avatar role _student",
+                                path: "_story._parent._student",
+                                select: "name email avatar role",
                                 model: usr
                             }, function (err, popstory) {
                                 Story.populate(story, {
-                                    path: "_story._parent._student",
+                                    path: "_story._teacher",
                                     select: "name email avatar role",
                                     model: usr
                                 }, callback);
                             });
                         });
+                    });
                 });
+    });
+}
+
+
+UserSchema.statics.getStoriesForTeacherWithFilter = function (id, params, callback) {
+    var usr = this;
+    return this.findById(id).populate('_story', null, params).exec(function (err, story) {
+                Story.populate(story, {
+                        path: "_story._reply",
+                        select: "info _parent",
+                        model: Reply
+                }, function (err, popstory) {
+                            Story.populate(story, {
+                            path: "_story._photo",
+                            select: "url thumb",
+                            model: Photo
+                    }, function (err, popstory) {
+                        Story.populate(story, {
+                            path: "_story._parent",
+                            select: "name email avatar role _student",
+                            model: usr
+                        }, function (err, popstory) {
+                            Story.populate(story, {
+                                path: "_story._parent._student",
+                                select: "name email avatar role",
+                                model: usr
+                            }, function (err, popstory) {
+                                Story.populate(story, {
+                                    path: "_story._teacher",
+                                    select: "name email avatar role",
+                                    model: usr
+                                }, callback);
+                            });
+                        });
+                    });
+                });
+    });
+}
+
+UserSchema.statics.getStoriesForParentWithFilter = function (id, params, callback) {
+    var usr = this;
+    return usr.findById(id).populate('_story', null, params).exec(function (err, story) {
+        Story.populate(story, {
+                path: "_story._reply",
+                select: "info _parent",
+                model: Reply
+        }, function (err, popstory) {
+                Story.populate(story, {
+                        path: "_story._photo",
+                        select: "url thumb",
+                        model: Photo
+                }, function (err, popstory) {
+                    Story.populate(story, {
+                        path: "_story._parent",
+                        select: "name email avatar role _student",
+                        model: usr
+                    }, function (err, popstory) {
+                        Story.populate(story, {
+                            path: "_story._parent._student",
+                            select: "name email avatar role",
+                            model: usr
+                        }, function (err, popstory) {
+                            Story.populate(story, {
+                                path: "_story._teacher",
+                                select: "name email avatar role",
+                                model: usr
+                            }, callback);
+                        });
+                    });
+                });
+        });
     });
 }
 
@@ -265,23 +348,29 @@ UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
                         select: "info _parent",
                         model: Reply
                 }, function (err, popstory) {
+                            Story.populate(story, {
+                            path: "_story._photo",
+                            select: "url thumb",
+                            model: Photo
+                    }, function (err, popstory) {
                         Story.populate(story, {
-                                path: "_story._photo",
-                                select: "url thumb",
-                                model: Photo
+                            path: "_story._parent",
+                            select: "name email avatar role _student",
+                            model: usr
                         }, function (err, popstory) {
                             Story.populate(story, {
-                                path: "_story._parent",
-                                select: "name email avatar role _student",
+                                path: "_story._parent._student",
+                                select: "name email avatar role",
                                 model: usr
                             }, function (err, popstory) {
                                 Story.populate(story, {
-                                    path: "_story._parent._student",
+                                    path: "_story._teacher",
                                     select: "name email avatar role",
                                     model: usr
                                 }, callback);
                             });
                         });
+                    });
                 });
     });
 }
@@ -294,23 +383,29 @@ UserSchema.statics.getStoriesForTeacherByDate = function (id, date, callback) {
                         select: "info _parent",
                         model: Reply
                 }, function (err, popstory) {
+                            Story.populate(story, {
+                            path: "_story._photo",
+                            select: "url thumb",
+                            model: Photo
+                    }, function (err, popstory) {
                         Story.populate(story, {
-                                path: "_story._photo",
-                                select: "url thumb",
-                                model: Photo
+                            path: "_story._parent",
+                            select: "name email avatar role _student",
+                            model: usr
                         }, function (err, popstory) {
                             Story.populate(story, {
-                                path: "_story._parent",
-                                select: "name email avatar role _student",
+                                path: "_story._parent._student",
+                                select: "name email avatar role",
                                 model: usr
                             }, function (err, popstory) {
                                 Story.populate(story, {
-                                    path: "_story._parent._student",
+                                    path: "_story._teacher",
                                     select: "name email avatar role",
                                     model: usr
                                 }, callback);
                             });
                         });
+                    });
                 });
     });
 }

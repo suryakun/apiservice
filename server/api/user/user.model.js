@@ -342,6 +342,7 @@ UserSchema.statics.getStoriesForParentWithFilter = function (id, params, callbac
 
 
 UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
+    var usr = this;
     return this.findById(id).populate('_story', null, {createdAt: {$gt: date}} ).exec(function (err, story) {
                 Story.populate(story, {
                         path: "_story._reply",
@@ -377,6 +378,7 @@ UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
         
 
 UserSchema.statics.getStoriesForTeacherByDate = function (id, date, callback) {
+    var usr = this;
     return this.findById(id).populate('_story', null, {createdAt: {$gt: date}} ).exec(function (err, story) {
                 Story.populate(story, {
                         path: "_story._reply",

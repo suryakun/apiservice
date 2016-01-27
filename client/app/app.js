@@ -27,7 +27,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
         'Accept': '*/*',
         'Content-Type': 'application/json;charset=utf-8;'
     };
-    // $httpProvider.interceptors.push('authInterceptor');
+    $httpProvider.interceptors.push('authInterceptor');
 }]).run(['$rootScope', '$state', '$stateParams', 'appAuth', function($rootScope, $state, $stateParams, appAuth) {
     $rootScope.containerClass = null;
     $rootScope.$state = $state;
@@ -77,13 +77,18 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
             });
         }
     });
-}]).factory('authInterceptor', function($rootScope, $q, $cookieStore, $location) {
+}]).factory('authInterceptor', function($rootScope, $q, $store, $location) {
     return {
         // Add authorization token to headers
         request: function(config) {
-            config.headers = config.headers || {};
-            if ($cookieStore.get('token')) {
-                config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+            if (config.url.indexOf('/api') === 0) {
+                config.headers = config.headers || {};
+                if ($store.get('token')) {
+                    config.headers.Authorization = 'Bearer ' + $store.get('token');
+                }
+                if ($store.get('data')) {
+                    config.headers.user_id = $store.get('data').id;
+                }
             }
             return config;
         },
@@ -92,7 +97,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
             if (response.status === 401) {
                 $location.path('/login');
                 // remove any stale tokens
-                $cookieStore.remove('token');
+                $store.remove('token');
                 return $q.reject(response);
             } else {
                 return $q.reject(response);

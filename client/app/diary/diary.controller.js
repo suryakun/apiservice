@@ -4,9 +4,9 @@ angular.module('roomApp').controller('DiaryCtrl', ['$scope', 'apiConnector', fun
     $scope.dataset = [];
     var a = apiConnector.getStories({
         // date: new Date()
-    }, response => {
+    }, function(response) {
         $scope.dataset = response;
-    }, response => {
+    }, function(response) {
         console.log(response);
     });
     $scope.getReplies = function(data) {

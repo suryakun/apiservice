@@ -1,7 +1,11 @@
 'use strict';
 (function() {
     class MainController {
-        constructor($scope, appAuth, $state, $modal, $modalStack) {
+        constructor($scope, appAuth, $state, $modal, $modalStack, socket) {
+            $scope.unreadCount = 0;
+            socket.socket.on('story:save', function(event, data){
+                ++$scope.unreadCount;
+            });
             // Listeners
             $scope.$on('$stateChangeSuccess', function(event) {
                 // event.targetScope.$watch('$viewContentLoaded', function() {

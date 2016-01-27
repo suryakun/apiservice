@@ -1,16 +1,11 @@
 'use strict';
 angular.module('roomApp').controller('StudentCtrl', ['$scope', 'apiConnector', function($scope, apiConnector) {
-    $scope.dataset = [];
-    var a = apiConnector.getMyClasses(response => {
-        $scope.myClasses = response._school._class;
-    }, response => {
+    $scope.myClasses = [];
+    $scope.selectedClass = null;
+    var a = apiConnector.getMyClasses(function(response) {
+        $scope.myClasses = [response];
+        $scope.selectedClass = $scope.myClasses[0];
+    }, function(response) {
         console.log(response);
     });
-
-    // $scope.onSubmitReply = function(activity) {
-    //     apiConnector.postReply({
-    //         info: activity.newReply,
-    //         story_id: activity._id
-    //     });
-    // }
 }]);

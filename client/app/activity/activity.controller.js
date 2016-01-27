@@ -1,13 +1,20 @@
 'use strict';
-angular.module('roomApp').controller('ActivityCtrl', ['$scope', 'apiConnector', function($scope, apiConnector) {
+angular.module('roomApp').controller('ActivityCtrl', ['$scope', 'apiConnector', 'socket', function($scope, apiConnector, socket) {
     $scope.dataset = [];
     var a = apiConnector.getStories({
         type: 'activity'
-    }, response => {
+    }, function(response) {
         $scope.dataset = response;
-    }, response => {
+        socket.syncUpdates('story', $scope.dataset, function(){
+            // console.info(arguments);
+        });
+    }, function(response) {
         console.log(response);
     });
+
+    // socket.socket.on('story:save', function() {
+        
+    // });
 
     $scope.onSubmitReply = function(activity) {
         apiConnector.postReply({

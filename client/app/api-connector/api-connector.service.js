@@ -2,6 +2,28 @@
 angular.module('roomApp').factory('apiConnector', ['$resource', 'appConfig', 'appAuth', function($resource, appConfig, appAuth) {
     return $resource(appConfig.baseAPIUrl + '/api/users/get-my-stories', {}, {
         getStories: {
+            url: appConfig.baseAPIUrl + '/api/users/get-story-filter/:type/:parent',
+            params: {
+                type: 0,
+                parent: 0
+            },
+            method: 'GET',
+            cache: false,
+            isArray: true
+        },
+        getAllTeacherFromMySchool: {
+            url: appConfig.baseAPIUrl + '/api/users/get-all-teacher-from-my-school',
+            method: 'GET',
+            cache: false,
+            isArray: true
+        },
+        getAllParentFromMySchool: {
+            url: appConfig.baseAPIUrl + '/api/users/get-all-parent-from-my-school',
+            method: 'GET',
+            cache: false,
+            isArray: true
+        },
+        getMyStories: {
             url: appConfig.baseAPIUrl + '/api/users/get-my-stories',
             method: 'GET',
             cache: false,

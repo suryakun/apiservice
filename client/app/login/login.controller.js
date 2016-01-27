@@ -10,7 +10,7 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
     };
     $scope.onFormSubmit = function(form) {
         if (form.$valid) {
-            $scope.promise = appAuth.login($scope.data).then(response => {
+            $scope.promise = appAuth.login($scope.data).then(function(response) {
                 appAuth.getMe().then(function(me) {
                     if (appAuth.data.role === 'teacher') {
                         $state.go('main.activity');
@@ -18,7 +18,7 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
                         $state.go('main.diary');
                     }
                 });
-            }, response => {
+            }, function(response) {
                 console.log(response);
             });
         }

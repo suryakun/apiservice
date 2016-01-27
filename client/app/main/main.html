@@ -1,38 +1,158 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
+<!-- <add-diary ng-class="{'display-block': createType === 'diary'}" on-remove="onRemove('diary')"></add-diary> -->
+<!-- BEGIN HEADER -->
+<div class="header navbar navbar-inverse ">
+    <!-- BEGIN TOP NAVIGATION BAR -->
+    <div class="navbar-inner">
+        <div class="header navbar navbar-inverse ">
+            <!-- BEGIN TOP NAVIGATION BAR -->
+            <div class="navbar-inner">
+                <!-- END RESPONSIVE MENU TOGGLER -->
+                <div class="menu-bar clearfix">
+                    <ul class="nav quick-section visible-xs">
+                        <li class="quicklinks">
+                            <a href="javascript:void(0)" class="" onclick="$('.page-content .content aside').fadeToggle()">
+                            <span class="iconset top-menu-toggle-dark"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="container">
+                        <section class="header-identity col-sm-3">
+                            <figure>
+                                <img src="assets/img/scholl-logo.png" alt="logo" />
+                            </figure>
+                            <span ng-bind="appAuth.data.school_name">School Name</span>
+                        </section>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-7 logo">
+                                    <img src="assets/img/logo-biru.png" alt="logo" />
+                                </div>
+                                <div class="col-sm-5">
+                                    <!-- BEGIN USER TOGGLER -->
+                                    <div class="pull-right user">
+                                        <div class="chat-toggler nav" data-dropdown="">
+                                            <a href="javascript:void(0)" class="dropdown-toggle" data-content='' data-toggle="dropdown" data-dropdown-toggle="">
+                                            <span ng-bind="appAuth.data.name">User Name</span>
+                                            <span class="profile-pic"> <img ng-src="{{ appAuth.data.avatar ? (appAuth.data.avatar|apiFile:'avatar') : 'assets/img/profiles/mu.jpg'}}" alt="avatar" /> </span>
+                                            <span class="iconset top-down-arrow"></span>
+                                            </a>
+                                            <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                                <li><a href="user-profile.html"> My Account</a> </li>
+                                                <li><a href="calender.html">My Calendar</a> </li>
+                                                <li><a href="email.html"> My Inbox&nbsp;&nbsp;<span class="badge badge-important animated bounceIn">2</span></a> </li>
+                                                <li class="divider"></li>
+                                                <li><a href="javascript:void(0)" ng-click="onLogoutClick()"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <section class="pull-right">
+                                        <ul class="nav quick-section ">
+                                            <li class="quicklinks">
+                                                <a data-toggle="dropdown" id="message-trigger" data-placement="bottom" class="dropdown-toggle  pull-right" href="javascript:void(0)" popover="deee" popover-placement="bottom" popover-trigger="click" popover-template="'myPopoverTemplate.html'" popover-animation="false">
+                                                    <i class="fa fa-comment">&nbsp;</i>
+                                                    <span class="badge badge-important animated bounceIn" id="chat-message-count">1</span>
+                                                </a>
 
-<!-- <header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
-  </div>
-</header>
+                                                <!-- <div id="message-list" style="display:none"> -->
+                                                <script type="text/ng-template" id="myPopoverTemplate.html">
+                                                    <div class="notification-messages">
+                                                        <div class="user-profile"> <img src="assets/img/profiles/d.jpg" alt="" data-src="assets/img/profiles/d.jpg" data-src-retina="assets/img/profiles/d2x.jpg" width="35" height="35"> </div>
+                                                        <div class="message-wrapper">
+                                                            <div class="heading">
+                                                                David Nester - Commented on your wall
+                                                            </div>
+                                                            <div class="description">
+                                                                Meeting postponed to tomorrow
+                                                            </div>
+                                                            <div class="date pull-left">
+                                                                A min ago
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                    <div class="notification-messages">
+                                                        <div class="user-profile"> <img src="assets/img/profiles/h.jpg" alt="" data-src="assets/img/profiles/h.jpg" data-src-retina="assets/img/profiles/h2x.jpg" width="35" height="35"> </div>
+                                                        <div class="iconholder">
+                                                            <i class="icon-warning-sign"></i>
+                                                        </div>
+                                                        <div class="message-wrapper">
+                                                            <div class="heading">
+                                                                Server load limited
+                                                            </div>
+                                                            <div class="description">
+                                                                Database server has reached its daily capicity
+                                                            </div>
+                                                            <div class="date pull-left">
+                                                                2 mins ago
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                    <div class="notification-messages">
+                                                        <div class="user-profile"> <img src="assets/img/profiles/d.jpg" alt="" data-src="assets/img/profiles/d.jpg" data-src-retina="assets/img/profiles/d2x.jpg" width="35" height="35"> </div>
+                                                        <div class="message-wrapper">
+                                                            <div class="heading">
+                                                                You haveve got 150 messages
+                                                            </div>
+                                                            <div class="description">
+                                                                150 newly unread messages in your inbox
+                                                            </div>
+                                                            <div class="date pull-left">
+                                                                An hour ago
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </script>
+                                                <!-- </div> -->
 
-<div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in awesomeThings">
-        <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="deleteThing(thing)">&times;</button></a></li>
-      </ul>
+                                            </li>
+                                        </ul>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END TOP NAVIGATION MENU -->
+            </div>
+            <!-- END TOP NAVIGATION BAR -->
+        </div>
+        <!-- END TOP NAVIGATION MENU -->
     </div>
-  </div>
-
-  <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
-    <p class="input-group">
-      <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="newThing">
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" ng-click="addThing()">Add New</button>
-      </span>
-    </p>
-  </form>
+    <!-- END TOP NAVIGATION BAR -->
 </div>
-
-<footer class="footer">
-  <div class="container">
-      <p>Angular Fullstack v2.1.1 |
-        <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
-         <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a></p>
-  </div>
-</footer>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container row" id="page-container">
+    <a href="javascript:void(0)" class="scrollup">Scroll</a>
+    <!-- BEGIN PAGE CONTAINER-->
+    <div class="page-content">
+        <div class="container content profile-detail">
+            <div class="row">
+                <aside id="sidebar_menu" class="col-md-3">
+                    <ul class="main-menu">
+                        <li>
+                            <button ng-click="onPostNewClick()" id="post_new" class="btn btn-primary btn-sm"><i class="no-margin fa fa-plus"></i> Post New</button>
+                            <ul class="create-new">
+                                <li><a href="javascript:void(0)" id="post_diary" ng-click="openForm('diary')"><i class="icon7p-diary"></i> <span>Post Diary</span></a></li>
+                                <li><a href="javascript:void(0)" id="post_portfolio" ng-click="openForm('portfolio')"><i class="icon7p-portofolio"></i><span> Post Portfolio</span></a></li>
+                                <li><a href="javascript:void(0)" id="post_activity" ng-click="openForm('activity')"><i class="icon7p-activity"></i><span> Post Activity</span></a></li>
+                                <li><a href="javascript:void(0)" id="post_info" ng-click="openForm('info')"><i class="icon7p-info"></i> <span>Post Info</span></a></li>
+                            </ul>
+                        </li>
+                        <li><a href="javascript:void(0)" ui-sref="main.student" ng-class="{cur: $state.current.name === 'main.student' || $state.current.name === 'main.diary' || $state.current.name === 'main.portfolio'|| $state.current.name === 'main.portfolio-detail'}"><i class="icon7p-user"></i> Student <span class="badge badge-green">New</span></a></li>
+                        <li><a href="javascript:void(0)" ui-sref-active="cur" ui-sref="main.activity"><i class="icon7p-activity"></i> Activity</a></li>
+                        <li><a href="javascript:void(0)" ui-sref="main.info" ng-class="{cur: $state.current.name === 'main.info' || $state.current.name === 'main.info-detail'}"><i class="icon7p-info"></i> Info <span class="badge badge-grey">4</span></a></li>
+                        <li class="separator"></li>
+                        <li><a href="javascript:void(0)"><i class="icon7p-message"></i> Send Feedback</a></li>
+                        <li><a href="javascript:void(0)"><i class="icon7p-about"></i> About</a></li>
+                    </ul>
+                </aside>
+                <div class="col-md-9 {{containerClass}}" ui-view="">
+                </div>
+            </div>
+            <!-- END PAGE -->
+        </div>
+    </div>
+</div>

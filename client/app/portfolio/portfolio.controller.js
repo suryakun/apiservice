@@ -1,4 +1,4 @@
 'use strict';
-angular.module('roomApp').controller('PortfolioCtrl', ['$scope', function($scope) {
-    $scope.message = 'Hello';
+angular.module('roomApp').controller('PortfolioCtrl', ['$scope', 'userDetailHttp', function($scope, userDetailHttp) {
+    $scope.user = userDetailHttp.data;
 }]);

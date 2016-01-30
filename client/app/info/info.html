@@ -1,137 +1,19 @@
 <div id="email-list">
     <table class="table table-striped table-hover" id="emails" >
         <tbody>
-            <tr>
+            <tr ng-repeat="(key, story) in stories | orderBy:'-createdAt'">
                 <td width="6%" class="clickable v-align-middle">
                     <div class="user-profile-pic-1x">
                         <img width="25" height="25" src="assets/img/profiles/avatar.jpg" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
                     </div>
                 </td>
                 <td width="84%" class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: '1'})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
+                    <h5 class="bold no-margin" ng-bind="story._teacher.name">David Nester</h5>
+                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: story._id})" ng-bind="story.info"></a>
                 </td>
-                <td width="10%" class="clickable"><span class="muted text-right">Yesterday </span></td>
+                <td width="10%" class="clickable"><span class="muted text-right" am-time-ago="story.createdAt">Yesterday </span></td>
 
             </tr>
-            <tr>
-                <td class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/bd.jpg" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-            <tr>
-                <td class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/b2x.jpg" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-            <tr>
-                <td class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/2.png" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-            <tr>
-                <td class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/d.jpg" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-            <tr>
-                <td width="6%" class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/avatar.jpg" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td width="84%" class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td width="10%" class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-            <tr>
-                <td class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/bd.jpg" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-            <tr>
-                <td class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/b2x.jpg" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-            <tr>
-                <td class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/2.png" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-            <tr>
-                <td class="clickable v-align-middle">
-                    <div class="user-profile-pic-1x">
-                        <img width="25" height="25" src="assets/img/profiles/d.jpg" alt="" data-src="img/profiles/avatar.jpg" data-src-retina="img/profiles/avatar2x.jpg">
-                    </div>
-                </td>
-                <td class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin">David Nester</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: 1})">Less spam, and mobile access. Gmail is email that's intuitive, ...efficient, and useful. And maybe even fun.</a>
-                </td>
-                <td class="clickable"><span class="muted text-right">Yesterday </span></td>
-
-            </tr>
-
         </tbody>
     </table>
 </div>

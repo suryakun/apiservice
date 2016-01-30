@@ -2,18 +2,18 @@
     <div class="tiles cover-pic-wrapper">
         <img src="assets/img/cover.jpg" alt="">
         <figure class="children-pp">
-            <img src="assets/img/children.jpg" alt="pp" />
+            <img ng-src="{{user.avatar || 'assets/img/profiles/bc.jpg'}}" alt="pp" />
         </figure>
-        <span class="name">Grace Andhita Puspasari</span>
+        <span class="name" ng-bind="user.name">User Name</span>
     </div>
 </div>
 <div class="user-menu">
     <ul class="clearfix">
         <li>
-            <a href="javascript:void(0)" ui-sref="main.diary">Diary</a>
+            <a href="javascript:void(0)" ui-sref="main.diary({id: $stateParams.id})">Diary</a>
         </li>
         <li>
-            <a href="javascript:void(0)" ui-sref="main.portfolio" class="cur">Portfolio</a>
+            <a href="javascript:void(0)" ui-sref="main.portfolio({id: $stateParams.id})" class="cur">Portfolio</a>
         </li>
     </ul>
 </div>

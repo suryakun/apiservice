@@ -1,17 +1,17 @@
-<ul class="cbp_tmtimeline">
-    <li ng-repeat="(key, story) in dataset">
+<ul class="cbp_tmtimeline" ng-show="stories.length">
+    <li ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-init="getReply(story)">
         <time class="cbp_tmtime" datetime="2013-04-10 18:30">
-            <span class="date"><strong>Monday</strong>, <span>18</span> May 2015</span>
+            <span class="date"><strong ng-bind="story.createdAt | amDateFormat:'dddd'">Monday</strong>, <span ng-bind="story.createdAt | amDateFormat:'D'">18</span> <spam ng-bind="story.createdAt | amDateFormat:'MMM'">May</spam> {{story.createdAt | amDateFormat:'Y'}}</span>
         </time>
         <div class="cbp_tmicon animated bounceIn tip"> &nbsp; </div>
         <div class="cbp_tmlabel">
             <div class="post-content">
-                <span class="time">10:05 <span class="semi-bold">am</span></span>
-                <div class="profile-pic"> <img width="35" height="35" src="assets/img/profiles/cute.jpg" alt=""> </div>
+                <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>
+                <div class="profile-pic"> <img width="35" height="35" ng-src="{{ reply.teacher.avatar ? (reply.teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg' }}"  alt=""> </div>
                 <div class="inline m-b-5">
                     <h4 class="semi-bold pull-left">
-                    John Doe
-                    <span class="muted">Teacher</span>
+                    <span ng-bind="story._teacher.name">name</span>
+                    <span class="muted" ng-bind="story._teacher.role">role</span>
                     </h4>
                     <h6 class="semi-bold pull-left m-l-10 m-t-15">
                     To
@@ -21,31 +21,31 @@
                     <span class="muted">Parents</span>
                     </h4>
                 </div>
-                <p class="dark-text" ng-bind="story.info"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh.</p>
+                <p class="dark-text" ng-bind="story.info"></p>
                 <div class="photo Collage clearfix" collage-plus>
                     <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a><img ng-src="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
                 </div>
                 <div class="user-action">
-                    <a class="muted pull-left" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="fa fa-comment"></i> <span ng-bind="story._reply.length">0</span> Comments</a>
-                    <a class="muted pull-right pink" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="icon7p-love"></i> <span ng-bind="story._reply.length">0</span> Liked</a>
+                    <a class="muted pull-left" href="javascript:void(0)" ui-sref="main.comment-detail({id: story._id})"><i class="fa fa-comment"></i> <span ng-bind="story.reply.length">0</span> Comments</a>
+                    <!-- <a class="muted pull-right pink" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="icon7p-love"></i> <span ng-bind="story._reply.length">0</span> Liked</a> -->
                 </div>
                 <ul class="comment-list">
-                    <li ng-repeat="(key, reply) in story._reply">
+                    <li ng-repeat="(key, reply) in story.reply">
                         <div class="post comments-section">
                             <div class="user-profile-pic-wrapper">
                                 <div class="user-profile-pic-normal">
-                                    <img width="35" height="35" data-src-retina="assets/img/profiles/e2x.jpg" data-src="assets/img/profiles/e2x.jpg" src="assets/img/profiles/e2x.jpg" alt="">
+                                    <img width="35" height="35" data-src-retina="assets/img/profiles/ba.jpg" data-src="assets/img/profiles/ba.jpg" src="assets/img/profiles/ba.jpg" alt="">
                                 </div>
                             </div>
                             <div class="info-wrapper">
                                 <div class="username">
-                                    <span class="dark-text">ID User Belum dapet</span>
+                                    <span class="dark-text" ng-bind="reply._teacher || reply._parent">ID User Belum dapet</span>
                                 </div>
                                 <div class="info" ng-bind="reply.info">
                                 </div>
                                 <div class="more-details">
                                     <ul class="post-links">
-                                        <li><a href="javascript:void(0)" class="muted">2 Minutes ago (reply time belum dapet)</a></li>
+                                        <li><a href="javascript:void(0)" class="muted" am-time-ago="reply.createdAt"></a></li>
                                     </ul>
                                 </div>
                             </div>

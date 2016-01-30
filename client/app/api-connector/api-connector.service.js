@@ -66,6 +66,12 @@ angular.module('roomApp').factory('apiConnector', ['$resource', 'appConfig', 'ap
             cache: false,
             isArray: true
         },
+        getClasses: {
+            url: appConfig.baseAPIUrl + '/api/classes',
+            method: 'GET',
+            cache: false,
+            isArray: true
+        },
         getSingleUser: {
             url: appConfig.baseAPIUrl + '/api/users/single/:id',
             method: 'GET',

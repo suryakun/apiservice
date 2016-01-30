@@ -1,11 +1,14 @@
 'use strict';
-angular.module('roomApp').controller('StudentCtrl', ['$scope', 'apiConnector', function($scope, apiConnector) {
-    $scope.myClasses = [];
-    $scope.selectedClass = null;
-    var a = apiConnector.getMyClasses(function(response) {
-        $scope.myClasses = [response];
-        $scope.selectedClass = $scope.myClasses[0];
-    }, function(response) {
-        console.log(response);
-    });
+angular.module('roomApp').controller('StudentCtrl', ['$scope', 'myClassesHttp', 'apiConnector', '$http', function($scope, myClassesHttp, apiConnector, $http) {
+    $scope.myClasses = [myClassesHttp.data];
+    $scope.selectedClass = $scope.myClasses[0];
+    $scope.students = [];
+    var getData = function() {
+        $scope.promise = $http.get('/api/classes/get-all-student-by-class-id/' + $scope.selectedClass._id, {
+            cache: true
+        }).then(function(response) {
+            $scope.students = response.data._student;
+        });
+    };
+    getData();
 }]);

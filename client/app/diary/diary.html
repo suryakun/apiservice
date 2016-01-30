@@ -2,29 +2,29 @@
     <div class="tiles cover-pic-wrapper">
         <img src="assets/img/cover.jpg" alt="">
         <figure class="children-pp">
-            <img src="assets/img/children.jpg" alt="pp" />
+            <img ng-src="{{user.avatar || 'assets/img/profiles/bc.jpg'}}" alt="pp" />
         </figure>
-        <span class="name">Grace Andhita Puspasari</span>
+        <span class="name" ng-bind="user.name">User Name</span>
     </div>
 </div>
 <div class="user-menu">
     <ul class="clearfix">
         <li>
-            <a href="javascript:void(0)" ui-sref="main.diary" class="cur">Diary</a>
+            <a href="javascript:void(0)" ui-sref="main.diary({id: $stateParams.id})" class="cur">Diary</a>
         </li>
         <li>
-            <a href="javascript:void(0)" ui-sref="main.portfolio">Portfolio</a>
+            <a href="javascript:void(0)" ui-sref="main.portfolio({id: $stateParams.id})">Portfolio</a>
         </li>
     </ul>
 </div>
-<ul class="cbp_tmtimeline">
-    <li ng-repeat="(key, story) in dataset">
+<ul class="cbp_tmtimeline" ng-show="stories.length">
+    <li ng-repeat="(key, story) in stories | orderBy:'-createdAt'">
         <time class="cbp_tmtime" datetime="2013-04-10 18:30">
             <span class="date"><strong>Monday</strong>, <span>18</span> May 2015</span>
         </time>
         <div class="cbp_tmicon animated bounceIn tip"> &nbsp; </div>
         <div class="cbp_tmlabel">
-            <div class="post-content" ng-init="getSingleUser(story._teacher, story, 'teacher'); getSingleUser(story._parent[0], story, 'parent');" n>
+            <div class="post-content" xng-init="getSingleUser(story._teacher, story, 'teacher'); getSingleUser(story._parent[0], story, 'parent');" n>
                 <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>
                 <div class="profile-pic"> <img width="35" height="35" ng-src="{{ reply.teacher.avatar ? (reply.teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/cute.jpg' }}"  alt=""> </div>
                 <div class="inline m-b-5">
@@ -48,8 +48,8 @@
                     <a class="muted pull-left" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="fa fa-comment"></i> <span ng-bind="story._reply.length">0</span> Comments</a>
                     <a class="muted pull-right pink" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="icon7p-love"></i> <span ng-bind="story._reply.length">0</span> Liked</a>
                 </div>
-                <ul class="comment-list" ng-init="getReplies(story)">
-                    <li ng-repeat="(key, reply) in story.reply" ng-init="getSingleUser(reply._teacher, reply, 'userDetail')">
+                <ul class="comment-list" xng-init="getReplies(story)">
+                    <li ng-repeat="(key, reply) in story.reply" xng-init="getSingleUser(reply._teacher, reply, 'userDetail')">
                         <div class="post comments-section">
                             <div class="user-profile-pic-wrapper">
                                 <div class="user-profile-pic-normal">

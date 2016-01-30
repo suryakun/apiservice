@@ -4,6 +4,13 @@ angular.module('roomApp').config(['$stateProvider', function($stateProvider) {
         url: 'student',
         templateUrl: 'app/student/student.html',
         controller: 'StudentCtrl',
-        controllerAs: 'student'
+        controllerAs: 'student',
+        resolve: {
+            myClassesHttp: ['$http', function($http) {
+                return $http.get('/api/users/get-my-class', {
+                    cache: true
+                });
+            }],
+        }
     });
 }]);

@@ -1,6 +1,6 @@
 'use strict';
 angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', function($urlRouterProvider, $locationProvider, $httpProvider) {
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/activity');
     $locationProvider.html5Mode(true);
     /**
      * Setup CORS
@@ -28,6 +28,8 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
         'Content-Type': 'application/json;charset=utf-8;'
     };
     $httpProvider.interceptors.push('authInterceptor');
+    // https://code.angularjs.org/1.4.8/docs/api/ng/service/$http
+    $httpProvider.useLegacyPromiseExtensions = false;
 }]).run(['$rootScope', '$state', '$stateParams', 'appAuth', function($rootScope, $state, $stateParams, appAuth) {
     $rootScope.containerClass = null;
     $rootScope.$state = $state;

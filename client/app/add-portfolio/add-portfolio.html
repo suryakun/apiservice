@@ -9,31 +9,30 @@
         </div>
     </div>
     <div class="tab-content">
-        {{data|json}}
         <aside class="col-md-4 no-padding">
             <div class="chat-window-wrapper">
                 <div id="main-chat-wrapper" class="inner-content">
                     <div class="scroll-wrapper chat-window-wrapper scroller scrollbar-dynamic" style="position: relative;">
                         <div class="chat-window-wrapper scroller scrollbar-dynamic scroll-content scroll-scrollx_visible scroll-scrolly_visible">
-                            <div class="chat-header">
+                            <!-- <div class="chat-header">
                                 <select ng-model="data.class_id" ng-options="group._id as group.name for group in groups">
                                     <option value=""></option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="tab-content" tabset>
-                                <div class="tab-pane active no-padding" id="contact_parent" tab heading="Parent Of">
+                                <div class="tab-pane no-padding" id="contact_parent" tab heading="Parent Of" disable="true">
                                     <div class="side-widget fadeIn">
                                         <div class="side-widget-title">A</div>
                                         <div class="side-widget-content" style="overflow-y: auto;">
                                             <div class="user-details-wrapper clearfix" data-chat-status="online" data-chat-user-pic="assets/img/profiles/d.jpg" data-chat-user-pic-retina="assets/img/profiles/d2x.jpg" data-user-name="Jane Smith" ng-repeat="(key, value) in parents" ng-init="parent.checked = false;" ng-click="value.checked = !value.checked;">
                                                 <div class="user-profile">
-                                                    <img ng-src="assets/img/profiles/d.jpg" alt="" width="35" height="35">
+                                                    <img ng-src="assets/img/profiles/bc.jpg" alt="" width="35" height="35">
                                                 </div>
                                                 <div class="user-details">
                                                     <div class="user-name" ng-bind="value.name">
                                                         Ane Smith
                                                     </div>
-                                                    <div class="title">Parent of Juan Smith</div>
+                                                    <div class="title">Parent of <span ng-bind="">...</span></div>
                                                 </div>
                                                 <div class="checkbox check-success   ">
                                                     <input id="{{'checkbox-parent-'+$index}}" type="checkbox" xchecked="checked" ng-model="value.checked">
@@ -43,19 +42,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="contact_teacher" tab heading="Teacher">
+                                <div class="tab-pane no-padding" id="contact_teacher" tab heading="Teacher" active="true">
                                     <div class="side-widget">
-                                        <div class="side-widget-title">B</div>
-                                        <div class="side-widget-content" id="friends-list">
-                                            <div class="user-details-wrapper clearfix" data-chat-status="online" data-chat-user-pic="assets/img/profiles/d.jpg" data-chat-user-pic-retina="assets/img/profiles/d2x.jpg" data-user-name="Jane Smith" ng-repeat="(key, value) in teachers" ng-init="parent.checked = false;" ng-click="value.checked = !value.checked;">
+                                        <div class="side-widget-title" ng-repeat-start="(key, value) in teachers | orderBy:'name'" xng-bind="value.name.charAt(0)"></div>
+                                        <div class="side-widget-content" id="friends-list" ng-repeat-end>
+                                            <div class="user-details-wrapper clearfix" data-chat-status="online" data-chat-user-pic="assets/img/profiles/d.jpg" data-chat-user-pic-retina="assets/img/profiles/d2x.jpg" data-user-name="Jane Smith" ng-init="value.checked = false;" ng-click="value.checked = !value.checked;">
                                                 <div class="user-profile">
-                                                    <img src="assets/img/profiles/d.jpg" alt="" width="35" height="35">
+                                                    <img src="assets/img/profiles/bc.jpg" alt="" width="35" height="35">
                                                 </div>
                                                 <div class="user-details">
                                                     <div class="user-name" ng-bind="value.name">
                                                         Bane Smith
                                                     </div>
-                                                    <div class="title">Parent of Juan Smith</div>
+                                                    <div class="title">Teacher</div>
                                                 </div>
                                                 <div class="checkbox check-success ">
                                                     <input id="{{'checkbox-teacher-'+$index}}" type="checkbox" xchecked="checked" ng-model="value.checked">
@@ -77,11 +76,11 @@
                     <div class="message clearfix">
                         <div class="to-message">
                             <label class="pull-left col-xs-1 text-right bold m-t-15">To</label>
-                            <select class="multiple-ruang col-xs-11" multiple ng-model="data.to" ui-select2>
-                                <option ng-value="room.id" ng-repeat="(key, room) in rooms" ng-bind="room.name"></option>
+                            <select class="multiple-ruang col-xs-11" multiple ng-model="data.parent" ui-select2>
+                                <option ng-value="room._id" ng-repeat="(key, room) in receipents | orderBy:'name'" ng-bind="room.name"></option>
                             </select>
                         </div>
-                        <textarea rows="5" class="form-control user-status-box post-input" placeholder="Post Diary Here" ng-model="data.info"></textarea>
+                        <textarea rows="5" class="form-control user-status-box post-input" placeholder="Post Portfolio Here" ng-model="data.info"></textarea>
                         <section class="image-area clearfix">
                             <div ng-repeat="item in files">
                                 <div ng-thumb="{ file: item.file, height: 100 }"></div>
@@ -95,39 +94,6 @@
                         </div>
                         <div class="pull-right">
                             <button class="btn btn-primary btn-sm" type="button" ng-click="onPostBtnClick()">POST <i class="glyphicon glyphicon-send"></i></button>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane" id="tab_info">
-            <div class="row column-seperation">
-                <div class="col-md-12 no-padding">
-                    <div class="message clearfix">
-                        <div class="row to-message">
-                            <label class="pull-left col-xs-1 text-right bold m-t-15">To</label>
-                            <select class="multiple-ruang col-xs-11" multiple>
-                                <option value="r1">Ruang 1</option>
-                                <option value="r2">Ruang 2</option>
-                                <option value="r3">Ruang 3</option>
-                                <option value="r4">Ruang 4</option>
-                                <option value="r5">Ruang 5</option>
-                                <option value="r6">Ruang 6</option>
-                                <option value="r7">Ruang 7</option>
-                                <option value="r8">Ruang 8</option>
-                                <option value="r9">Ruang 9</option>
-                                <option value="r10">Ruang 10</option>
-                            </select>
-                        </div>
-                        <textarea rows="5" class="form-control user-status-box post-input" placeholder="Post Diary Here"></textarea>
-                    </div>
-                    <div class="tiles grey padding-10">
-                        <div class="pull-left">
-                            <label class="btn btn-default btn-sm btn-small upload-style" type="button"><input type="file" /> <i class="fa fa-camera"></i></label>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-primary btn-sm" type="button">POST <i class="glyphicon glyphicon-send"></i></button>
                         </div>
                         <div class="clearfix"></div>
                     </div>

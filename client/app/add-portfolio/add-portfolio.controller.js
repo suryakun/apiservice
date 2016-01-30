@@ -1,26 +1,22 @@
 'use strict';
-angular.module('roomApp').controller('AddPortfolioCtrl', ['$modalInstance', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
-    $scope.onMinimize = function() {
-        angular.element('.tab-content').toggle();
+angular.module('roomApp').controller('AddPortfolioCtrl', ['$modalInstance', '$rootScope', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $rootScope, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
+    $scope.data = {
+        type: 'portfolio',
+        info: '',
+        class_id: 0,
+        parent: [],
+        cc: []
     };
-    $scope.groups = [];
-    apiConnector.getGroups(function(response) {
-        $scope.groups = response;
-    });
-    $scope.parents = [];
+    $scope.receipents = [];
     apiConnector.getParents(function(response) {
-        $scope.parents = response;
+        $scope.receipents = $scope.receipents.concat(response);
     });
     $scope.teachers = [];
     apiConnector.getTeachers(function(response) {
         $scope.teachers = response;
     });
-    $scope.data = {
-        type: 'portfolio',
-        info: '',
-        class_id: null,
-        parent: 0
-            // cc: []
+    $scope.onMinimize = function() {
+        angular.element('.tab-content').toggle();
     };
     $scope.files = [];
     $scope.removeFromQueue = function(index) {
@@ -35,7 +31,14 @@ angular.module('roomApp').controller('AddPortfolioCtrl', ['$modalInstance', '$sc
         });
     };
     $scope.onPostBtnClick = function(files) {
-        // if ($scope.files && $scope.files.length) {
+        $scope.data.cc = [];
+        $scope.teachers.forEach(function(teacher) {
+            if (teacher.checked) {
+                $scope.data.cc.push(teacher._id);
+            };
+        });
+        $scope.data.parent = $scope.data.parent.toString();
+        $scope.data.cc = $scope.data.cc.toString();
         Upload.upload({
             url: appConfig.baseAPIUrl + '/api/stories',
             headers: {
@@ -48,6 +51,7 @@ angular.module('roomApp').controller('AddPortfolioCtrl', ['$modalInstance', '$sc
                 })
             }, $scope.data)
         }).then(function(response) {
+            $rootScope.$broadcast('portfolio:created', true);
             $timeout(function() {
                 $scope.result = response.data;
             });
@@ -59,12 +63,5 @@ angular.module('roomApp').controller('AddPortfolioCtrl', ['$modalInstance', '$sc
         }, function(evt) {
             $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         });
-        // } else {
-        //     apiConnector.postStory($scope.data, function() {
-        //         console.info(arguments);
-        //     }, function() {
-        //         console.warn(arguments);
-        //     });
-        // }
     };
 }]);

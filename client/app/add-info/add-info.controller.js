@@ -1,26 +1,22 @@
 'use strict';
-angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
-    $scope.onMinimize = function() {
-        angular.element('.tab-content').toggle();
+angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$rootScope', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $rootScope, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
+    $scope.data = {
+        type: 'info',
+        info: '',
+        class_id: [],
+        parent: 0,
+        cc: []
     };
-    $scope.groups = [];
-    apiConnector.getGroups(function(response) {
-        $scope.groups = response;
-    });
-    $scope.parents = [];
-    apiConnector.getParents(function(response) {
-        $scope.parents = response;
+    $scope.receipents = [];
+    apiConnector.getClasses(function(response) {
+        $scope.receipents = $scope.receipents.concat(response);
     });
     $scope.teachers = [];
     apiConnector.getTeachers(function(response) {
         $scope.teachers = response;
     });
-    $scope.data = {
-        type: 'info',
-        info: '',
-        class_id: null,
-        parent: 0
-            // cc: []
+    $scope.onMinimize = function() {
+        angular.element('.tab-content').toggle();
     };
     $scope.files = [];
     $scope.removeFromQueue = function(index) {
@@ -35,7 +31,14 @@ angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope',
         });
     };
     $scope.onPostBtnClick = function(files) {
-        // if ($scope.files && $scope.files.length) {
+        $scope.data.cc = [];
+        $scope.teachers.forEach(function(teacher) {
+            if (teacher.checked) {
+                $scope.data.cc.push(teacher._id);
+            };
+        });
+        $scope.data.class_id = $scope.data.class_id.toString();
+        $scope.data.cc = $scope.data.cc.toString();
         Upload.upload({
             url: appConfig.baseAPIUrl + '/api/stories',
             headers: {
@@ -48,6 +51,7 @@ angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope',
                 })
             }, $scope.data)
         }).then(function(response) {
+            $rootScope.$broadcast('info:created', true);
             $timeout(function() {
                 $scope.result = response.data;
             });
@@ -59,12 +63,5 @@ angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope',
         }, function(evt) {
             $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         });
-        // } else {
-        //     apiConnector.postStory($scope.data, function() {
-        //         console.info(arguments);
-        //     }, function() {
-        //         console.warn(arguments);
-        //     });
-        // }
     };
 }]);

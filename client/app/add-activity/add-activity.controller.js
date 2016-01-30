@@ -11,25 +11,10 @@ angular.module('roomApp').controller('AddActivityCtrl', ['$modalInstance', '$roo
     apiConnector.getClasses(function(response) {
         $scope.receipents = $scope.receipents.concat(response);
     });
-    // $scope.parents = [];
-    // apiConnector.getParents(function(response) {
-    //     $scope.parents = response;
-    // });
     $scope.teachers = [];
     apiConnector.getTeachers(function(response) {
         $scope.teachers = response;
     });
-    // $scope.selectCC = function(data) {
-    //     console.log(data);
-    //     var oldItem = _.find($scope.data.cc, {
-    //         _id: data._id
-    //     });
-    //     if (!data.checked && oldItem) {
-    //         $scope.data.cc.splice($scope.data.cc.indexOf(oldItem), 1);
-    //     } else if (data.checked && !oldItem) {
-    //         $scope.data.cc.push(data);
-    //     }
-    // };
     $scope.onMinimize = function() {
         angular.element('.tab-content').toggle();
     };

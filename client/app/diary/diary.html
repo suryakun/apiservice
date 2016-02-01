@@ -20,27 +20,27 @@
 <ul class="cbp_tmtimeline" ng-show="stories.length">
     <li ng-repeat="(key, story) in stories | orderBy:'-createdAt'">
         <time class="cbp_tmtime" datetime="2013-04-10 18:30">
-            <span class="date"><strong>Monday</strong>, <span>18</span> May 2015</span>
+            <span class="date"><strong ng-bind="story.createdAt | amDateFormat:'dddd'">Monday</strong>, <span ng-bind="story.createdAt | amDateFormat:'D'">18</span> <spam ng-bind="story.createdAt | amDateFormat:'MMM'">May</spam> {{story.createdAt | amDateFormat:'Y'}}</span>
         </time>
         <div class="cbp_tmicon animated bounceIn tip"> &nbsp; </div>
         <div class="cbp_tmlabel">
-            <div class="post-content" xng-init="getSingleUser(story._teacher, story, 'teacher'); getSingleUser(story._parent[0], story, 'parent');" n>
+            <div class="post-content">
                 <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>
-                <div class="profile-pic"> <img width="35" height="35" ng-src="{{ reply.teacher.avatar ? (reply.teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/cute.jpg' }}"  alt=""> </div>
+                <div class="profile-pic"> <img width="35" height="35" ng-src="{{ reply.teacher.avatar ? (reply.teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg' }}"  alt=""> </div>
                 <div class="inline m-b-5">
                     <h4 class="semi-bold pull-left">
-                    <span ng-bind="story.teacher.name">From Teacher</span>
-                    <span class="muted">Teacher</span>
+                    <span ng-bind="story._teacher.name">Teacher</span>
+                    <span class="muted" ng-bind="story._teacher.role">role</span>
                     </h4>
                     <h6 class="semi-bold pull-left m-l-10 m-t-15">
                     To
                     </h6>
                     <h4 class="semi-bold pull-left">
-                    <span ng-bind="story.parent.name">To Parent</span>
-                    <span class="muted">Parents</span>
+                    <span ng-bind="user._parent.name">Parent</span>
+                    <span class="muted" ng-bind="user._parent.role">Parents</span>
                     </h4>
                 </div>
-                <p class="dark-text" ng-bind="story.info"></p>
+                <p class="dark-text" ng-bind-html="story.info"></p>
                 <div class="photo Collage clearfix" collage-plus>
                     <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a><img ng-src="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
                 </div>

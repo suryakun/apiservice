@@ -1,11 +1,14 @@
 'use strict';
-angular.module('roomApp').controller('ActivityCtrl', ['$rootScope', '$scope', '$http', 'socket', function($rootScope, $scope, $http, socket) {
+angular.module('roomApp').controller('ActivityCtrl', ['$rootScope', '$scope', '$http', 'socket', '$filter',function($rootScope, $scope, $http, socket, $filter) {
     $scope.stories = [];
     var getData = function() {
         $scope.promise = $http.get('/api/users/get-story-filter/activity/0', {
             cache: false
         }).then(function(response) {
             $scope.stories = response.data;
+            angular.forEach($scope.stories, function(value, key) {
+                $scope.getReply(value);
+            });
         });
     };
     getData();
@@ -22,6 +25,14 @@ angular.module('roomApp').controller('ActivityCtrl', ['$rootScope', '$scope', '$
                 $scope.stories.splice(index, 1, oldItem);
             }
         });
+    };
+    var lastDate = null;
+    $scope.onInitStory = function(story) {
+        if (lastDate === $filter('amDateFormat')(story.createdAt, 'D-MM-Y')) {
+            story.hideDate = true;
+        } else {
+            lastDate = $filter('amDateFormat')(story.createdAt, 'D-MM-Y');
+        }
     };
     // var a = apiConnector.getStories({
     //     type: 'activity'

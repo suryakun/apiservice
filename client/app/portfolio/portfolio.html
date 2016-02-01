@@ -22,7 +22,7 @@
         <h3><span class="semi-bold">Portfolio</span></h3>
     </div>
     <div class="col-sm-7 album-filter">
-        <div class="pull-right"Album Kenangan>
+        <div class="pull-right">
             <ul class="nav nav-pills" id="tab-4">
                 <li class="active"><a href="javascript:void(0)">Name</a></li>
                 <li><a href="javascript:void(0)">Date</a></li>
@@ -33,15 +33,15 @@
 </div>
 <div class="clear"></div>
 <div class="row">
-    <section class="col-sm-6" ng-repeat="(key, story) in stories">
+    <section class="col-sm-6" ng-repeat="(key, story) in stories | orderBy:'-createdAt'">
         <div class="grid simple">
             <div class="grid-title no-border">
                 <h3><a href="javascript:void(0)" ui-sref="main.portfolio-detail({id: story._id})"></a></h3>
                 <div class="clearfix">
                     <strong class="small-text pull-left">(<span ng-bind="story._photo.length"></span> Photos)</strong>
-                    <span class="small-text pull-right">11 Mei 2015</span>
+                    <span class="small-text pull-right" ng-bind="(story.createdAt | amDateFormat:'D MMM Y')"></span>
                 </div>
-                <a href="javascript:void(0)" ui-sref="main.portfolio-detail({id: story._id})"<p ng-bind="story.info"></p></a>
+                <a href="javascript:void(0)" ui-sref="main.portfolio-detail({id: story._id})"<p ng-bind="story.info" style="color: inherit;"></p></a>
             </div>
             <div class="grid-body no-border album">
                 <div class="photo Collage clearfix" collage-plus>

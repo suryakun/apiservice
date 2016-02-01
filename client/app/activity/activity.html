@@ -1,9 +1,9 @@
 <ul class="cbp_tmtimeline" ng-show="stories.length">
-    <li ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-init="getReply(story)">
-        <time class="cbp_tmtime" datetime="2013-04-10 18:30">
+    <li ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-init="onInitStory(story)" ng-class="{'reduce-margin': story.hideDate}">
+        <time class="cbp_tmtime" datetime="2013-04-10 18:30" ng-hide="story.hideDate">
             <span class="date"><strong ng-bind="story.createdAt | amDateFormat:'dddd'">Monday</strong>, <span ng-bind="story.createdAt | amDateFormat:'D'">18</span> <spam ng-bind="story.createdAt | amDateFormat:'MMM'">May</spam> {{story.createdAt | amDateFormat:'Y'}}</span>
         </time>
-        <div class="cbp_tmicon animated bounceIn tip"> &nbsp; </div>
+        <div class="cbp_tmicon animated bounceIn tip" ng-hide="story.hideDate"> &nbsp; </div>
         <div class="cbp_tmlabel">
             <div class="post-content">
                 <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>
@@ -17,8 +17,10 @@
                     To
                     </h6>
                     <h4 class="semi-bold pull-left">
-                    Jack Sparrow
-                    <span class="muted">Parents</span>
+                    <span ng-repeat-start="(key, class) in story._class" ng-bind="class.name">name</span>
+                    <span class="muted" ng-repeat-end>Class</span>
+                    <span ng-repeat-start="(key, group) in story._group" ng-bind="group.name">name</span>
+                    <span class="muted" ng-repeat-end>Group</span>
                     </h4>
                 </div>
                 <p class="dark-text" ng-bind="story.info"></p>
@@ -41,7 +43,7 @@
                                 <div class="username">
                                     <span class="dark-text" ng-bind="reply._teacher || reply._parent">ID User Belum dapet</span>
                                 </div>
-                                <div class="info" ng-bind="reply.info">
+                                <div class="info" ng-bind-html="reply.info">
                                 </div>
                                 <div class="more-details">
                                     <ul class="post-links">

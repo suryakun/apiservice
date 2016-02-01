@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', function($urlRouterProvider, $locationProvider, $httpProvider) {
+angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', function($urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider.otherwise('/activity');
     $locationProvider.html5Mode(true);
     /**
@@ -83,7 +83,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
     return {
         // Add authorization token to headers
         request: function(config) {
-            if (config.url.indexOf('/api') === 0) {
+            if (config.url.indexOf('/api') === 0 && config.url.indexOf('/auth') === -1) {
                 config.headers = config.headers || {};
                 if ($store.get('token')) {
                     config.headers.Authorization = 'Bearer ' + $store.get('token');

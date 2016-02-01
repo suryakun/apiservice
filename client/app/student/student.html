@@ -9,12 +9,12 @@
 <div class="grid simple" cg-busy="promise">
     <div class="grid-body no-border">
         <ul class="people-list row">
-            <li class="col-sm-3" ng-repeat="(key, student) in students">
+            <li class="col-sm-3" ng-repeat="(key, student) in students | orderBy: 'name'">
                 <a href="javascript:void(0)" ui-sref="main.diary({id: student._id})">
                 <span class="profile-img-wrapper">
                 <img width="35" height="35" alt="" ng-src="{{student.avatar || 'assets/img/profiles/bc.jpg'}}"/>
                 </span>
-                <span class="name"><span ng-bind="$index+1"></span>. <span ng-bind="student.name"></span></span>
+                <span class="name"><span ng-bind="student.name"></span></span>
                 </a>
             </li>
         </ul>

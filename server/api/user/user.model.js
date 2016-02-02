@@ -236,7 +236,7 @@ UserSchema.statics.getStoriesForParent = function (id, callback) {
 
 UserSchema.statics.getStoriesForTeacher = function (id, callback) {
     var usr = this;
-    return this.findById(id).populate('_story').exec(function (err, story) {
+    return this.findById(id).populate('_story', null, {active:true}).exec(function (err, story) {
                 Story.populate(story, {
                         path: "_story._reply",
                         select: "info _parent",
@@ -272,6 +272,7 @@ UserSchema.statics.getStoriesForTeacher = function (id, callback) {
 
 UserSchema.statics.getStoriesForTeacherWithFilter = function (id, params, callback) {
     var usr = this;
+    params.active = true;
     return this.findById(id).populate('_story', null, params).exec(function (err, story) {
                 Story.populate(story, {
                         path: "_story._reply",
@@ -307,6 +308,7 @@ UserSchema.statics.getStoriesForTeacherWithFilter = function (id, params, callba
 
 UserSchema.statics.getStoriesForParentWithFilter = function (id, params, callback) {
     var usr = this;
+    params.active = true;
     return usr.findById(id).populate('_story', null, params).exec(function (err, story) {
         Story.populate(story, {
                 path: "_story._reply",
@@ -343,7 +345,7 @@ UserSchema.statics.getStoriesForParentWithFilter = function (id, params, callbac
 
 UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
     var usr = this;
-    return this.findById(id).populate('_story', null, {createdAt: {$gt: date}} ).exec(function (err, story) {
+    return this.findById(id).populate('_story', null, {createdAt: {$gt: date}, active:true} ).exec(function (err, story) {
                 Story.populate(story, {
                         path: "_story._reply",
                         select: "info _parent",
@@ -379,7 +381,7 @@ UserSchema.statics.getStoriesForParentByDate = function (id, date, callback) {
 
 UserSchema.statics.getStoriesForTeacherByDate = function (id, date, callback) {
     var usr = this;
-    return this.findById(id).populate('_story', null, {createdAt: {$gt: date}} ).exec(function (err, story) {
+    return this.findById(id).populate('_story', null, {createdAt: {$gt: date}, active:true} ).exec(function (err, story) {
                 Story.populate(story, {
                         path: "_story._reply",
                         select: "info _parent",

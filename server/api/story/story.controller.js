@@ -666,11 +666,11 @@ exports.update = function(req, res) {
 
 // Deletes a story from the DB.
 exports.destroy = function(req, res) {
-    Story.find({_id: req.params.id, active: true}, function (err, story) {
+    Story.findOne({_id: req.params.id}, function (err, story) {
         if(err) { return handleError(res, err); }
         if(!story) { return res.status(404).send('Not Found'); }
-        story.remove(function(err) {
-            if(err) { return handleError(res, err); }
+        story.active = false;
+        story.save(function () {
             return res.status(204).send('No Content');
         });
     });

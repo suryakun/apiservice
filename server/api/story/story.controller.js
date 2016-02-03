@@ -800,9 +800,9 @@ function resizeThumb (url, destPath) {
         im.resize({
             srcPath: url,
             dstPath: destPath,
-            width: resizeWidth,
-            height: resizeHeight,
-            quality: 0.8
+            width: "",
+            height: "",
+            quality: 0.5
         }, function(err, stdout, stderr){
             if (err) throw err;
             console.log('resized kittens.jpg to fit within 256x256px');

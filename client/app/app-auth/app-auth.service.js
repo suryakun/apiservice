@@ -127,7 +127,7 @@ angular.module('roomApp')
                     authenticated: true,
                     token: response.data.token,
                     role: AUTHConfig.userRoles[response.data.role],
-                    expires: (new Date()).setSeconds(5 * 60 * 60),
+                    expires: (new Date()).setSeconds(24 * 60 * 60),
                     data: response.data
                 });
             });

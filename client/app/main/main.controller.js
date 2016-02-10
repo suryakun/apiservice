@@ -3,7 +3,8 @@
     class MainController {
         constructor($scope, appAuth, $state, $modal, $modalStack, socket) {
             $scope.unreadCount = 0;
-            socket.socket.on('story:save', function(event, data){
+            socket.socket.on('story:save', function(event, data) {
+                console.log(arguments);
                 ++$scope.unreadCount;
             });
             // Listeners
@@ -31,7 +32,7 @@
                 appAuth.logout();
                 $state.go('login');
             };
-            // Import Data
+            // Posting Form
             $scope.openForm = function(type) {
                 $modalStack.dismissAll();
                 var popup = $modal.open({
@@ -42,17 +43,6 @@
                     backdrop: false,
                     windowClass: 'add-status',
                     openedClass: 'none',
-                    resolve: {
-                        // pageInformation: function() {
-                        //     return $scope.pageInformation;
-                        // },
-                        // districtDetail: function() {
-                        //     return row;
-                        // },
-                        // canUpdate: function() {
-                        //     return true;
-                        // }
-                    },
                     controller: 'Add' + type.charAt(0).toUpperCase() + type.substr(1) + 'Ctrl'
                 });
                 popup.result.then(function(response, status) {
@@ -60,6 +50,22 @@
                     // $scope.getData();
                 });
             };
+            $scope.$on('$viewContentLoaded', function() {
+                $(window).scroll(function() {
+                    if ($(this).scrollTop() > 100) {
+                        $('.scrollup').fadeIn();
+                    } else {
+                        $('.scrollup').fadeOut();
+                    }
+                });
+                //***********************************BEGIN Function calls *****************************
+                $('.scrollup').click(function() {
+                    $("html, body").animate({
+                        scrollTop: 0
+                    }, 700);
+                    return false;
+                });
+            });
         }
     }
     angular.module('roomApp').controller('MainController', MainController);

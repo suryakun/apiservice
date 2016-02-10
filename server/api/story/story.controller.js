@@ -666,11 +666,11 @@ exports.update = function(req, res) {
 
 // Deletes a story from the DB.
 exports.destroy = function(req, res) {
-    Story.find({_id: req.params.id, active: true}, function (err, story) {
+    Story.findOne({_id: req.params.id}, function (err, story) {
         if(err) { return handleError(res, err); }
         if(!story) { return res.status(404).send('Not Found'); }
-        story.remove(function(err) {
-            if(err) { return handleError(res, err); }
+        story.active = false;
+        story.save(function () {
             return res.status(204).send('No Content');
         });
     });
@@ -800,9 +800,9 @@ function resizeThumb (url, destPath) {
         im.resize({
             srcPath: url,
             dstPath: destPath,
-            width: resizeWidth,
-            height: resizeHeight,
-            quality: 0.8
+            width: "",
+            height: "",
+            quality: 0.5
         }, function(err, stdout, stderr){
             if (err) throw err;
             console.log('resized kittens.jpg to fit within 256x256px');

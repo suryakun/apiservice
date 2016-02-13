@@ -118,9 +118,9 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
 }).value('cgBusyDefaults', {
     message: 'Please wait..',
     backdrop: true,
-    // templateUrl: 'my_custom_template.html',
+    templateUrl: 'app/main/loader.html',
     delay: 0,
-    minDuration: 700,
+    minDuration: 300,
     // wrapperClass: 'my-class my-class2'
 }).directive('ngThumb', ['$window', function($window) {
     var helper = {

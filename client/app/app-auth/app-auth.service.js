@@ -152,13 +152,8 @@ angular.module('roomApp')
               isArray: false
           });
           http.then(function(response, status) {
-            console.info(response, self);
-            // var permissions = response.data.data.roles && response.data.data.roles.length ? response.data.data.roles[0].permissions : [];
             self.setData({
               profile: response.data
-              // permissions: permissions.length ? permissions.map(function(item){ return item.slug; }) : [],
-              // districts: response.data.data.districts || [],
-              // districtIds: response.data.data.districts.map(function(item){ return item.id; })
             });
           }, function(response, status) {
             console.info(response, status);

@@ -46,7 +46,7 @@
                 </div>
                 <div class="user-action">
                     <a class="muted pull-left" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="fa fa-comment"></i> <span ng-bind="story._reply.length">0</span> Comments</a>
-                    <a class="muted pull-right pink" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="icon7p-love"></i> <span ng-bind="story._reply.length">0</span> Liked</a>
+                    <!-- <a class="muted pull-right pink" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="icon7p-love"></i> <span ng-bind="story._reply.length">0</span> Liked</a> -->
                 </div>
                 <ul class="comment-list" xng-init="getReplies(story)">
                     <li ng-repeat="(key, reply) in story.reply" xng-init="getSingleUser(reply._teacher, reply, 'userDetail')">

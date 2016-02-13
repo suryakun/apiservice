@@ -17,10 +17,8 @@
                     To
                     </h6>
                     <h4 class="semi-bold pull-left">
-                    <span ng-repeat-start="(key, class) in story._class" ng-bind="class.name">name</span>
-                    <span class="muted" ng-repeat-end>Class</span>
-                    <span ng-repeat-start="(key, group) in story._group" ng-bind="group.name">name</span>
-                    <span class="muted" ng-repeat-end>Group</span>
+                    <span> <span ng-bind="story._class.length + story._group.length"></span> Groups</span>
+                    <span class="muted">Selected Groups</span>
                     </h4>
                 </div>
                 <p class="dark-text" ng-bind="story.info"></p>

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('AddPortfolioCtrl', ['$modalInstance', '$rootScope', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $rootScope, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
+angular.module('roomApp').controller('AddPortfolioCtrl', ['$modalInstance', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
     $scope.data = {
         type: 'portfolio',
         info: '',
@@ -51,7 +51,6 @@ angular.module('roomApp').controller('AddPortfolioCtrl', ['$modalInstance', '$ro
                 })
             }, $scope.data)
         }).then(function(response) {
-            $rootScope.$broadcast('portfolio:created', true);
             $timeout(function() {
                 $scope.result = response.data;
             });

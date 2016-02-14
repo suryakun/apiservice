@@ -35,6 +35,7 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
     };
     console.info('appAuth', appAuth);
     // Listeners
+    $scope.notificationOpened = false;
     $scope.unreadCount = 0;
     $scope.unreadStory = [];
     socket.socket.on('story:save', function(event, data) {
@@ -53,6 +54,7 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
         //         scrollTop: 0
         //     }, 200);
         // });
+        $scope.notificationOpened = false;
         $('.create-new').hide(350);
     });
     $scope.$on('$viewContentLoaded', function() {

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$rootScope', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $rootScope, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
+angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
     $scope.data = {
         type: 'info',
         info: '',
@@ -88,7 +88,6 @@ angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$rootSco
                 })
             }, $scope.data)
         }).then(function(response) {
-            $rootScope.$broadcast('info:created', true);
             $timeout(function() {
                 $scope.result = response.data;
             });

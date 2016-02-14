@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('ActivityCtrl', ['$rootScope', '$scope', '$http', 'socket', '$filter',function($rootScope, $scope, $http, socket, $filter) {
+angular.module('roomApp').controller('ActivityCtrl', ['$scope', '$http', 'socket', '$filter',function($scope, $http, socket, $filter) {
     $scope.stories = [];
     var getData = function() {
         $scope.promise = $http.get('/api/users/get-story-filter/activity/0', {
@@ -55,7 +55,7 @@ angular.module('roomApp').controller('ActivityCtrl', ['$rootScope', '$scope', '$
             $scope.getReply(story);
         });
     };
-    $rootScope.$on('activity:created', function() {
+    $scope.$on('activity:created', function() {
         getData();
     });
 }]);

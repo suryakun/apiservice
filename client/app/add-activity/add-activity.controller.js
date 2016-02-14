@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('AddActivityCtrl', ['$modalInstance', '$rootScope', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $rootScope, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
+angular.module('roomApp').controller('AddActivityCtrl', ['$modalInstance', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
     $scope.data = {
         type: 'activity',
         info: '',
@@ -88,7 +88,6 @@ angular.module('roomApp').controller('AddActivityCtrl', ['$modalInstance', '$roo
                 })
             }, $scope.data)
         }).then(function(response) {
-            $rootScope.$broadcast('activity:created', true);
             $timeout(function() {
                 $scope.result = response.data;
             });

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('PortfolioCtrl', ['$rootScope', '$scope', 'userDetailHttp', '$http', function($rootScope, $scope, userDetailHttp, $http) {
+angular.module('roomApp').controller('PortfolioCtrl', ['$scope', 'userDetailHttp', '$http', function($scope, userDetailHttp, $http) {
     $scope.user = userDetailHttp.data;
     $scope.stories = [];
     var getData = function() {
@@ -10,7 +10,7 @@ angular.module('roomApp').controller('PortfolioCtrl', ['$rootScope', '$scope', '
         });
     };
     getData();
-    $rootScope.$on('portfolio:created', function() {
+    $scope.$on('portfolio:created', function() {
         getData();
     });
 }]);

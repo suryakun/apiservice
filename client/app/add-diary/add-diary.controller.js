@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('AddDiaryCtrl', ['$modalInstance', '$rootScope', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $rootScope, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
+angular.module('roomApp').controller('AddDiaryCtrl', ['$modalInstance', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
     $scope.data = {
         type: 'diary',
         info: '',
@@ -51,7 +51,6 @@ angular.module('roomApp').controller('AddDiaryCtrl', ['$modalInstance', '$rootSc
                 })
             }, $scope.data)
         }).then(function(response) {
-            $rootScope.$broadcast('diary:created', true);
             $timeout(function() {
                 $scope.result = response.data;
             });

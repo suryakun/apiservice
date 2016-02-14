@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('InfoCtrl', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
+angular.module('roomApp').controller('InfoCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.stories = [];
     var getData = function() {
         $scope.promise = $http.get('/api/users/get-story-filter/info/0', {
@@ -9,7 +9,7 @@ angular.module('roomApp').controller('InfoCtrl', ['$rootScope', '$scope', '$http
         });
     };
     getData();
-    $rootScope.$on('info:created', function() {
+    $scope.$on('info:created', function() {
         getData();
     });
 }]);

@@ -1,27 +1,66 @@
-<div class="page page-core page-login" style="margin-top: 25px;">
 
-  <div class="container w-420 p-15 bg-white mt-40 text-center" style="border: 1px solid #dbe0e2;" cg-busy="promise">
-
-
-    <h2 class="text-light text-greensea">Log In</h2>
-
-    <form name="form" class="form-validation mt-20" ng-submit="onFormSubmit(form)" novalidate>
-
-      <div class="form-group">
-        <input type="email" class="form-control underline-input" placeholder="Email" ng-model="data.email" required>
+    <div class="container">
+        <div class="row login-container column-seperation">
+            <div class="col-md-5 col-md-offset-1">
+                <h2>Media Interaksi Sekolah</h2>
+                <p>7Pagi merupakan Media Privat Sekolah untuk Guru dan Orang Tua.<br>Memudahkan Guru untuk menginformasikan kegiatan Anak di Sekolah, karena kami percaya interaksi yang baik antara Sekolah & Orang Tua membentuk Lingkungan belajar terbaik untuk Anak.
+                  <br />Silahkan login dengan Username dan Password yang telah diberikan pihak Sekolah. </p>
+            </div>
+            <div class="col-md-5 "> <br />
+                <form id="form-login" name="form" class="animated fadeIn" ng-submit="onFormSubmit(form)">
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label">Username</label>
+                            <div class="controls">
+                              <div class="input-with-icon  right">
+                                <i class=""></i>
+                                    <input type='text' name='username' id='username' value='' class="form-control" placeholder="Username" ng-model="data.email" required>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label">Password</label>
+                            <span class="help"></span>
+                            <div class="controls">
+                              <div class="input-with-icon  right">
+                                <i class=""></i>
+                                    <input  type='password' name='password' value=''  class="form-control" placeholder="Password" ng-model="data.password" required>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <!-- <label class="checkbox-wrapper pull-left">
+                                <input name="remember_me" type="checkbox" />
+                                Remember me
+                            </label>
+ -->
+                            <button class="btn btn-primary btn-cons pull-right" type="submit" value="LOGIN">Login</button>
+                            <input type='hidden' name='login' id='login' value='true' />
+                        </div>
+                        <div class="col-md-10 text-center">
+                            <hr />
+                            <a href="javascript:void(0)" ui-sref="reset-password">Forgot Your password?</a>
+                        </div>
+                    </div>
+            </form>
+            </div>
       </div>
+    </div>
 
-      <div class="form-group">
-        <input type="password" placeholder="Password" class="form-control underline-input" ng-model="data.password" required>
-      </div>
+    <div class="pull-bottom sm-pull-bottom col-md-offset-1 col-md-10" style="margin-top:15%;">
+        <div class="m-b-10 p-r-80 sm-m-t-20 sm-p-r-15 sm-p-b-20 clearfix">
+            <div class="col-sm-3 col-md-2">
+              <img alt="" class="m-t-5" height="40" src="assets/img/logo-biru-footer.png" alt="" />
 
-      <div class="form-group text-left mt-20">
-        <button type="submit" class="btn btn-greensea b-0 br-2 mr-5" ng-disabled='form.$invalid'>Login</button>
-        <!-- <a ui-sref="core.forgotpass" class="pull-right mt-10">Forgot Password?</a> -->
-      </div>
-
-    </form>
-
-  </div>
-
-</div>
+            </div>
+            <div class="col-sm-9 no-padding m-t-10">
+                <p>
+                    <small>Media Interaksi Digital Sekolah. Untuk informasi lebih mengenai 7Pagi, silahkan email kami di <a href="mailto:halo@7Pagi.com"><i><small>halo@7Pagi.com</small></i></a>.<br>@2016</small>
+                </p>
+            </div>
+        </div>
+    </div>

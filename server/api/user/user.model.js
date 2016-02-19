@@ -9,6 +9,7 @@ var Story = require('../story/story.model');
 var School = require('../school/school.model');
 var Reply = require('../reply/reply.model');
 var Photo = require('../photo/photo.model');
+var Group = require('../group/group.model');
 var _ = require('lodash');
 
 var UserSchema = new Schema({
@@ -298,7 +299,19 @@ UserSchema.statics.getStoriesForTeacherWithFilter = function (id, params, callba
                                     path: "_story._teacher",
                                     select: "name email avatar role",
                                     model: usr
-                                }, callback);
+                                }, function (err, popstory) {
+                                    Story.populate(story, {
+                                        path: "_story._class",
+                                        select: "name",
+                                        model: Classd
+                                    }, function (err, popstory) {
+                                        Story.populate(story, {
+                                            path: "_story._group",
+                                            select: "name",
+                                            model: Group
+                                        }, callback);
+                                    });
+                                });
                             });
                         });
                     });

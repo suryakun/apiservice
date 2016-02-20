@@ -8,7 +8,7 @@
                     </div>
                 </td>
                 <td width="84%" class="clickable tablefull v-align-middle">
-                    <h5 class="bold no-margin" ng-bind="story._teacher.name">Teacher Name</h5>
+                    <h5 class="bold no-margin" ng-bind="story._teacher.name | capitalize">Teacher</h5>
                     <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: story._id})" ng-bind="story.info"></a>
                 </td>
                 <td width="10%" class="clickable"><span class="muted text-right" am-time-ago="story.createdAt"></span></td>

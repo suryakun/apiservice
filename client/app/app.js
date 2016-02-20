@@ -115,6 +115,27 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
             return input;
         }
     };
+}).filter('capitalize', function() {
+    return function(input, scope) {
+        if (input) {
+            var splitStr = input.split(' ');
+            var logStr = [];
+            angular.forEach(splitStr, function(value, key) {
+                this.push(value.substring(0, 1).toUpperCase() + value.substring(1));
+            }, logStr);
+            return logStr.join(' ');
+        } else {
+            return input;
+        };
+    };
+}).filter('ucFirst', function() {
+    return function(input, scope) {
+        if (input) {
+            return input.charAt(0).toUpperCase() + input.substring(1);
+        } else {
+            return input;
+        }
+    };
 }).value('cgBusyDefaults', {
     message: 'Please wait..',
     backdrop: true,

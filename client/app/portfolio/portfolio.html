@@ -4,7 +4,7 @@
         <figure class="children-pp">
             <img ng-src="{{user.avatar || 'assets/img/profiles/bc.jpg'}}" alt="pp" />
         </figure>
-        <span class="name" ng-bind="user.name">User Name</span>
+        <span class="name" ng-bind="user.name | capitalize">User Name</span>
     </div>
 </div>
 <div class="user-menu">

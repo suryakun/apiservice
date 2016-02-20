@@ -14,7 +14,7 @@
                 <span class="profile-img-wrapper">
                 <img width="35" height="35" alt="" ng-src="{{student.avatar || 'assets/img/profiles/bc.jpg'}}"/>
                 </span>
-                <span class="name"><span ng-bind="student.name"></span></span>
+                <span class="name"><span ng-bind="student.name | capitalize"></span></span>
                 </a>
             </li>
         </ul>

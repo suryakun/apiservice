@@ -10,17 +10,17 @@
             <div class="inline m-b-5">
                 <h4 class="semi-bold pull-left">
                 <span ng-bind="story._teacher.name">name</span>
-                <span class="muted" ng-bind="story._teacher.role">role</span>
+                <span class="muted" ng-bind="story._teacher.role | capitalize">role</span>
                 </h4>
                 <h6 class="semi-bold pull-left m-l-10 m-t-15">
                 To
                 </h6>
                 <h4 class="semi-bold pull-left">
-                <span ng-if="story.type === 'activity' || story.type === 'info'"> <span ng-bind="story._class.length + story._group.length"></span> Groups</span>
+                <span ng-if="story.type === 'activity' || story.type === 'info'" tooltip="{{getDetailGroup(story)}}"> <span ng-bind="story._class.length + story._group.length"></span> Groups</span>
                 <span ng-if="story.type === 'activity' || story.type === 'info'" class="muted">Selected Groups</span>
                 <!-- DIARY -->
                 <span ng-if="story.type === 'diary' || story.type === 'portfolio'" ng-bind="user._parent.name">Parent</span>
-                <span ng-if="story.type === 'diary' || story.type === 'portfolio'"  class="muted" ng-bind="user._parent.role">Parents</span>
+                <span ng-if="story.type === 'diary' || story.type === 'portfolio'"  class="muted" ng-bind="user._parent.role | capitalize">Parents</span>
                 </h4>
             </div>
             <p class="dark-text" ng-bind="story.info"></p>

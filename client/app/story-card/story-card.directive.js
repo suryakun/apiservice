@@ -30,6 +30,17 @@ angular.module('roomApp')
                   $scope.getReply(story);
               });
           };
+          $scope.getDetailGroup = function(story) {
+              var result = [];
+              console.log(story);
+              angular.forEach(story._class || [], function(value, key) {
+                  result.push(value.name);
+              });
+              angular.forEach(story._group || [], function(value, key) {
+                  result.push(value.name);
+              });
+              return result.join('<br />');
+          }
       }],
       scope: {
         story: '=storyCard',

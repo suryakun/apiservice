@@ -38,15 +38,15 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
     $scope.notificationOpened = false;
     $scope.unreadCount = 0;
     $scope.unreadStory = [];
-    socket.socket.on('story:save', function(event, data) {
-        if (appAuth.data.role === 'parent' && event._parent.indexOf(appAuth.data.id) !== -1) {
+    socket.socket.on('story:save', function(data) {
+        if (appAuth.data.role === 'parent' && data._parent.indexOf(appAuth.data.id) !== -1) {
             ++$scope.unreadCount;
-            $scope.unreadStory.push(event);
-        } else if (appAuth.data.role === 'teacher' && event._cc.indexOf(appAuth.data.id) !== -1) {
+            $scope.unreadStory.push(data);
+        } else if (appAuth.data.role === 'teacher' && data._cc.indexOf(appAuth.data.id) !== -1) {
             ++$scope.unreadCount;
-            $scope.unreadStory.push(event);
+            $scope.unreadStory.push(data);
         }
-        $rootScope.$broadcast(event.type + ':created', true);
+        $rootScope.$broadcast(data.type + ':created', true);
     });
     socket.socket.on('reply:save', function(data) {
         if (appAuth.data.role === 'parent' && data._parent !== appAuth.data.id) {

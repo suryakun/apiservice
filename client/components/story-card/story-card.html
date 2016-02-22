@@ -6,7 +6,7 @@
     <div class="cbp_tmlabel">
         <div class="post-content">
             <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>
-            <div class="profile-pic"> <img width="35" height="35" ng-src="{{ reply.teacher.avatar ? (reply.teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg' }}"  alt=""> </div>
+            <div class="profile-pic"> <img width="35" height="35" ng-src="{{ story._teacher.avatar ? (story._teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg' }}"  alt=""> </div>
             <div class="inline m-b-5">
                 <h4 class="semi-bold pull-left">
                 <span ng-bind="story._teacher.name">name</span>
@@ -32,16 +32,16 @@
                 <!-- <a class="muted pull-right pink" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="icon7p-love"></i> <span ng-bind="story._reply.length">0</span> Liked</a> -->
             </div>
             <ul class="comment-list">
-                <li ng-repeat="(key, reply) in story.reply">
+                <li ng-repeat="(key, reply) in story.reply" ng-init="reply.user = reply._teacher || reply._parent;">
                     <div class="post comments-section">
                         <div class="user-profile-pic-wrapper">
                             <div class="user-profile-pic-normal">
-                                <img width="35" height="35" data-src-retina="assets/img/profiles/ba.jpg" data-src="assets/img/profiles/ba.jpg" src="assets/img/profiles/ba.jpg" alt="">
+                                <img width="35" height="35" ng-src="{{ reply.user.avatar ? (reply.user.avatar|apiFile:'avatar') : 'assets/img/profiles/ba.jpg' }}" alt="">
                             </div>
                         </div>
                         <div class="info-wrapper">
                             <div class="username">
-                                <span class="dark-text" ng-bind="reply._teacher || reply._parent"></span>
+                                <span class="dark-text" ng-bind="reply.user.name"></span>
                             </div>
                             <div class="info" ng-bind-html="reply.info">
                             </div>

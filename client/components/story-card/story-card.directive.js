@@ -7,7 +7,7 @@ angular.module('roomApp')
       restrict: 'A',
       controller: ['$scope', '$http', 'socket', function ($scope, $http, socket) {
           $scope.getReply = function(story) {
-              $http.get('/api/stories/get-reply-by-story-id/' + story._id, {
+              $http.get('/api/stories/' + story._id + '/replies', {
                   cache: false
               }).then(function(response) {
                   $scope.story.reply = response.data;
@@ -33,7 +33,7 @@ angular.module('roomApp')
           }
           // Event Listeners
           socket.socket.on('reply:save', function(data) {
-              if (data._story === $scope.story.id) {
+              if (data._story === $scope.story._id) {
                   $scope.getReply($scope.story);
               }
           });

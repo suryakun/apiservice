@@ -8,8 +8,8 @@ angular.module('roomApp').controller('InfoCtrl', ['$scope', '$http', function($s
             $scope.stories = response.data;
         });
     };
-    getData();
     $scope.$on('info:created', function() {
         getData();
     });
+    getData();
 }]);

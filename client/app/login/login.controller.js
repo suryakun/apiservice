@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state', 'apiConnector', function($scope, appAuth, $state, apiConnector) {
+angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state', function($scope, appAuth, $state) {
     // $scope.data = {
     //     email: 'adelia@kidzpotentia.sch.id',
     //     password: 'parent.adelia'

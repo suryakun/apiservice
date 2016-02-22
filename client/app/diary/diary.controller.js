@@ -9,8 +9,8 @@ angular.module('roomApp').controller('DiaryCtrl', ['$scope', 'userDetailHttp', '
             $scope.stories = response.data;
         });
     };
-    getData();
     $scope.$on('diary:created', function() {
         getData();
     });
+    getData();
 }]);

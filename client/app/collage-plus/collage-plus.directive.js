@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').directive('collagePlus', [function() {
+angular.module('roomApp').directive('collagePlus', ['$timeout', function($timeout) {
     return {
         restrict: 'EA',
         scope: {
@@ -11,7 +11,9 @@ angular.module('roomApp').directive('collagePlus', [function() {
                 'direction': 'horizontal'
             }, scope.options || {});
             element.imagesLoaded(function() {
-                element.collagePlus(options);
+                $timeout(function(){
+                    element.collagePlus(options);
+                }, 100);
             });
         }
     };

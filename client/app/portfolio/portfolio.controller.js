@@ -9,8 +9,8 @@ angular.module('roomApp').controller('PortfolioCtrl', ['$scope', 'userDetailHttp
             $scope.stories = response.data;
         });
     };
-    getData();
     $scope.$on('portfolio:created', function() {
         getData();
     });
+    getData();
 }]);

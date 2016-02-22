@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('StudentCtrl', ['$scope', 'myClassesHttp', 'apiConnector', '$http', function($scope, myClassesHttp, apiConnector, $http) {
+angular.module('roomApp').controller('StudentCtrl', ['$scope', 'myClassesHttp', '$http', function($scope, myClassesHttp, $http) {
     $scope.myClasses = [myClassesHttp.data];
     $scope.selectedClass = $scope.myClasses[0];
     $scope.students = [];

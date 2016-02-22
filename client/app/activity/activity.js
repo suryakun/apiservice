@@ -5,6 +5,6 @@ angular.module('roomApp').config(['$stateProvider', function($stateProvider) {
         templateUrl: 'app/activity/activity.html',
         controller: 'ActivityCtrl',
         controllerAs: 'activity',
-        containerClass: 'no-cover'
+        containerClass: 'no-cover animated fadeIn'
     });
 }]);

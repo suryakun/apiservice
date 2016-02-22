@@ -16,7 +16,7 @@
                 To
                 </h6>
                 <h4 class="semi-bold pull-left">
-                <span ng-if="story.type === 'activity' || story.type === 'info'" tooltip="{{getDetailGroup(story)}}"> <span ng-bind="story._class.length + story._group.length"></span> Groups</span>
+                <span ng-if="story.type === 'activity' || story.type === 'info'" tooltip="{{getDetailGroup(story)}}" tooltip-animation="false" tooltip-placement="right" tooltip-class="customClass"> <span ng-bind="story._class.length + story._group.length"></span> Groups</span>
                 <span ng-if="story.type === 'activity' || story.type === 'info'" class="muted">Selected Groups</span>
                 <!-- DIARY -->
                 <span ng-if="story.type === 'diary' || story.type === 'portfolio'" ng-bind="user._parent.name">Parent</span>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="info-wrapper">
                             <div class="username">
-                                <span class="dark-text" ng-bind="reply._teacher || reply._parent">ID User Belum dapet</span>
+                                <span class="dark-text" ng-bind="reply._teacher || reply._parent"></span>
                             </div>
                             <div class="info" ng-bind-html="reply.info">
                             </div>
@@ -61,7 +61,7 @@
             <div class="inline pull-right">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Write a comment" ng-model="story.newReply">
-                <span class="input-group-addon primary" ng-click="onSubmitReply(story)"> <span class="arrow"></span><i class="glyphicon glyphicon-send"></i> </span> </div>
+                <span class="input-group-addon primary" ng-disabled="!story.newReply" ng-click="onSubmitReply(story)" style="cursor: pointer !important;"> <span class="arrow"></span><i class="glyphicon glyphicon-send"></i> </span> </div>
             </div>
             <div class="clearfix"></div>
         </div>

@@ -48,11 +48,20 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
         }
         $rootScope.$broadcast(event.type + ':created', true);
     });
+    socket.socket.on('reply:save', function(data) {
+        if (appAuth.data.role === 'parent' && data._parent !== appAuth.data.id) {
+            ++$scope.unreadCount;
+            $scope.unreadStory.push(data);
+        } else if (appAuth.data.role === 'teacher' && data._teacher !== appAuth.data.id) {
+            ++$scope.unreadCount;
+            $scope.unreadStory.push(data);
+        }
+    });
     $scope.$on('$stateChangeSuccess', function(event) {
         // event.targetScope.$watch('$viewContentLoaded', function() {
-        //     angular.element('html, body, #page-container').animate({
+        //     $("html, body").animate({
         //         scrollTop: 0
-        //     }, 200);
+        //     }, 700);
         // });
         $scope.notificationOpened = false;
         $('.create-new').hide(350);

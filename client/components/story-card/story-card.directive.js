@@ -3,7 +3,7 @@
 angular.module('roomApp')
   .directive('storyCard', function () {
     return {
-      templateUrl: 'app/story-card/story-card.html',
+      templateUrl: 'components/story-card/story-card.html',
       restrict: 'A',
       controller: ['$scope', '$http', 'socket', function ($scope, $http, socket) {
           $scope.getReply = function(story) {

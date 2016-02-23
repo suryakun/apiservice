@@ -7,6 +7,7 @@ var Photo = require('../photo/photo.model');
 var Teacher = require('../teacher/teacher.model');
 var Classd = require('../class/class.model');
 var Group = require('../group/group.model');
+var Reply = require('../reply/reply.model');
 var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var formidable = require('formidable');
@@ -36,6 +37,61 @@ exports.show = function(req, res) {
         if(err) { return handleError(res, err); }
         if(!story) { return res.status(404).send('Not Found'); }
         return res.json(story);
+    });
+};
+
+// Get a single story more detail
+exports.detail = function(req, res) {
+    Story.find({_id: req.params.id, active: true}, function (err, story) {
+        if(err) { return handleError(res, err); }
+        if(!story) { return res.status(404).send('Not Found'); }
+        Story.populate(story, {
+            path: "_teacher",
+            select: "name email avatar role",
+        }, function (err, story) {
+            Story.populate(story, {
+                path: "_parent",
+                select: "name email avatar role",
+            }, function (err, story) {
+                Story.populate(story, {
+                    path: "_class",
+                    select: "name",
+                }, function (err, story) {
+                    Story.populate(story, {
+                        path: "_group",
+                        select: "name",
+                    }, function (err, story) {
+                        Story.populate(story, {
+                            path: "_photo",
+                            select: "url thumb",
+                        }, function (err, story) {
+                            return res.json(story);
+                        });
+                    });
+                });
+            });
+        });
+    });
+};
+
+exports.getReply = function(req, res) {
+    var story_id = req.params.id;
+    handleString(res, story_id);
+    Story.getReplyByStoryId(story_id, function (err, story) {
+        if(err) { return handleError(res, err); }
+        if(!story) { return res.status(404).send('Not Found'); }
+        Reply.populate(story._reply, {
+            path: "_teacher",
+            select: "name email avatar role",
+        }, function (err, reply) {
+            Reply.populate(reply, {
+                path: "_parent",
+                select: "name email avatar role",
+            }, function (err, reply) {
+                return res.json(reply);
+                // res.status(200).json(story._reply);
+            });
+        });
     });
 };
 

@@ -19,5 +19,8 @@ router.get('/get-class-by-story-id/:id', auth.hasRole(['teacher','student','pare
 router.get('/get-teacher-by-story-id/:id', auth.hasRole(['teacher','student','parent']), controller.getTeacherByStoryId);
 router.post('/read-story', auth.hasRole(['teacher','parent']), controller.readStory);
 router.get('/get-reader/:id', auth.hasRole(['teacher','parent']), controller.getReader);
+// more detail story than SHOW route
+router.get('/:id', controller.detail);
+router.get('/:id/replies', controller.getReply);
 
 module.exports = router;

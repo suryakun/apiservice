@@ -33,7 +33,14 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
             // $scope.getData();
         });
     };
-    console.info('appAuth', appAuth);
+    console.info('appAuth', appAuth, $state);
+    if ($state.current.name === 'main') {
+        if (appAuth.data.role === 'teacher') {
+            $state.go('main.activity');
+        } else if (appAuth.data.role === 'parent') {
+            $state.go('main.diary', {id: appAuth.profile._student[0]._id });
+        }
+    }
     // Listeners
     $scope.notificationOpened = false;
     $scope.unreadCount = 0;

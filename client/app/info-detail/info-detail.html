@@ -6,80 +6,53 @@
     <li class="m-b-30 no-margin">
         <div class="cbp_tmlabel">
             <div class="post-content">
-                <span class="time">10:05 <span class="semi-bold">am</span></span>
-                <div class="profile-pic"> <img width="35" height="35" src="assets/img/profiles/cute.jpg" alt=""> </div>
+                <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>
+                <div class="profile-pic"> <img width="35" height="35" ng-src="{{ story._teacher.avatar ? (story._teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg' }}"  alt=""> </div>
                 <div class="inline m-b-5">
                     <h4 class="semi-bold pull-left">
-                    John Doe
-                    <span class="muted">Teacher</span>
+                    <span ng-bind="story._teacher.name">name</span>
+                    <span class="muted" ng-bind="story._teacher.role | capitalize">role</span>
                     </h4>
                     <h6 class="semi-bold pull-left m-l-10 m-t-15">
                     To
                     </h6>
                     <h4 class="semi-bold pull-left">
-                    Jack Sparrow
-                    <span class="muted">Parents</span>
+                    <span ng-if="story.type === 'activity' || story.type === 'info'" tooltip="{{getDetailGroup(story)}}" tooltip-animation="false" tooltip-placement="right" tooltip-class="customClass"> <span ng-bind="story._class.length + story._group.length"></span> Groups</span>
+                    <span ng-if="story.type === 'activity' || story.type === 'info'" class="muted">Selected Groups</span>
+                    <!-- DIARY -->
+                    <span ng-if="story.type === 'diary' || story.type === 'portfolio'" ng-bind="story._parent[0].name">Parent</span>
+                    <span ng-if="story.type === 'diary' || story.type === 'portfolio'"  class="muted" ng-bind="story._parent[0].role | capitalize">Parents</span>
                     </h4>
                 </div>
                 <hr class="no-margin dashed"/>
-                <p class="dark-text m-t-10">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem.
-                Sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam
-                </p>
-                <p class="m-t-20"><strong>Attachment :</strong></p>
-                <div class="photo attachment clearfix">
-                    <div class="work-masonry-thumb" ><a href="assets/img/others/1.jpg" class="gallery-portfolio"><img src="assets/img/others/1.jpg" alt="" /></a></div>
-                    <div class="work-masonry-thumb" ><a href="assets/img/others/2.jpg" class="gallery-portfolio"><img src="assets/img/others/2.jpg" class="" alt="" /></a></div>
-                    <div class="work-masonry-thumb" ><a href="assets/img/others/3.png" class="gallery-portfolio"><img src="assets/img/others/3.png" class="work-masonry-thumbx" alt="" /></a></div>
-                    <div class="work-masonry-thumb" ><a href="assets/img/others/rob.jpg" class="gallery-portfolio"><img src="assets/img/others/rob.jpg" class="work-masonry-thumbx" alt="" /></a></div>
-                    <div class="work-masonry-thumb" ><a href="assets/img/others/cover.jpg" class="gallery-portfolio"><img src="assets/img/others/cover.jpg" class="work-masonry-thumbx" alt="" /></a></div>
+                <p class="dark-text  m-t-10" ng-bind="story.info"></p>
+                <p class="m-t-20" ng-if="story._photo.length"><strong>Attachment :</strong></p>
+                <div class="photo attachment clearfix"> 
+                    <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a href="javascript:void(0)" ><img class="gallery-portfolio" ng-src="{{ photo.url|apiFile:'story' }}" href="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
                 </div>
+                <colorbox box-for=".gallery-portfolio" />
                 <div class="user-action" id="comment_tab">
-                    <a class="muted pull-left cur" href="#replied"><i class="fa fa-comment"></i> 10 Repplied</a>
-                    <a class="muted pull-left" href="#unread"><i class="fa fa-user"></i> 10 Unreads</a>
+                    <a class="muted pull-left" href="javascript:void(0)"><i class="fa fa-comment"></i> <span ng-bind="story.reply.length">0</span> Repplied</a>
+                    <!-- <a class="muted pull-left" href="#unread"><i class="fa fa-user"></i> 10 Unreads</a> -->
                 </div>
 
-                <ul class="comment-list" id="replied">
-                    <li>
+                <ul class="comment-list">
+                    <li ng-repeat="(key, reply) in story.reply" ng-init="reply.user = reply._teacher || reply._parent;">
                         <div class="post comments-section">
                             <div class="user-profile-pic-wrapper">
                                 <div class="user-profile-pic-normal">
-                                    <img width="35" height="35" data-src-retina="assets/img/profiles/e2x.jpg" data-src="assets/img/profiles/e2x.jpg" src="assets/img/profiles/e2x.jpg" alt="">
+                                    <img width="35" height="35" ng-src="{{ reply.user.avatar ? (reply.user.avatar|apiFile:'avatar') : 'assets/img/profiles/ba.jpg' }}" alt="">
                                 </div>
                             </div>
                             <div class="info-wrapper">
                                 <div class="username">
-                                    <span class="dark-text">Thunderbolt</span>
+                                    <span class="dark-text" ng-bind="reply.user.name"></span>
                                 </div>
-                                <div class="info">
-                                    Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem.
-                                </div>
-                                <div class="more-details">
-                                    <ul class="post-links">
-                                        <li><a href="javascript:void(0)" class="muted">2 Minutes ago</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="post comments-section">
-                            <div class="user-profile-pic-wrapper">
-                                <div class="user-profile-pic-normal">
-                                    <img width="35" height="35" data-src-retina="assets/img/profiles/b.jpg" data-src="assets/img/profiles/b.jpg" src="assets/img/profiles/b.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="info-wrapper">
-                                <div class="username">
-                                    <span class="dark-text">Thunderbolt</span>
-                                </div>
-                                <div class="info">
-                                    Mirum est notare quam littera gothica, quam nunc putamus.
+                                <div class="info" ng-bind-html="reply.info">
                                 </div>
                                 <div class="more-details">
                                     <ul class="post-links">
-                                        <li><a href="javascript:void(0)" class="muted">2 Minutes ago</a></li>
+                                        <li><a href="javascript:void(0)" class="muted" am-time-ago="reply.createdAt"></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -87,47 +60,13 @@
                         </div>
                     </li>
                 </ul>
-
-                <ul class="comment-list hide" id="unread">
-                    <li>
-                        <div class="post comments-section">
-                            <div class="user-profile-pic-wrapper">
-                                <div class="user-profile-pic-normal">
-                                    <img width="35" height="35" data-src-retina="assets/img/profiles/e2x.jpg" data-src="assets/img/profiles/e2x.jpg" src="assets/img/profiles/e2x.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="info-wrapper">
-                                <div class="username m-t-10">
-                                    <span class="dark-text">Thunderbolt</span>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="post comments-section">
-                            <div class="user-profile-pic-wrapper">
-                                <div class="user-profile-pic-normal">
-                                    <img width="35" height="35" data-src-retina="assets/img/profiles/b.jpg" data-src="assets/img/profiles/b.jpg" src="assets/img/profiles/b.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="info-wrapper">
-                                <div class="username m-t-10">
-                                    <span class="dark-text">Thunderbolt</span>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </li>
-                </ul>
-
             </div>
             <div class="clearfix"></div>
             <div class="p-b-10 p-l-10 p-r-10 p-t-10 tiles grey">
                 <div class="inline pull-right">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Write a repply">
-                    <span class="input-group-addon primary"> <span class="arrow"></span><i class="glyphicon glyphicon-send"></i> </span> </div>
+                        <input type="text" class="form-control" placeholder="Write a comment" ng-model="story.newReply">
+                    <span class="input-group-addon primary" ng-disabled="!story.newReply" ng-click="onSubmitReply(story)" style="cursor: pointer !important;"> <span class="arrow"></span><i class="glyphicon glyphicon-send"></i> </span> </div>
                 </div>
                 <div class="clearfix"></div>
             </div>

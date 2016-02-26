@@ -4,6 +4,13 @@ angular.module('roomApp').config(['$stateProvider', function($stateProvider) {
         url: 'portfolio-detail/:id',
         templateUrl: 'app/portfolio-detail/portfolio-detail.html',
         controller: 'PortfolioDetailCtrl',
-        containerClass: 'no-cover'
+        containerClass: 'no-cover',
+        resolve: {
+            storyDetailHttp: ['$http', '$stateParams', function($http, $stateParams) {
+                return $http.get('/api/stories/' + $stateParams.id, {
+                    cache: false
+                });
+            }],
+        }
     });
 }]);

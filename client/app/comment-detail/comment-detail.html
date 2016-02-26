@@ -28,7 +28,7 @@
                 <hr class="no-margin dashed"/>
                 <p class="dark-text  m-t-10" ng-bind="story.info"></p>
                 <div class="photo collage-big clearfix" collage-plus="{'targetHeight': 500, 'direction': 'horizontal'}">
-                    <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a><img ng-src="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
+                    <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a href="javascript:void(0)" ><img class="gallery-portfolio" ng-src="{{ photo.url|apiFile:'story' }}" href="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
                 </div>
                 <colorbox box-for=".gallery-portfolio" />
                 <div class="user-action">

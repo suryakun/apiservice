@@ -46,14 +46,17 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
     $scope.unreadCount = 0;
     $scope.unreadStory = [];
     socket.socket.on('story:save', function(data) {
-        if (appAuth.data.role === 'parent' && data._parent.indexOf(appAuth.data.id) !== -1) {
-            ++$scope.unreadCount;
-            $scope.unreadStory.push(data);
-        } else if (appAuth.data.role === 'teacher' && data._cc.indexOf(appAuth.data.id) !== -1) {
-            ++$scope.unreadCount;
-            $scope.unreadStory.push(data);
+        // story:save fired both create and update story
+        if (+new Date(data.createdAt) === +new Date(data.updatedAt)) {
+            if (appAuth.data.role === 'parent' && data._parent.indexOf(appAuth.data.id) !== -1) {
+                ++$scope.unreadCount;
+                $scope.unreadStory.push(data);
+            } else if (appAuth.data.role === 'teacher' && data._cc.indexOf(appAuth.data.id) !== -1) {
+                ++$scope.unreadCount;
+                $scope.unreadStory.push(data);
+            }
+            $rootScope.$broadcast(data.type + ':created', true);
         }
-        $rootScope.$broadcast(data.type + ':created', true);
     });
     socket.socket.on('reply:save', function(data) {
         if (appAuth.data.role === 'parent' && data._parent !== appAuth.data.id) {

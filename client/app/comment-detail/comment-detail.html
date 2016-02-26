@@ -1,10 +1,10 @@
-<div class="page-title"> <a href="info.html" id="btn-back"><i class="fa fa-arrow-left"></i></a>
-    <h3>Back- <span class="semi-bold">Activity</span></h3>
+<div class="page-title"> <a href="javascript:void(0)" id="btn-back" ng-click="back()"><i class="fa fa-arrow-left"></i></a>
+    <h3>Back- <span class="semi-bold" ng-bind="story.type | capitalize">Activity</span></h3>
     <!-- Judul bisa activity atau diary tergantung awal halamannya, mungkin bisa dibuat 2 page -->
     <!--<h3>Back- <span class="semi-bold">Diary</span></h3>-->
 </div>
 <ul class="cbp_tmtimeline cd-detail">
-    <li class="m-b-30 no-margin">
+    <li class="m-b-30 no-margin" cg-busy="promise">
         <div class="cbp_tmlabel">
             <div class="post-content">
                 <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>

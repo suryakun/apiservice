@@ -5,9 +5,10 @@ angular.module('roomApp')
     return {
       templateUrl: 'components/story-card/story-card.html',
       restrict: 'A',
+      replace: true,
       controller: ['$scope', '$http', 'socket', function ($scope, $http, socket) {
           $scope.getReply = function(story) {
-              $http.get('/api/stories/' + story._id + '/replies', {
+              $scope.promise = $http.get('/api/stories/' + story._id + '/replies', {
                   cache: false
               }).then(function(response) {
                   $scope.story.reply = response.data;

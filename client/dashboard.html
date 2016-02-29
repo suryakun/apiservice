@@ -1,54 +1,25 @@
-<!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <base href="/">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(client) app/vendor.css -->
-      <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-      <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css({.tmp,client}) app/app.css -->
-    <link rel="stylesheet" href="app/app.css">
-      <!-- injector:css -->
-      <link rel="stylesheet" href="app/account/login/login.css">
-      <link rel="stylesheet" href="app/admin/admin.css">
-      <link rel="stylesheet" href="app/app.css">
-      <link rel="stylesheet" href="app/main/main.css">
-      <link rel="stylesheet" href="components/modal/modal.css">
-      <!-- endinjector -->
-    <!-- endbuild -->
-  </head>
-  <body>
-    <!-- Hallo, How Are You??? (^_^)v -->
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+<html lang="en">
+<head>
+<base href="/">
+<meta charset="utf-8" />
+<title>LMS | 7Pagi</title>
+<meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="assets/libs/assets/animate.css/animate.css" type="text/css" />
+<link rel="stylesheet" href="assets/libs/assets/font-awesome/css/font-awesome.css" type="text/css" />
+<link rel="stylesheet" href="assets/libs/jquery/waves/dist/waves.css" type="text/css" />
+<link rel="stylesheet" href="assets/styles/material-design-icons.css" type="text/css" />
+<link rel="stylesheet" href="assets/libs/jquery/bootstrap/dist/css/bootstrap.css" type="text/css" />
+<link rel="stylesheet" href="assets/styles/font.css" type="text/css" />
+<link rel="stylesheet" href="assets/styles/app.css" type="text/css" />
+</head>
+<body ng-app="cmsApp">
 
-    <!-- Add your site or application content here -->
-	Hallow
+<div ui-view></div>
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-    <script>
-      // (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      // (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      // m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      // })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      // ga('create', 'UA-XXXXX-X');
-      // ga('send', 'pageview');
-    </script>
-
-    <!--[if lt IE 9]>
+<!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
+<script src="assets/scripts/ui-waves.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- build:js({client,node_modules}) app/vendor.js -->
@@ -62,14 +33,26 @@
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/angular-socket-io/socket.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/ng-simplePagination/simplePagination.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
+    
+      <script src="assets/libs/jquery/bootstrap/dist/js/bootstrap.js"></script>
+      <script src="assets/libs/jquery/waves/dist/waves.js"></script>
+      <script src="assets/scripts/ui-load.js"></script>
+      <script src="assets/scripts/ui-jp.config.js"></script>
+      <script src="assets/scripts/ui-jp.js"></script>
+      <script src="assets/scripts/ui-nav.js"></script>
+      <script src="assets/scripts/ui-toggle.js"></script>
+      <script src="assets/scripts/ui-form.js"></script>
+      <script src="assets/scripts/ui-client.js"></script>
 
         
         <!-- build:js(.tmp) app/app.js -->
         
         <script src="app/app.js"></script>
+        <script src="app/cms.js"></script>
           <!-- injector:js -->
           <script src="app/account/account.js"></script>
           <script src="app/account/login/login.controller.js"></script>
@@ -77,15 +60,42 @@
           <script src="app/account/signup/signup.controller.js"></script>
           <script src="app/admin/admin.controller.js"></script>
           <script src="app/admin/admin.js"></script>
+          <script src="app/class/class.controller.js"></script>
+          <script src="app/class/class.js"></script>
+          <script src="app/class/class.service.js"></script>
+          <script src="app/dashboard/dashboard.controller.js"></script>
+          <script src="app/dashboard/dashboard.js"></script>
+          <script src="app/foundation/foundation.controller.js"></script>
+          <script src="app/foundation/foundation.js"></script>
+          <script src="app/foundation/foundation.service.js"></script>
+          <script src="app/level/level.controller.js"></script>
+          <script src="app/level/level.js"></script>
+          <script src="app/level/level.service.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="app/moderator/moderator.controller.js"></script>
+          <script src="app/moderator/moderator.js"></script>
+          <script src="app/moderator/moderator.service.js"></script>
+          <script src="app/parent/parent.controller.js"></script>
+          <script src="app/parent/parent.js"></script>
+          <script src="app/parent/parent.service.js"></script>
+          <script src="app/school/school.controller.js"></script>
+          <script src="app/school/school.js"></script>
+          <script src="app/school/school.service.js"></script>
+          <script src="app/teacher/teacher.controller.js"></script>
+          <script src="app/teacher/teacher.js"></script>
+          <script src="app/teacher/teacher.service.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>
           <script src="components/modal/modal.service.js"></script>
           <script src="components/mongoose-error/mongoose-error.directive.js"></script>
+          <script src="components/navbar/header/header.controller.js"></script>
+          <script src="components/navbar/headerschool/headerschool.controller.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
+          <script src="components/sidebar/sidebar.service.js"></script>
           <script src="components/socket/socket.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
+
 </body>
 </html>

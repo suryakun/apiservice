@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('cmsApp', [
-  'roomApp',
+angular.module('cmsApp', [  
   'ngCookies',
   'ngResource',
   'ngSanitize',

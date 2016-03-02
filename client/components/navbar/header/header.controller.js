@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('roomApp')
+angular.module('cmsApp')
     .controller('HeaderCtrl', function ($scope, $location, Auth, $http, sidebar, $state, $stateParams) {
     $http.get('/api/users/me').success(function (data) {
         $scope.me = data;

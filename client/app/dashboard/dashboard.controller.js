@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('roomApp')
+angular.module('cmsApp')
   .controller('DashboardCtrl', function ($scope) {
     $scope.message = 'Hello';
   });

@@ -15,7 +15,7 @@ angular.module('cmsApp')
         })
         .then( function() {
           // Logged in, redirect to home
-          $location.path('/');
+          $location.path('/foundation');
         })
         .catch( function(err) {
           $scope.errors.other = err;

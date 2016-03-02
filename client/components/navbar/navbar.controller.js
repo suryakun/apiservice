@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('roomApp')
+angular.module('cmsApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
       'title': 'Home',

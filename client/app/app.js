@@ -44,12 +44,6 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
             angular.element('html, body, #page-container').animate({
                 scrollTop: 0
             }, 200);
-            // setTimeout(function () {
-            //   angular.element('#wrap').css('visibility','visible');
-            //   if (!angular.element('.dropdown').hasClass('open')) {
-            //     angular.element('.dropdown').find('>ul').slideUp();
-            //   }
-            // }, 200);
         });
         $rootScope.containerClass = toState.containerClass || '';
     });
@@ -61,7 +55,6 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
          * Cegah akses ke halaman anon untuk user yang sudah login
          */
         if (toState.data && toState.data.accessLevel === AUTHConfig.accessLevels.anon && appAuth.authenticated === true) {
-            // angular.element('#pageloader').toggleClass('hide animate');
             event.preventDefault();
             if (appAuth.data.role === 'teacher') {
                 $state.go('main.activity');
@@ -70,7 +63,6 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
             }
         } else if (toState.data && !appAuth.authorize(toState.data.accessLevel || AUTHConfig.accessLevels.public)) {
             event.preventDefault();
-            // angular.element('#pageloader').toggleClass('hide animate');
             console.warn('Page Access Denied', toState, fromState.url);
             return $state.go(toState.data.loginState, {
                 backTo: $state.href(toState.name, null, {

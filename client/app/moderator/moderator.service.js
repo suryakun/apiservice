@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('roomApp')
+angular.module('cmsApp')
     .service('Moderator', function ($http) {
 
         var base = this;

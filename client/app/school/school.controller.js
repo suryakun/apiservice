@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('roomApp')
+angular.module('cmsApp')
 
     .filter('schoolStartFrom', function () {
         return function (input, start) {

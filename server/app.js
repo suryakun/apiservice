@@ -10,6 +10,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var express = require('express');
 var mongoose = require('mongoose');
+var vhost = require('vhost');
 var config = require('./config/environment');
 
 // Connect to database
@@ -23,8 +24,10 @@ mongoose.connection.on('error', function(err) {
 if(config.seedDB) { require('./config/seed'); }
 
 // Setup server
+var mainApp = express();
 var app = express();
-var server = require('http').createServer(app);
+
+var server = require('http').createServer(mainApp);
 var socketio = require('socket.io')(server, {
   serveClient: config.env !== 'production',
   path: '/socket.io-client'
@@ -32,6 +35,14 @@ var socketio = require('socket.io')(server, {
 require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
+
+//cms routing subdomain
+var cmsApp = express();
+require('./config/express')(cmsApp);
+require('./cms-routes')(cmsApp);
+
+mainApp.use(vhost('dashboard.7pagi.dev',cmsApp));
+mainApp.use(vhost('7pagi.dev',app));
 
 // Start server
 server.listen(config.port, config.ip, function () {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('roomApp')
+angular.module('cmsApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('foundation', {

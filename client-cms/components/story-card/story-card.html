@@ -1,0 +1,69 @@
+<li cg-busy="promise">
+    <time class="cbp_tmtime" datetime="2013-04-10 18:30" ng-hide="story.hideDate">
+        <span class="date"><strong ng-bind="story.createdAt | amDateFormat:'dddd'">Monday</strong>, <span ng-bind="story.createdAt | amDateFormat:'D'">18</span> <spam ng-bind="story.createdAt | amDateFormat:'MMM'">May</spam> {{story.createdAt | amDateFormat:'Y'}}</span>
+    </time>
+    <div class="cbp_tmicon animated bounceIn tip" ng-hide="story.hideDate"> &nbsp; </div>
+    <div class="cbp_tmlabel">
+        <div class="post-content">
+            <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>
+            <div class="profile-pic"> <img width="35" height="35" ng-src="{{ story._teacher.avatar ? (story._teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg' }}"  alt=""> </div>
+            <div class="inline m-b-5">
+                <h4 class="semi-bold pull-left">
+                <span ng-bind="story._teacher.name">name</span>
+                <span class="muted" ng-bind="story._teacher.role | capitalize">role</span>
+                </h4>
+                <h6 class="semi-bold pull-left m-l-10 m-t-15">
+                To
+                </h6>
+                <h4 class="semi-bold pull-left">
+                <span ng-if="story.type === 'activity' || story.type === 'info'" tooltip="{{getDetailGroup(story)}}" tooltip-animation="false" tooltip-placement="right" tooltip-class="customClass"> <span ng-bind="story._class.length + story._group.length"></span> Groups</span>
+                <span ng-if="story.type === 'activity' || story.type === 'info'" class="muted">Selected Groups</span>
+                <!-- DIARY -->
+                <span ng-if="story.type === 'diary' || story.type === 'portfolio'" ng-bind="user._parent.name">Parent</span>
+                <span ng-if="story.type === 'diary' || story.type === 'portfolio'"  class="muted" ng-bind="user._parent.role | capitalize">Parents</span>
+                </h4>
+            </div>
+            <p class="dark-text" ng-bind="story.info"></p>
+            <div class="photo Collage clearfix" collage-plus>
+                <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a><img ng-src="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
+            </div>
+            <div class="user-action">
+                <a class="muted pull-left" href="javascript:void(0)" ui-sref="main.comment-detail({id: story._id})"><i class="fa fa-comment"></i> <span ng-bind="story.reply.length">0</span> Comments</a>
+                <!-- <a class="muted pull-right pink" href="javascript:void(0)" ui-sref="main.comment-detail({id:1})"><i class="icon7p-love"></i> <span ng-bind="story._reply.length">0</span> Liked</a> -->
+            </div>
+            <ul class="comment-list">
+                <li ng-repeat="(key, reply) in story.reply" ng-init="reply.user = reply._teacher || reply._parent;">
+                    <div class="post comments-section">
+                        <div class="user-profile-pic-wrapper">
+                            <div class="user-profile-pic-normal">
+                                <img width="35" height="35" ng-src="{{ reply.user.avatar ? (reply.user.avatar|apiFile:'avatar') : 'assets/img/profiles/ba.jpg' }}" alt="">
+                            </div>
+                        </div>
+                        <div class="info-wrapper">
+                            <div class="username">
+                                <span class="dark-text" ng-bind="reply.user.name"></span>
+                            </div>
+                            <div class="info" ng-bind-html="reply.info">
+                            </div>
+                            <div class="more-details">
+                                <ul class="post-links">
+                                    <li><a href="javascript:void(0)" class="muted" am-time-ago="reply.createdAt"></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+        <div class="p-b-10 p-l-10 p-r-10 p-t-10 tiles grey">
+            <div class="inline pull-right">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Write a comment" ng-model="story.newReply">
+                <span class="input-group-addon primary" ng-disabled="!story.newReply" ng-click="onSubmitReply(story)" style="cursor: pointer !important;"> <span class="arrow"></span><i class="glyphicon glyphicon-send"></i> </span> </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</li>

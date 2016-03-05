@@ -38,8 +38,8 @@ require('./routes')(app);
 
 //cms routing subdomain
 var cmsApp = express();
-require('./config/express')(cmsApp);
-require('./cms-routes')(cmsApp);
+require('./config/express-cms')(cmsApp);
+require('./routes-cms')(cmsApp);
 
 mainApp.use(vhost('dashboard.7pagi.dev',cmsApp));
 mainApp.use(vhost('7pagi.dev',app));

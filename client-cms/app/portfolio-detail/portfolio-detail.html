@@ -1,0 +1,82 @@
+<div class="page-title"> <a href="javascript:void(0)" id="btn-back" ng-click="back()"><i class="fa fa-arrow-left"></i></a>
+    <h3>Back- <span class="semi-bold">Portfolio</span></h3>
+</div>
+<ul class="cbp_tmtimeline cd-detail">
+    <li class="m-b-30 no-margin">
+        <div class="cbp_tmlabel">
+            <div class="post-content">
+                <span class="time"><span ng-bind="(story.createdAt | amDateFormat:'hh:mm')"></span> <span class="semi-bold" ng-bind="story.createdAt | amDateFormat:'a'"></span></span>
+                <h6 class="semi-bold pull-left m-l-10 m-t-20 m-r-10">
+                From :
+                </h6>
+                <div class="profile-pic"> <img width="35" height="35" ng-src="{{ story._teacher.avatar ? (story._teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg' }}"  alt=""> </div>
+                <div class="inline m-b-5">
+                    <h4 class="semi-bold pull-left">
+                    <span ng-bind="story._teacher.name">name</span>
+                    <span class="muted" ng-bind="story._teacher.role | capitalize">role</span>
+                    </h4>
+                </div>
+                <hr class="no-margin dashed"/>
+                <article class="portfolio-detail">
+                    <!-- <h3 class="title pull-left m-r-20">Portfolio Title</h3> -->
+                    <!-- <div class="tag pull-right">
+                        <strong>Tags :</strong>
+                        Sport, Math, Art
+                    </div> -->
+                    <div class="clear"></div>
+                    <h6 class="semi-bold pull-left m-t-30 m-r-10">
+                    By :
+                    </h6>
+                    <div class="profile-pic"> <img width="35" height="35" src="assets/img/children.jpg" alt=""> </div>
+                    <div class="inline m-b-5">
+                        <h4 class="semi-bold pull-left m-t-20">
+                        Grace Andhita Puspasari
+                        </h4>
+                    </div>
+                    <div class="clear"></div>
+                    <p class="dark-text" ng-bind="story.info"></p>
+                </article>
+                <div class="photo collage-big clearfix" collage-plus="{'targetHeight': 500, 'direction': 'horizontal'}">
+                    <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a href="javascript:void(0)" ><img class="gallery-portfolio" ng-src="{{ photo.url|apiFile:'story' }}" href="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
+                </div>
+                <colorbox box-for=".gallery-portfolio" />
+                <div class="user-action">
+                    <a class="muted pull-left" href="javascript:void(0)"><i class="fa fa-comment"></i> <span ng-bind="story.reply.length">0</span> Comments</a>
+                </div>
+                <ul class="comment-list">
+                    <li ng-repeat="(key, reply) in story.reply" ng-init="reply.user = reply._teacher || reply._parent;">
+                        <div class="post comments-section">
+                            <div class="user-profile-pic-wrapper">
+                                <div class="user-profile-pic-normal">
+                                    <img width="35" height="35" ng-src="{{ reply.user.avatar ? (reply.user.avatar|apiFile:'avatar') : 'assets/img/profiles/ba.jpg' }}" alt="">
+                                </div>
+                            </div>
+                            <div class="info-wrapper">
+                                <div class="username">
+                                    <span class="dark-text" ng-bind="reply.user.name"></span>
+                                </div>
+                                <div class="info" ng-bind-html="reply.info">
+                                </div>
+                                <div class="more-details">
+                                    <ul class="post-links">
+                                        <li><a href="javascript:void(0)" class="muted" am-time-ago="reply.createdAt"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+            <div class="p-b-10 p-l-10 p-r-10 p-t-10 tiles grey">
+                <div class="inline pull-right">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Write a comment" ng-model="story.newReply">
+                    <span class="input-group-addon primary" ng-disabled="!story.newReply" ng-click="onSubmitReply(story)" style="cursor: pointer !important;"> <span class="arrow"></span><i class="glyphicon glyphicon-send"></i> </span> </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </li>
+</ul>

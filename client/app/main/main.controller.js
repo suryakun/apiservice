@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cmsApp').controller('MainController', ['$scope', 'appAuth', '$state', '$modal', '$modalStack', 'socket', '$rootScope', function($scope, appAuth, $state, $modal, $modalStack, socket, $rootScope) {
+angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$state', '$modal', '$modalStack', 'socket', '$rootScope', function($scope, appAuth, $state, $modal, $modalStack, socket, $rootScope) {
     // Method
     $scope.createType = null;
     $scope.onPostNewClick = function() {

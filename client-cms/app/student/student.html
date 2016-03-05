@@ -1,0 +1,22 @@
+<div class="page-title row">
+    <div class="col-sm-9 no-padding">
+        <h2 class="pull-left">All Students - in</h2>
+        <select class="pull-left m-l-10 m-t-10" ng-options="class as class.info for class in myClasses" ng-model="selectedClass">
+        </select>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="grid simple" cg-busy="promise">
+    <div class="grid-body no-border">
+        <ul class="people-list row">
+            <li class="col-sm-3" ng-repeat="(key, student) in students | orderBy: 'name'">
+                <a href="javascript:void(0)" ui-sref="main.diary({id: student._id})">
+                <span class="profile-img-wrapper">
+                <img width="35" height="35" alt="" ng-src="{{student.avatar || 'assets/img/profiles/bc.jpg'}}"/>
+                </span>
+                <span class="name"><span ng-bind="student.name | capitalize"></span></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

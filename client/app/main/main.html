@@ -106,7 +106,7 @@
             <div class="row">
                 <aside id="sidebar_menu" class="col-md-3">
                     <ul class="main-menu">
-                        <li>
+                        <li ng-if="appAuth.data.role === 'teacher'">
                             <button ng-click="onPostNewClick()" id="post_new" class="btn btn-primary btn-sm"><i class="no-margin fa fa-plus"></i> Post New</button>
                             <ul class="create-new">
                                 <li><a href="javascript:void(0)" id="post_diary" ng-click="openForm('diary')"><i class="icon7p-diary"></i> <span>Post Diary</span></a></li>
@@ -115,8 +115,8 @@
                                 <li><a href="javascript:void(0)" id="post_info" ng-click="openForm('info')"><i class="icon7p-info"></i> <span>Post Info</span></a></li>
                             </ul>
                         </li>
-                        <li ng-show="appAuth.data.role === 'teacher'"><a href="javascript:void(0)" ui-sref="main.student" ng-class="{cur: $state.current.name === 'main.student' || $state.current.name === 'main.diary' || $state.current.name === 'main.portfolio'|| $state.current.name === 'main.portfolio-detail'}"><i class="icon7p-user"></i> Student <span class="badge badge-green">New</span></a></li>
-                        <li ng-show="appAuth.data.role === 'parent'"><a href="javascript:void(0)" ui-sref="main.diary({id: appAuth.profile._student[0]._id })" ng-class="{cur: $state.current.name === 'main.student' || $state.current.name === 'main.diary' || $state.current.name === 'main.portfolio'|| $state.current.name === 'main.portfolio-detail'}"><i class="icon7p-user"></i> Student <span class="badge badge-green">New</span></a></li>
+                        <li ng-if="appAuth.data.role === 'teacher'"><a href="javascript:void(0)" ui-sref="main.student" ng-class="{cur: $state.current.name === 'main.student' || $state.current.name === 'main.diary' || $state.current.name === 'main.portfolio'|| $state.current.name === 'main.portfolio-detail'}"><i class="icon7p-user"></i> Student <span class="badge badge-green">New</span></a></li>
+                        <li ng-if="appAuth.data.role === 'parent'"><a href="javascript:void(0)" ui-sref="main.diary({id: appAuth.profile._student[0]._id })" ng-class="{cur: $state.current.name === 'main.student' || $state.current.name === 'main.diary' || $state.current.name === 'main.portfolio'|| $state.current.name === 'main.portfolio-detail'}"><i class="icon7p-user"></i> Student <span class="badge badge-green">New</span></a></li>
                         <li><a href="javascript:void(0)" ui-sref-active="cur" ui-sref="main.activity"><i class="icon7p-activity"></i> Activity</a></li>
                         <li><a href="javascript:void(0)" ui-sref="main.info" ng-class="{cur: $state.current.name === 'main.info' || $state.current.name === 'main.info-detail'}"><i class="icon7p-info"></i> Info <span class="badge badge-grey">4</span></a></li>
                         <li class="separator"></li>

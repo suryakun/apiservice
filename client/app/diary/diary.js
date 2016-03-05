@@ -4,7 +4,7 @@ angular.module('roomApp').config(['$stateProvider', function($stateProvider) {
         url: 'diary/:id',
         templateUrl: 'app/diary/diary.html',
         controller: 'DiaryCtrl',
-        containerClass: '',
+        containerClass: 'animated fadeIn',
         resolve: {
             userDetailHttp: ['$http', '$stateParams', function($http, $stateParams) {
                 return $http.get('/api/users/single/' + $stateParams.id, {

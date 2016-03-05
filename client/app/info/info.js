@@ -5,6 +5,6 @@ angular.module('roomApp').config(['$stateProvider', function($stateProvider) {
         templateUrl: 'app/info/info.html',
         controller: 'InfoCtrl',
         controllerAs: 'info',
-        containerClass: 'no-cover'
+        containerClass: 'no-cover animated fadeIn'
     });
 }]);

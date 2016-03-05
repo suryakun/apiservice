@@ -15,7 +15,7 @@ angular.module('cmsApp')
             })
             .state('editclass', {
                 url: '/class/edit/{id}/{school_id}',
-                templateUrl: 'app/class/class-edit.html',
+                templateUrl/.: 'app/class/class-edit.html',
                 controller: 'ClassEditCtrl'
             });
     });

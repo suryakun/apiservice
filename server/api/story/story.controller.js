@@ -213,8 +213,9 @@ exports.create = function(req, res) {
                 dataDescription._photo = [];
                 if (fields.hasOwnProperty("group")) {
                     dataDescription._group = fields.group.split(",");;
-                };
+                };                  
 
+                console.log(dataDescription);
                 Classd.find({_id: {$in:dataDescription._class}}).populate("_student").exec(function (err, destClass) {
                     var ids_parent = [];
                     if (err) console.log(err);

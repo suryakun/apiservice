@@ -48,7 +48,7 @@
                     <strong class="small-text pull-left">(<span ng-bind="story._photo.length"></span> Photos)</strong>
                     <span class="small-text pull-right" ng-bind="(story.createdAt | amDateFormat:'D MMM Y')"></span>
                 </div>
-                <a href="javascript:void(0)" ui-sref="main.portfolio-detail({id: story._id})"<p ng-bind="story.info" style="color: inherit;"></a>
+                <a href="javascript:void(0)" ui-sref="main.portfolio-detail({id: story._id})"<p ng-bind-html="story.info | nl2br" style="color: inherit;"></a>
             </div>
             <div class="grid-body no-border album">
                 <div class="photo Collage clearfix" collage-plus>

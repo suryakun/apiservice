@@ -128,6 +128,14 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
             return input;
         }
     };
+}).filter('nl2br', function() {
+    return function(input) {
+        if (input) {
+            return input.replace(/\r?\n/g, '<br />');
+        } else {
+            return input;
+        }
+    };
 }).value('cgBusyDefaults', {
     message: 'Please wait..',
     backdrop: true,

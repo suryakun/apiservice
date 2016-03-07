@@ -23,7 +23,7 @@
                 <span ng-if="story.type === 'diary' || story.type === 'portfolio'"  class="muted" ng-bind="user._parent.role | capitalize">Parents</span>
                 </h4>
             </div>
-            <p class="dark-text" ng-bind="story.info"></p>
+            <p class="dark-text" ng-bind-html="story.info | nl2br"></p>
             <div class="photo Collage clearfix" collage-plus>
                 <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a><img ng-src="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
             </div>

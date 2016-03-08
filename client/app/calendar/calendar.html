@@ -1,0 +1,14 @@
+
+        <div class="fc-overlay">
+          <div class="panel b-solid">
+            <h4 class="text-light mt-0">{{event.title}}</h4>
+            <div class="b-b b-solid mb-10"></div>
+            <div class="text-muted"><i class="icon-calendar mr-5"></i> {{event.start | date:'medium'}}</div>
+            <div class="text-muted" ng-show='event.end'><i class="icon-clock mr-5"></i> {{event.end | date:'medium'}}</div>
+            <div class="text-muted" ng-show='event.location'><i class="icon-pointer mr-5"></i> {{event.location}}</div>
+            <div class="mt-10">{{event.info}}</div>
+            <div class="mt-10">{{event.url}}</div>
+          </div>
+        </div>
+
+<div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>

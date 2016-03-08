@@ -119,6 +119,7 @@
                         <li ng-if="appAuth.data.role === 'parent'"><a href="javascript:void(0)" ui-sref="main.diary({id: appAuth.profile._student[0]._id })" ng-class="{cur: $state.current.name === 'main.student' || $state.current.name === 'main.diary' || $state.current.name === 'main.portfolio'|| $state.current.name === 'main.portfolio-detail'}"><i class="icon7p-user"></i> Student <span class="badge badge-green">New</span></a></li>
                         <li><a href="javascript:void(0)" ui-sref-active="cur" ui-sref="main.activity"><i class="icon7p-activity"></i> Activity</a></li>
                         <li><a href="javascript:void(0)" ui-sref="main.info" ng-class="{cur: $state.current.name === 'main.info' || $state.current.name === 'main.info-detail'}"><i class="icon7p-info"></i> Info <span class="badge badge-grey">4</span></a></li>
+                        <li><a href="javascript:void(0)" ui-sref="main.calendar"><i class="icon7p-calendar"></i> Calendar</a></li>
                         <li class="separator"></li>
                         <li><a href="javascript:void(0)"><i class="icon7p-message"></i> Send Feedback</a></li>
                         <li><a href="javascript:void(0)"><i class="icon7p-about"></i> About</a></li>

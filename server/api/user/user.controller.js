@@ -125,7 +125,9 @@ exports.createTeacher = function (req, res) {
             password: req.body.password,
             _class: cls._id
         }, function (err, user) {
-            res.status(201).send(user);
+            Classd.update({_id:req.body.class}, {$push:{_teacher:user.id}}, function (err, ok) {
+                res.status(201).send(user.profile);
+            });
         })
     });
 }

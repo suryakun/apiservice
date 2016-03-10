@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state', function($scope, appAuth, $state) {
+angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state', 'adalAuthenticationService', '$log', function($scope, appAuth, $state, adalAuthenticationService, $log) {
     // $scope.data = {
     //     email: 'adelia@kidzpotentia.sch.id',
     //     password: 'parent.adelia'
@@ -23,4 +23,36 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
             });
         }
     };
+
+
+    /**
+     * This function does any initialization work the 
+     * controller needs.
+     */
+    (function activate() {
+        if (adalAuthenticationService.userInfo.isAuthenticated) {
+            console.log('adalAuthenticationService.userInfo.isAuthenticated');
+            // var activeSnippet = vm.snippetGroups[0].snippets[0];
+            
+            // var tenant = adalAuthenticationService.userInfo.userName.split('@')[1];
+            console.log(adalAuthenticationService)
+        }
+    })();
+
+    /**
+     * Expose the login method to the view.
+     */
+    $scope.connectMicrosoft  = function () {
+        $log.debug('Connecting to Office 365...');
+        adalAuthenticationService.login();
+    };
+    
+    /**
+     * Expose the logOut method to the view.
+     */
+    $scope.disconnectMicrosoft = function () {
+        $log.debug('Disconnecting from Office 365...');
+        adalAuthenticationService.logOut();
+    };
+
 }]);

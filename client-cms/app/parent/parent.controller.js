@@ -2,7 +2,7 @@
 
 angular.module('cmsApp')
 
-    .filter('classStartFrom', function () {
+    .filter('parentStartFrom', function () {
         return function (input, start) {
             if (input === undefined || input === null || input.length === 0) return [];
             start = +start; //parse to int
@@ -10,7 +10,7 @@ angular.module('cmsApp')
         }
     })
 
-    .controller('ClassCtrl', function ($scope, $http, $stateParams, Pagination, socket, Class, filterFilter, $state) {
+    .controller('ParentCtrl', function ($scope, $http, $stateParams, Pagination, socket, Parent, filterFilter, $state) {
 
     	$scope.params = {};
         $scope.classs = [];
@@ -20,40 +20,44 @@ angular.module('cmsApp')
         $scope.school_id = $stateParams.school_id;
 
         //get data for self
-        Class.getMe().success(function (data) {
+        Parent.getMe().success(function (data) {
             $scope.me = data;
         });
 
         //initialize data for index page
-        Class.getData($stateParams.school_id).success(function (data) {
-            $scope.classs = data;
+        Parent.getData($stateParams.school_id).success(function (data) {
             console.log(data);
+            $scope.students = data;
             
             // pagination controls
             $scope.currentPage = 1;
-            $scope.totalItems = $scope.classs.length;
-            $scope.entryLimit = 5; // items per page
+            $scope.totalItems = $scope.students.length;
+            $scope.entryLimit = 10; // items per page
             $scope.noOfPages = Math.ceil($scope.totalItems / $scope.entryLimit);
 
-            socket.syncUpdates('Class', $scope.Classs);
+            socket.syncUpdates('User', $scope.parents);
 
             // $watch search to update pagination
             $scope.$watch('search', function (newVal, oldVal) {
-                $scope.filtered = filterFilter($scope.classs, newVal);
+                $scope.filtered = filterFilter($scope.students, newVal);
                 $scope.totalItems = $scope.filtered.length;
                 $scope.noOfPages = Math.ceil($scope.totalItems / $scope.entryLimit);
                 $scope.currentPage = 1;
                 }, true);
-
+        }).error(function (err) {
+            console.log(err);
         });
 
-        $scope.modelSetDelete = function (id) {
-            $scope.id_delete = id;
+
+
+        $scope.modelSetDelete = function (student) {
+            $scope.student_delete = student;
         }
 
         $scope.delete = function () {
-            _.remove($scope.classs, {_id:$scope.id_delete});
-            Class.delete($scope.id_delete);
+            _.remove($scope.students, {_id:$scope.student_delete._id});
+            Parent.delete($scope.student_delete._id);
+            Parent.delete($scope.student_delete._parent._id);
         }
 
         $scope.closeModal = function () {
@@ -61,30 +65,22 @@ angular.module('cmsApp')
         }
     })
 
-    .controller('ClassEditCtrl', function ($scope, $http, $stateParams, Pagination, socket, Class, Level, filterFilter, $state, $location) {
-        $scope.levels = [];
+    .controller('ParentEditCtrl', function ($scope, $http, $stateParams, Pagination, socket, Parent, Level, filterFilter, $state, $location, $window) {
 
-        Level.getData($stateParams.school_id).success(function (data) {
-            $scope.levels = data;
-        });
-
-        $scope.setAddLevel = function (id, name) {
-            $scope.editparams._level = id;
-            $scope.editparams.level = name;
-        }
-
-        Class.getDetail($stateParams.id)
-            .success(function (Class) {
-                $scope.editparams = Class[0];
+        Parent.getDetail($stateParams.id)
+            .success(function (parent) {
+                console.log(parent);
+                $scope.editparams = parent;
             });
 
         //execute update data Class
-        $scope.editClass = function (id) {
-            Class.update($scope.editparams._id, $scope.editparams)
+        $scope.editParent = function (id) {
+            console.log($scope.editparams._id);
+            Parent.update($scope.editparams._id, $scope.editparams)
                 .success(function () {
-                    alert('Class data has been updated');
-                    $location.path('/class/' + $scope.editparams._school);
+                    alert('Parent data has been updated');
                     $scope.editparams = {};
+                    $window.history.back();
                 })
                 .error(function () {
                     alert('something went wrong, please try again');
@@ -92,26 +88,25 @@ angular.module('cmsApp')
         }
     })
 
-    .controller('ClassCreateCtrl', function ($scope, $http, $stateParams, Pagination, socket, Class, Level, filterFilter, $state) {
-        $scope.levels = [];
+    .controller('ParentCreateCtrl', function ($scope, $http, $stateParams, Pagination, socket, Class, Parent, Level, filterFilter, $state) {
         $scope.params = {};
+        $scope.classes = [];
 
-        Level.getData($stateParams.school_id).success(function (data) {
-            $scope.levels = data;
+        Class.getData($stateParams.school_id).success(function (data) {
+            $scope.classes = data;
+        })
+
+        Parent.getData($stateParams.school_id).success(function (data) {
+            $scope.students = data;
         });
 
-        $scope.setAddLevel = function (id, name) {
-            $scope.params._level = id;
-            $scope.params.level = name;
-        }
-
         //execute add data Class
-        $scope.addClass = function () {
+        $scope.addParent = function () {
             $scope.params._school = $stateParams.school_id;
             $scope.params.active = true;
-            Class.create($scope.params)
+            Parent.create($scope.params)
                 .success(function (data) {
-                    alert('Class data has been saved');
+                    alert('Parent data has been saved');
                     $scope.params = {};
                     $scope.form.$setPristine();
                 })

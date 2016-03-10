@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('./user.model');
+var Classd = require('../class/class.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var helper = require('../../config/helpers');
@@ -10,6 +11,7 @@ var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
 var mkdirp = require('mkdirp');
+var mongoose = require('mongoose');
 
 var validationError = function(res, err) {
     return res.status(422).json(err);
@@ -39,6 +41,95 @@ exports.create = function (req, res, next) {
     });
 };
 
+/*
+update user
+*/
+exports.update = function(req, res) {
+    User.update({_id:req.body._id}, {$set:{name:req.body.name}}, function (err, user) {
+        if (err || !user) { return handleError(res, err); }
+        User.update({_id:req.body._student[0]._id}, {$set:{name:req.body._student[0].name}}, function (err, userStd) {
+            if (err || !userStd) { return handleError(res, err); }
+            return res.status(200).json(userStd);
+        });
+    });
+};
+
+/*
+update teacher
+*/
+exports.updateTeacher = function (req, res) {
+    User.update({_id:req.body._id}, {$set:{name:req.body.name}}, function (err, user) {
+        if (err || !user) { return handleError(res, err); }
+        return res.status(200).json(user);
+    });
+}
+
+/*
+* Create student and parent
+*/
+exports.createParent = function (req, res, next) {
+
+    User.create([{
+        provider: 'local',        
+        name: req.body.student.name,
+        email: req.body.student.email,
+        role: 'student',
+        password: req.body.student.password
+    }, {
+        provider: 'local',        
+        name: req.body.parent.name,
+        email: req.body.parent.email,
+        role: 'parent',
+        password: req.body.parent.password
+    }] , function (err) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            setTimeout(function () {
+                User.findOne({email: req.body.student.email}, function (err, std) {
+                    User.findOne({email: req.body.parent.email}, function (err, prn) {
+                        console.log(std);
+                        console.log(prn);
+                        std._parent = mongoose.Types.ObjectId(prn._id);
+                        std.save();
+
+                        prn._student.push(mongoose.Types.ObjectId(std._id));
+                        prn.save();
+                    });
+
+                    Classd.findById(req.body.class, function (err, cls) {
+                        std._class = mongoose.Types.ObjectId(cls._id);
+                        std.save();
+
+                        cls._student.push(mongoose.Types.ObjectId(std._id));
+                        cls.save(); 
+                        res.status(201).send('created');
+                    });
+                });
+
+            },1000);
+        }
+    });
+}
+
+/*
+Create Teacher
+*/
+exports.createTeacher = function (req, res) {
+    Classd.findById(req.body.class, function (err, cls) {
+        User.create({
+            provider: 'local',        
+            name: req.body.name,
+            email: req.body.email,
+            role: 'teacher',
+            password: req.body.password,
+            _class: cls._id
+        }, function (err, user) {
+            res.status(201).send(user);
+        })
+    });
+}
+
 /**
  * Get a single user
  */
@@ -57,6 +148,7 @@ exports.show = function (req, res, next) {
  * restriction: 'admin'
  */
 exports.destroy = function(req, res) {
+    console.log(req.params.id);
     User.findByIdAndRemove(req.params.id, function(err, user) {
         if(err) return res.status(500).send(err);
         return res.status(204).send('No Content');
@@ -291,6 +383,12 @@ exports.getAllParentFromMySchool = function (req, res) {
     });
 }
 
+exports.getParentForAdmin = function (req, res) {
+    User.getParentForAdmin(req.params.id, res, function (err, user) {
+        res.status(200).json(user);
+    });
+}
+
 exports.getTeacherOfMySchool = function (req, res) {
     User.getTeacherOfMySchool(req.user._id, function (err, user) {
         console.log(user.length);
@@ -302,6 +400,18 @@ exports.getTeacherOfMySchool = function (req, res) {
         });
         res.status(200).json(tmp);
     });
+}
+
+exports.getTeacherForAdmin = function (req, res) {
+    User.getTeacherForAdmin(req.params.id, function (err, teacher) {
+        var tmp = [];
+        teacher.forEach(function (p) {
+            _.each(p._teacher, function (t) {
+                tmp.push(t);
+            })
+        });
+        res.status(200).json(tmp);
+    });   
 }
 
 exports.getModerator = function (req, res) {

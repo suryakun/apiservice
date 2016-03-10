@@ -53,4 +53,5 @@ angular.module('cmsApp', [
         }
       });
     });
+    console.log("test");
   });

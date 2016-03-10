@@ -23,9 +23,15 @@ router.get('/get-my-class', auth.hasRole(['teacher','parent']), controller.getMy
 router.post('/update-gcm-id', auth.hasRole(['teacher','parent','student','principal']), controller.updateGcmId);
 router.post('/get-story-by-date', auth.hasRole(['teacher','parent']), controller.getMyStoriesByDate);
 router.post('/get-all-principal', auth.hasRole(['admin']), controller.getAllPrincipal);
-router.get('/get-all-parent-from-my-school', auth.hasRole(['teacher','parent']), controller.getAllParentFromMySchool);
-router.get('/get-all-teacher-from-my-school', auth.hasRole(['teacher','parent']), controller.getTeacherOfMySchool);
-router.get('/get-story-filter/:type/:parent', auth.hasRole(['teacher','parent']), controller.getStoryFilter);
+router.post('/create-parent', auth.hasRole(['admin']), controller.createParent);
+router.post('/create-teacher', auth.hasRole(['admin']), controller.createTeacher);
+router.get('/get-all-parent-from-my-school', auth.hasRole(['teacher','parent','admin']), controller.getAllParentFromMySchool);
+router.get('/get-all-teacher-from-my-school', auth.hasRole(['teacher','parent','admin']), controller.getTeacherOfMySchool);
+router.get('/get-story-filter/:type/:parent', auth.hasRole(['teacher','parent','admin']), controller.getStoryFilter);
+router.get('/get-parent-for-admin/:id', auth.hasRole(['admin','moderator']), controller.getParentForAdmin);
+router.get('/get-teacher-for-admin/:id', auth.hasRole(['admin']), controller.getTeacherForAdmin );
+router.put('/update-user/:id', auth.hasRole(['admin']), controller.update);
+router.put('/update-teacher/:id', auth.hasRole(['admin']), controller.updateTeacher);
 
 router.get('/get-moderators/:id', auth.hasRole(['admin']), controller.getModerator);
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cmsApp')
-    .service('Class', function ($http) {
+    .service('Teacher', function ($http) {
 
         var base = this;
 
@@ -10,23 +10,23 @@ angular.module('cmsApp')
         }
 
         base.getData = function (id) {
-            return $http.get('/api/classes/' + id);
+            return $http.get('/api/users/get-teacher-for-admin/' + id);
         }
 
         base.create = function (params) {
-            return $http.post('/api/classes', params)
+            return $http.post('/api/users/create-teacher', params)
         }
 
         base.update = function (id, params) {
-            return $http.put('/api/classes/' + id, params)
+            return $http.put('/api/users/update-teacher/' + id, params)
         }
 
         base.delete = function (id, params) {
-            return $http.get('/api/classes/active/' + id, params)
+            return $http.delete('/api/users/' + id, params)
         }
 
         base.getDetail = function (id) {
-            return $http.get('/api/classes/single/' + id)
+            return $http.get('/api/users/single/' + id)
         }
 
         return base;

@@ -21,6 +21,7 @@
       <link href="assets/plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css"/>
       <link rel="stylesheet" href="assets/plugins/angular-busy/dist/angular-busy.css" />
       <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- END CORE CSS FRAMEWORK -->
@@ -68,12 +69,10 @@
     <![endif]-->
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- BEGIN CORE JS FRAMEWORK-->
-      <script src="assets/plugins/jquery-1.8.3.min.js" type="text/javascript"></script>
-      <script src="assets/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-      <script src="assets/plugins/lodash/dist/lodash.compat.js"></script>
       <!-- BEGIN CORE TEMPLATE JS -->
       <!-- END CORE TEMPLATE JS -->
       <!-- bower:js -->
+      <script src="bower_components/jquery/dist/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -86,7 +85,11 @@
       <script src="bower_components/moment/moment.js"></script>
       <script src="bower_components/angular-momentjs/angular-momentjs.js"></script>
       <script src="bower_components/angular-socket-io/socket.js"></script>
+      <script src="bower_components/fullcalendar/dist/fullcalendar.js"></script>
+      <script src="bower_components/angular-ui-calendar/src/calendar.js"></script>
       <!-- endbower -->
+      <script src="assets/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+      <script src="assets/plugins/lodash/dist/lodash.compat.js"></script>
       <script src="assets/plugins/angular-busy/dist/angular-busy.js"></script>
       <script src="socket.io-client/socket.io.js"></script>
       <!-- JQuery or Javascript library -->
@@ -112,8 +115,9 @@
       <script src="app/add-diary/add-diary.controller.js"></script>
       <script src="app/add-info/add-info.controller.js"></script>
       <script src="app/add-portfolio/add-portfolio.controller.js"></script>
-      <script src="app/app-auth/app-auth.service.js"></script>
       <script src="app/app.constant.js"></script>
+      <script src="app/calendar/calendar.controller.js"></script>
+      <script src="app/calendar/calendar.js"></script>
       <script src="app/comment-detail/comment-detail.controller.js"></script>
       <script src="app/comment-detail/comment-detail.js"></script>
       <script src="app/diary/diary.controller.js"></script>
@@ -130,13 +134,15 @@
       <script src="app/portfolio-detail/portfolio-detail.js"></script>
       <script src="app/portfolio/portfolio.controller.js"></script>
       <script src="app/portfolio/portfolio.js"></script>
+      <script src="app/profile/profile.controller.js"></script>
+      <script src="app/profile/profile.js"></script>
       <script src="app/reset-password/reset-password.controller.js"></script>
       <script src="app/reset-password/reset-password.js"></script>
       <script src="app/student/student.controller.js"></script>
       <script src="app/student/student.js"></script>
       <script src="components/$store/$store.service.js"></script>
       <script src="components/api-connector/api-connector.service.js"></script>
-      <script src="components/auth/user.service.js"></script>
+      <script src="components/app-auth/app-auth.service.js"></script>
       <script src="components/collage-plus/collage-plus.directive.js"></script>
       <script src="components/socket/socket.service.js"></script>
       <script src="components/story-card/story-card.directive.js"></script>

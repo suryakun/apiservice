@@ -3241,7 +3241,7 @@ input[type="checkbox"] {
 }
 select,
 input[type="file"] {
-  height: 34px !important;
+  height: 34px;
   line-height: 30px;
 }
 select {
@@ -3739,7 +3739,6 @@ form legend,
   background-color: #f6f7f8;
   border: 0px;
   margin-bottom: 20px;
-  margin-top: 20px;
   padding: 19px 20px 20px;
 }
 .form-actions:after {
@@ -3945,7 +3944,7 @@ form legend,
   font-size: 12px;
 }
 .form-group .controls {
-  margin-top: 8px;
+  margin-top: 0px;
 }
 .form-control {
   border: 1px solid #E5E9EC;
@@ -4998,6 +4997,8 @@ form legend,
 }
 .grid.simple .grid-body h3 {
   color: #282323;
+  margin-bottom: 30px;
+  margin-top: 30px;
 }
 .grid.simple .grid-body.invoice-body {
   padding: 30px;
@@ -6380,7 +6381,6 @@ h4.custom-line-height {
 .btn-cons {
   margin-right: 5px;
   min-width: 120px;
-  margin-bottom: 8px;
 }
 .btn-demo-space {
   margin-bottom: 8px;
@@ -8230,7 +8230,7 @@ input[type="checkbox"] {
 }
 .header .menu-bar ul li a .fa{margin-right: 10px;}
 
-.school-info{background: #42c1cd;height: 100%;}
+.school-info{background: #40C2CE;height: 100%;}
 .school-info .school-name{
     font-size: 14px;
     text-align: center;
@@ -8387,9 +8387,36 @@ aside .tiles.white{}
 .page-content .content.profile-detail{padding-top: 10px;}
 .profile-detail aside .tiles.white{overflow: visible}
 .profile-detail .user-profile-pic img{margin: 0 auto;width: 100px; height: 100px}
-.profile-detail .school-info .school-name{  display: block;float: none;font-size: 20px;clear: both;top: 10px;text-align: center;}
-.profile-detail .school-info .class-name{font-size: 16px;clear: both;top: 10px;text-align: center;padding: 5px 0}
-.profile-detail .user-profile-pic{margin-top: -110px; text-align: center;margin-left: 0}
+.profile-detail .user-profile-pic .foto-upload{
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 10px;
+    cursor: pointer;
+}
+.profile-detail .user-profile-pic .foto-upload input{
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100% !important;
+}
+.profile-detail .user-profile-pic .foto-upload i{
+    position: absolute;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.81);
+    width: 100%;
+    height: 100%;
+    line-height: 100px;
+    font-size: 32px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all ease .3s;
+}
+.profile-detail .user-profile-pic .foto-upload:hover i{opacity: 1;}
+.profile-detail .school-info .school-name{  display: block;float: none;font-size: 18px;clear: both;top: 10px;text-align: center;}
+.profile-detail .school-info .class-name{font-size: 16px;clear: both;top: 10px;text-align: center;padding: 5px 0; color: white;}
+.profile-detail .user-profile-pic{margin-top: 0; text-align: center;margin-left: 0;text-align: center;padding-top: 20px;}
 .profile-detail .user-profile-pic img {float: none;}
 .profile-detail .user-mini-description{margin-top: 10px;border-top: 1px dashed #D3D3D3;border-bottom: 1px dashed #D3D3D3;padding: 10px 0}
 .profile-detail aside .tiles.white{box-shadow: none; background: none}
@@ -8644,7 +8671,7 @@ ul.my-friends li .profile-pic {
 .cboxIframe{width:100%; height:100%; display:block; border:0; padding:0; margin:0;}
 #colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
 
-/* 
+/*
     User Style:
     Change the following styles to modify the appearance of Colorbox.  They are
     ordered & tabbed in a way that represents the nesting of the generated HTML.
@@ -8676,7 +8703,7 @@ ul.my-friends li .profile-pic {
 
         /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
         #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
-        
+
         /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
         #cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
 
@@ -8734,3 +8761,52 @@ ul.my-friends li .profile-pic {
     right: 2px;
 }
 .photo.attachment .work-masonry-thumb a img{height: 100px;width: auto}
+
+/* calendar settng */
+body .fc{
+    margin-bottom: 20px;
+}
+.fc-view-container{
+    background: white;
+    padding: 1px 10px 10px;
+    border-radius: 8px;
+}
+.fc-event{
+    border: 1px solid #36A5AA;
+    background-color: #36A5AA;
+    line-height: 16px;
+    padding: 0 10px;
+}
+.fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody, .fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-popover{
+    border-color: #ccc;
+}
+.fc-basic-view td.fc-week-number span, .fc-basic-view td.fc-day-number{
+    font-size: 16px;
+}
+.fc-unthemed .fc-today {
+    background: #FFFABE;
+}
+.fc-toolbar h2{
+    font-weight: normal;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #7A7A7B;
+}
+.fc-state-default {
+    background: #FFF;
+    box-shadow: none;
+}
+.fc-state-disabled{
+    background: none;
+}
+.fc-toolbar .fc-state-active, .fc-toolbar .ui-state-active{
+    background-color: #36A5AA;
+    color: white;
+}
+.fc th, .fc td {
+    border-style: dashed;
+    border-width: 1px;
+}
+
+.border-right{border-right: 1px solid #F3F3F4;}
+/* end */

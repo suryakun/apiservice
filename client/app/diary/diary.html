@@ -17,7 +17,15 @@
         </li>
     </ul>
 </div>
-<ul class="cbp_tmtimeline" ng-show="stories.length">
+<ul class="cbp_tmtimeline">
+    <li ng-class="{'reduce-margin': story.hideDate}" ng-if="!stories.length">
+        <div class="cbp_tmlabel">
+            <div class="post-content">
+                <p class="dark-text">No diary yet</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </li>
     <li ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-class="{'reduce-margin': story.hideDate}" story-card="story" story-user="user">
     </li>
 </ul>

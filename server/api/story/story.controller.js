@@ -254,7 +254,7 @@ exports.create = function(req, res) {
                                     var targetfile = pathfile + '/' + name;
                                     mkdirp(pathfile, function(err) {
                                         if(err) { return handleError(res, err); }
-                                        fs.rename(files[file]['path'], targetfile);
+                                        fsx.copySync(files[file]['path'], targetfile);
 
                                         mkdirp(paththumb, function(err) {
                                             if(err) { return handleError(res, err); }
@@ -507,7 +507,7 @@ exports.create = function(req, res) {
                                     var targetfile = pathfile + '/' + name;
                                     mkdirp(pathfile, function(err) {
                                         if(err) { return handleError(res, err); }
-                                        fs.rename(files[file]['path'], targetfile);
+                                        fsx.copySync(files[file]['path'], targetfile);
 
                                         mkdirp(paththumb, function(err) {
                                             if(err) { return handleError(res, err); }

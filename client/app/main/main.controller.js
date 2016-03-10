@@ -28,10 +28,6 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
             openedClass: 'none',
             controller: 'Add' + type.charAt(0).toUpperCase() + type.substr(1) + 'Ctrl'
         });
-        popup.result.then(function(response, status) {
-            // appPopup.showResponseAPI(response, status);
-            // $scope.getData();
-        });
     };
     console.info('appAuth', appAuth, $state);
     if ($state.current.name === 'main') {
@@ -46,7 +42,7 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
     $scope.unreadCount = 0;
     $scope.unreadStory = [];
     socket.socket.on('story:save', function(data) {
-        // story:save fired both create and update story
+        // Untuk membedakan event ketika baru dan update
         if (+new Date(data.createdAt) === +new Date(data.updatedAt)) {
             if (appAuth.data.role === 'parent' && data._parent.indexOf(appAuth.data.id) !== -1) {
                 ++$scope.unreadCount;
@@ -68,11 +64,6 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
         }
     });
     $scope.$on('$stateChangeSuccess', function(event) {
-        // event.targetScope.$watch('$viewContentLoaded', function() {
-        //     $("html, body").animate({
-        //         scrollTop: 0
-        //     }, 700);
-        // });
         $scope.notificationOpened = false;
         $('.create-new').hide(350);
     });
@@ -84,12 +75,10 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
                 $('.scrollup').fadeOut();
             }
         });
-        //***********************************BEGIN Function calls *****************************
-        $('.scrollup').click(function() {
-            $("html, body").animate({
-                scrollTop: 0
-            }, 700);
-            return false;
-        });
     });
+    $scope.scrollTop = function() {
+        $("html, body").animate({
+            scrollTop: 0
+        }, 700);
+    };
 }]);

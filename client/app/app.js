@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', function($urlRouterProvider, $locationProvider, $httpProvider) {
+angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize', 'ui.calendar']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', function($urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider.otherwise('/activity');
     $locationProvider.html5Mode(true);
     /**
@@ -124,6 +124,14 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
     return function(input, scope) {
         if (input) {
             return input.charAt(0).toUpperCase() + input.substring(1);
+        } else {
+            return input;
+        }
+    };
+}).filter('nl2br', function() {
+    return function(input) {
+        if (input) {
+            return input.replace(/\r?\n/g, '<br />');
         } else {
             return input;
         }

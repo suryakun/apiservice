@@ -1,4 +1,4 @@
-<li cg-busy="promise">
+<li xcg-busy="promise">
     <time class="cbp_tmtime" datetime="2013-04-10 18:30" ng-hide="story.hideDate">
         <span class="date"><strong ng-bind="story.createdAt | amDateFormat:'dddd'">Monday</strong>, <span ng-bind="story.createdAt | amDateFormat:'D'">18</span> <spam ng-bind="story.createdAt | amDateFormat:'MMM'">May</spam> {{story.createdAt | amDateFormat:'Y'}}</span>
     </time>
@@ -23,7 +23,7 @@
                 <span ng-if="story.type === 'diary' || story.type === 'portfolio'"  class="muted" ng-bind="user._parent.role | capitalize">Parents</span>
                 </h4>
             </div>
-            <p class="dark-text" ng-bind="story.info"></p>
+            <p class="dark-text" ng-bind-html="story.info | nl2br"></p>
             <div class="photo Collage clearfix" collage-plus>
                 <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-if="photo.thumb"><a><img ng-src="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
             </div>

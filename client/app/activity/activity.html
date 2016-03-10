@@ -1,4 +1,12 @@
-<ul id="timeline" class="cbp_tmtimeline" ng-show="stories.length">
+<ul id="timeline" class="cbp_tmtimeline">
+    <li ng-class="{'reduce-margin': story.hideDate}" ng-if="!stories.length">
+        <div class="cbp_tmlabel">
+            <div class="post-content">
+                <p class="dark-text">No activity yet</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </li>
     <li ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-init="onInitStory(story)" ng-class="{'reduce-margin': story.hideDate}" story-card="story">
     </li>
 </ul>

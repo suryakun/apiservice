@@ -36,6 +36,7 @@ var UserSchema = new Schema({
     twitter: {},
     google: {},
     github: {},
+    azure: {},
     createdAt: Date,
     updatedAt: Date
 });

@@ -34,6 +34,8 @@
     "multer": "^1.0.6",
     "node-gcm": "^0.12.0",
     "passport": "~0.2.0",
+    "passport-azure-ad-oauth2": "0.0.4",
+    "passport-azure-oauth": "0.0.6",
     "passport-facebook": "latest",
     "passport-google-oauth": "latest",
     "passport-local": "~0.1.6",

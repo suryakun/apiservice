@@ -14,7 +14,7 @@ angular.module('cmsApp')
                 controller: 'ParentCreateCtrl'
             })
             .state('editparent', {
-                url: '/parent/edit/{id}/{school_id}',
+                url: '/parent/edit/{id}',
                 templateUrl: 'app/parent/parent-edit.html',
                 controller: 'ParentEditCtrl'
             });

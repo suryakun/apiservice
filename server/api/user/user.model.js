@@ -69,6 +69,7 @@ UserSchema
     .virtual('profile')
     .get(function() {
         return {
+            '_id': this._id,
             'name': this.name,
             'avatar': this.avatar || '',
             'role': this.role,
@@ -510,6 +511,24 @@ UserSchema.statics.getParentOfMySchool = function (id, callback) {
     });
 }
 
+UserSchema.statics.getParentForAdmin = function (id, res, callback) {
+    var user = this;
+    School.findById(id).populate("_class").exec(function (err, c) {
+        if (err) res.status(500).send(err);
+        if (!c) res.status(404).send('Not Found');
+        Classd.find({_id : {$in: c._class}}).populate("_student").exec(function (err, clas) {
+            var tmp = [];
+            clas.forEach(function (p) {
+                _.each(p._student, function (t) {
+                    tmp.push(t);
+                })
+            });
+            var student_ids = _.pluck(tmp, "_id");
+            user.find({_id: {$in: student_ids}}).populate("_parent").populate("_class").exec(callback);
+        });
+    });
+}
+
 UserSchema.statics.getTeacherOfMySchool = function (id, callback) {
     var user = this;
     return user.findById(id).populate("_class").populate("_student").exec(function (err, me) {
@@ -527,9 +546,28 @@ UserSchema.statics.getTeacherOfMySchool = function (id, callback) {
                     Classd.find({_id : {$in: c._class}}).populate("_teacher").exec(callback);
                 });
             });
-        }; 
-        
+        };
+
     });
+}
+
+UserSchema.statics.getTeacherForAdmin = function (id, callback) {
+    var user = this;
+    School.findById(id).populate("_class").exec(function (err, c) {
+        Classd.find({_id : {$in: c._class}}).populate("_teacher").exec(function (err, teacher) {
+            user.populate(teacher, {
+                path: "_teacher._class",
+                select: "name",
+                model: Classd
+            }, callback);
+        });
+    });
+}
+
+UserSchema.statics.findByIdAndRemove = function (id, callback) {
+    var user = this;
+    // user.update({_id:id}, {$set: {'active': false}}, callback);
+    user.remove({_id:id}, callback);
 }
 
 UserSchema.statics.getModerator = function (id, callback) {

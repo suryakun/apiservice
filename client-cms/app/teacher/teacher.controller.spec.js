@@ -1,16 +1,16 @@
 'use strict';
 
-describe('Controller: TeacherCtrl', function () {
+describe('Controller: ParentCtrl', function () {
 
   // load the controller's module
   beforeEach(module('roomApp'));
 
-  var TeacherCtrl, scope;
+  var ParentCtrl, scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    TeacherCtrl = $controller('TeacherCtrl', {
+    ParentCtrl = $controller('ParentCtrl', {
       $scope: scope
     });
   }));

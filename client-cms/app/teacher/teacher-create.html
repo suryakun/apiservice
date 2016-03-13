@@ -9,7 +9,7 @@
       <a md-ink-ripple  data-toggle="modal" data-target="#aside" class="navbar-item pull-left visible-xs visible-sm"><i class="mdi-navigation-menu i-24"></i></a>
       <!-- / -->
       <!-- Page title - Bind to $state's title -->
-      <div class="navbar-item pull-left title-page h4">Create Class</div>
+      <div class="navbar-item pull-left title-page h4">Create Teacher</div>
       <!-- / -->
       <!-- Common tools -->
       <div class="pull-right" ui-view="navbar@"></div>
@@ -21,7 +21,7 @@
       <div class="modal-dialog modal-md">
         <div class="modal-content">
           <div class="text-center">
-            <h3 class="text-info-lt">Choose Level</h3>
+            <h3 class="text-info-lt">Choose Class</h3>
             <input class="form-control input-lg no-bg no-border" placeholder="Search" ng-model="search">
             <table class="table table-striped">
               <thead>
@@ -32,10 +32,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="level in levels | filter:{grade:search}">
-                   <td>{{ level.grade }}</td>
-                   <td>{{ level.info }}</td>
-                   <td class="text-center"><a href="#" ng-click="setAddLevel(level._id, level.grade)" class="m-r-md"><i class="fa fa-edit"></i> Select</a></td>
+                <tr ng-repeat="class in classes | filter:{name:search}">
+                   <td>{{ class.name }}</td>
+                   <td>{{ class.info }}</td>
+                   <td class="text-center"><a href="#" ng-click="setAddClass(class._id)" class="m-r-md"><i class="fa fa-edit"></i> Select</a></td>
                 </tr>
               </tbody>
             </table>
@@ -56,37 +56,49 @@
                 <section class="col-md-6">
                   <div class="panel panel-default">
                         <div class="panel-heading">
-                            <strong>Add Class</strong>
+                            <strong>Add Teacher</strong>
                         </div>
                         <div class="panel-heading bg-white">
                           <small class="text-muted">Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis.</small>
                         </div>
                         
                         <div class="panel-body">
-                          <form role="form" name="form" ng-submit="addClass()" novalidate>
+                          <form role="form" name="form" ng-submit="addTeacher()" novalidate>
+                            
                             <div class="form-group">
-                              <label>Class Name</label>
-                              <input class="form-control" type="text" name="name" placeholder="Class Name" ng-model="params.name" required/>
+                              <label>Teacher Name</label>
+                              <input class="form-control" type="text" name="name" placeholder="Teacher Name" ng-model="params.name" required/>
                               <span class="help-block" ng-show="form.name.$error.required && form.name.$dirty">
-                                Invalid data name
+                                Invalid data teacher name
                               </span>
                             </div>
+
                             <div class="form-group">
-                              <label>Class Description</label>
-                              <input class="form-control" type="text" placeholder="Class Description" name="info" ng-model="params.info" required/>
-                              <span class="help-block" ng-show="form.info.$error.required && form.info.$dirty">
-                                Invalid data info
+                              <label>Teacher Email</label>
+                              <input class="form-control" type="email" name="email" placeholder="Teacher Email" ng-model="params.email" required/>
+                              <span class="help-block" ng-show="form.email.$error.required && form.email.$dirty">
+                                Invalid data teacher email
                               </span>
                             </div>
+
                             <div class="form-group">
-                              <label>Class Level</label>
-                              <input class="form-control" type="hidden" placeholder="Class Level" name="_level" ng-model="params._level" required disabled />
-                              <input class="form-control" type="text" placeholder="Class Level" name="level" ng-model="params.level" required disabled />
-                              <span class="help-block" ng-show="form.level.$error.required && form.level.$dirty">
-                                Invalid data info
+                              <label>Teacher Password</label>
+                              <input class="form-control" type="text" name="password" placeholder="Teacher Password" ng-model="params.password" required/>
+                              <span class="help-block" ng-show="form.password.$error.required && form.password.$dirty">
+                                Invalid data teacher password
                               </span>
-                              <a href="#" data-toggle="modal" ng-click="modelSetDelete(class._id)" data-target=".bs-example-modal-sm"><i class="fa fa-edit"></i> Choose Level</a>
                             </div>
+
+                            <div class="form-group">
+                              <label>Class</label>
+                              <select class="form-control" name="class" placeholder="Class" ng-model="params.class" required>
+                                <option ng-repeat="class in classes" value="{{class._id}}">{{class.name}}</option>
+                              </select>
+                              <span class="help-block" ng-show="form.class.$error.required && form.class.$dirty">
+                                Invalid data class
+                              </span>
+                            </div>
+
                             <div class="btn-block text-center">
                                  <button type="submit" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect" ng-disabled="!form.$valid" >Submit</button>
                             </div>

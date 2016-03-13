@@ -2,7 +2,7 @@
 
 angular.module('cmsApp')
 
-    .filter('classStartFrom', function () {
+    .filter('parentStartFrom', function () {
         return function (input, start) {
             if (input === undefined || input === null || input.length === 0) return [];
             start = +start; //parse to int
@@ -10,7 +10,7 @@ angular.module('cmsApp')
         }
     })
 
-    .controller('ClassCtrl', function ($scope, $http, $stateParams, Pagination, socket, Class, filterFilter, $state) {
+    .controller('TeacherCtrl', function ($scope, $http, $stateParams, Pagination, socket, Teacher, filterFilter, $state) {
 
     	$scope.params = {};
         $scope.classs = [];
@@ -20,40 +20,43 @@ angular.module('cmsApp')
         $scope.school_id = $stateParams.school_id;
 
         //get data for self
-        Class.getMe().success(function (data) {
+        Teacher.getMe().success(function (data) {
             $scope.me = data;
         });
 
         //initialize data for index page
-        Class.getData($stateParams.school_id).success(function (data) {
-            $scope.classs = data;
+        Teacher.getData($stateParams.school_id).success(function (data) {
             console.log(data);
+            $scope.teachers = data;
             
             // pagination controls
             $scope.currentPage = 1;
-            $scope.totalItems = $scope.classs.length;
-            $scope.entryLimit = 5; // items per page
+            $scope.totalItems = $scope.teachers.length;
+            $scope.entryLimit = 10; // items per page
             $scope.noOfPages = Math.ceil($scope.totalItems / $scope.entryLimit);
 
-            socket.syncUpdates('Class', $scope.Classs);
+            socket.syncUpdates('User', $scope.parents);
 
             // $watch search to update pagination
             $scope.$watch('search', function (newVal, oldVal) {
-                $scope.filtered = filterFilter($scope.classs, newVal);
+                $scope.filtered = filterFilter($scope.teachers, newVal);
                 $scope.totalItems = $scope.filtered.length;
                 $scope.noOfPages = Math.ceil($scope.totalItems / $scope.entryLimit);
                 $scope.currentPage = 1;
                 }, true);
-
+        }).error(function (err) {
+            console.log(err);
         });
 
-        $scope.modelSetDelete = function (id) {
-            $scope.id_delete = id;
+
+
+        $scope.modelSetDelete = function (student) {
+            $scope.id_delete = student;
         }
 
         $scope.delete = function () {
-            _.remove($scope.classs, {_id:$scope.id_delete});
-            Class.delete($scope.id_delete);
+            _.remove($scope.teachers, {_id:$scope.id_delete});
+            Teacher.delete($scope.id_delete);
         }
 
         $scope.closeModal = function () {
@@ -61,30 +64,20 @@ angular.module('cmsApp')
         }
     })
 
-    .controller('ClassEditCtrl', function ($scope, $http, $stateParams, Pagination, socket, Class, Level, filterFilter, $state, $location) {
-        $scope.levels = [];
+    .controller('TeacherEditCtrl', function ($scope, $http, $stateParams, Pagination, socket, Teacher, Level, filterFilter, $state, $location, $window) {
 
-        Level.getData($stateParams.school_id).success(function (data) {
-            $scope.levels = data;
-        });
-
-        $scope.setAddLevel = function (id, name) {
-            $scope.editparams._level = id;
-            $scope.editparams.level = name;
-        }
-
-        Class.getDetail($stateParams.id)
-            .success(function (Class) {
-                $scope.editparams = Class[0];
+        Teacher.getDetail($stateParams.id)
+            .success(function (parent) {
+                $scope.editparams = parent;
             });
 
         //execute update data Class
-        $scope.editClass = function (id) {
-            Class.update($scope.editparams._id, $scope.editparams)
+        $scope.editParent = function (id) {
+            Teacher.update($scope.editparams._id, $scope.editparams)
                 .success(function () {
-                    alert('Class data has been updated');
-                    $location.path('/class/' + $scope.editparams._school);
+                    alert('Teacher data has been updated');
                     $scope.editparams = {};
+                    $window.history.back();
                 })
                 .error(function () {
                     alert('something went wrong, please try again');
@@ -92,26 +85,23 @@ angular.module('cmsApp')
         }
     })
 
-    .controller('ClassCreateCtrl', function ($scope, $http, $stateParams, Pagination, socket, Class, Level, filterFilter, $state) {
-        $scope.levels = [];
+    .controller('TeacherCreateCtrl', function ($scope, $http, $stateParams, Pagination, socket, Class, Teacher, Parent, Level, filterFilter, $state) {
         $scope.params = {};
+        $scope.classes = [];
 
-        Level.getData($stateParams.school_id).success(function (data) {
-            $scope.levels = data;
+        Class.getData($stateParams.school_id).success(function (data) {
+            $scope.classes = data;
+        })
+
+        Teacher.getData($stateParams.school_id).success(function (data) {
+            $scope.students = data;
         });
 
-        $scope.setAddLevel = function (id, name) {
-            $scope.params._level = id;
-            $scope.params.level = name;
-        }
-
         //execute add data Class
-        $scope.addClass = function () {
-            $scope.params._school = $stateParams.school_id;
-            $scope.params.active = true;
-            Class.create($scope.params)
+        $scope.addTeacher = function () {
+            Teacher.create($scope.params)
                 .success(function (data) {
-                    alert('Class data has been saved');
+                    alert('Teacher data has been saved');
                     $scope.params = {};
                     $scope.form.$setPristine();
                 })

@@ -6,7 +6,7 @@ angular.module('cmsApp')
             .state('teacher', {
                 url: '/teacher/{school_id}',
                 templateUrl: 'app/teacher/teacher.html',
-                controller: 'ClassCtrl'
+                controller: 'TeacherCtrl'
             })
             .state('createteacher', {
                 url: '/teacher/create/{school_id}',
@@ -14,8 +14,8 @@ angular.module('cmsApp')
                 controller: 'TeacherCreateCtrl'
             })
             .state('editteacher', {
-                url: '/teacher/edit/{id}/{school_id}',
-                templateUrl: 'app/class/teacher-edit.html',
+                url: '/teacher/edit/{id}',
+                templateUrl: 'app/teacher/teacher-edit.html',
                 controller: 'TeacherEditCtrl'
             });
     });

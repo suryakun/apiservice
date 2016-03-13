@@ -8,7 +8,7 @@
       <a md-ink-ripple  data-toggle="modal" data-target="#aside" class="navbar-item pull-left visible-xs visible-sm"><i class="mdi-navigation-menu i-24"></i></a>
       <!-- / -->
       <!-- Page title - Bind to $state's title -->
-      <div class="navbar-item pull-left title-page h4">Classes</div>
+      <div class="navbar-item pull-left title-page h4">Parent</div>
 
       <!-- / -->
       <!-- Common tools -->
@@ -69,35 +69,20 @@
                	<section class="col-md-6">
                 	<div class="panel panel-default">
                         <div class="panel-heading">
-                            <strong>Edit Class</strong>
+                            <strong>Edit Teacher</strong>
                         </div>
                         <div class="panel-heading bg-white">
                           <small class="text-muted">Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis.</small>
                         </div>
                         
                         <div class="panel-body">
-                          <form role="form" name="formedit" ng-submit="editClass(editparams._id)" novalidate>
+                          <form role="form" name="formedit" ng-submit="editParent(editparams._id)" novalidate>
                             <div class="form-group">
-                              <label>Class Name</label>
-                              <input class="form-control" type="text" name="name" placeholder="Class Name" ng-model="editparams.name" required/>
+                              <label>Teacher Name</label>
+                              <input class="form-control" type="text" name="name" placeholder="Name" ng-model="editparams.name" required/>
                               <span class="help-block" ng-show="formedit.name.$error.required && formedit.name.$dirty">
                                 Invalid data name
                               </span>
-                            </div>
-                            <div class="form-group">
-                              <label>Class Description</label>
-                              <input class="form-control" type="text" placeholder="Class Description" name="principal" ng-model="editparams.info" required/>
-                              <span class="help-block" ng-show="formedit.info.$error.required && formedit.info.$dirty">
-                                Invalid data info
-                              </span>
-                            </div>
-                            <div class="form-group">
-                              <label>Class Level</label>
-                              <input class="form-control" type="text" placeholder="Class Level" name="_level" ng-model="editparams._level" required disabled />
-                              <span class="help-block" ng-show="form._level.$error.required && form._level.$dirty">
-                                Invalid data info
-                              </span>
-                              <a href="#" data-toggle="modal" ng-click="modelSetDelete(class._id)" data-target=".bs-example-modal-sm"><i class="fa fa-edit"></i> Choose Level</a>
                             </div>
                             <div class="btn-block text-center">
                                  <button type="submit" class="md-btn md-raised m-b btn-fw blue waves-effect waves-effect" ng-disabled="!formedit.$valid" >Submit</button>

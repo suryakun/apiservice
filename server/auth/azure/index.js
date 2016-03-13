@@ -10,10 +10,7 @@ router
   .get('/', passport.authenticate('azureoauth'))
 
   .get('/callback', passport.authenticate('azureoauth', {
-    failureRedirect: '/login',
-    session: false
   }), function (req, res) {
-    console.log(res);
     // Successful authentication, redirect home.
     res.redirect('/');
   });

@@ -38,7 +38,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
         endpoints: {
           'https://graph.microsoft.com': 'https://graph.microsoft.com'
         },
-        redirectUri: window.location.origin + '/auth/azure/callback'
+        redirectUri: window.location.origin + '/callback'
       },
       $httpProvider
       );

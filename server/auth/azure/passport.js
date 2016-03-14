@@ -13,9 +13,8 @@ exports.setup = function (User, config) {
       // currently we can't find a way to exchange access token by user info (see userProfile implementation), so
       // you will need a jwt-package like https://github.com/auth0/node-jsonwebtoken to decode id_token and get waad profile
       var waadProfile = profile || jwt.decode(params.id_token);
-      
       User.findOne({
-        'azure.rawObject.upn': waadProfile.upn
+        'azure.rawObject.upn': waadProfile.rawObject.upn
       },
       function(err, user) {
         if (err) {
@@ -23,12 +22,13 @@ exports.setup = function (User, config) {
         }
         if (!user) {
           user = new User({
-            name: waadProfile.name,
-            email: waadProfile.upn,
+            name: waadProfile.rawObject.name,
+            email: waadProfile.rawObject.upn,
             role: 'user',
             username: waadProfile.username,
-            provider: 'azureoauth',
-            azure: waadProfile._json
+            provider: 'azure',
+            azure: waadProfile.rawObject._json,
+            password: 'randomize'
           });
           user.save(function(err) {
             if (err) return done(err);

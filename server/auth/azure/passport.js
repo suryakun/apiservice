@@ -1,8 +1,9 @@
 var passport = require('passport');
 var AzureOAuthStrategy = require('passport-azure-oauth').Strategy;
+var jwt = require('jsonwebtoken');
 
 exports.setup = function (User, config) {
-  passport.use('azureoauth', new AzureOAuthStrategy({
+  passport.use(new AzureOAuthStrategy({
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
       redirectURL: config.azure.callbackURL,
@@ -14,29 +15,15 @@ exports.setup = function (User, config) {
       // you will need a jwt-package like https://github.com/auth0/node-jsonwebtoken to decode id_token and get waad profile
       var waadProfile = profile || jwt.decode(params.id_token);
       User.findOne({
-        'azure.rawObject.upn': waadProfile.rawObject.upn
+        'azure.upn': waadProfile.rawObject.upn
       },
       function(err, user) {
         if (err) {
           return done(err);
         }
         if (!user) {
-          user = new User({
-            name: waadProfile.rawObject.name,
-            email: waadProfile.rawObject.upn,
-            role: 'user',
-            username: waadProfile.username,
-            provider: 'azure',
-            azure: waadProfile.rawObject._json,
-            password: 'randomize'
-          });
-          user.save(function(err) {
-            if (err) return done(err);
-            console.log('new', user);
-            done(err, user);
-          });
+          return done(null, false, { message: 'User not found' });
         } else {
-          console.log('exists', user);
           return done(err, user);
         }
       })

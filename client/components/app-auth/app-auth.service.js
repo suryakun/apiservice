@@ -209,4 +209,38 @@ angular.module('roomApp')
     var userData = new UserData();
     return userData;
 
-});
+}).factory('AzureService', ['$window', '$q', '$log',
+    function($window, $q, $log) {
+        var deferred = null;
+        $window.authOk = function(data) {
+            $log.info('authOk', data);
+            if (deferred) {
+                if (data) {
+                    deferred.resolve(JSON.parse(data));
+                } else {
+                    deferred.reject('Token not available');
+                }
+            }
+        };
+        $window.authDenied = function(data) {
+            $log.warn('authDenied', data);
+            if (deferred) {
+                deferred.reject(JSON.parse(data));
+            }
+        };
+        $window.authClose = function() {
+            if (deferred) {
+                deferred.notify('Auth closed');
+            }
+        };
+        var obj = {
+            login: function() {
+                deferred = $q.defer();
+                var url = '/auth/azure';
+                $window.open(url, "azure_connect", "width=600,height=400");
+                return deferred.promise;
+            }
+        };
+        return obj;
+    }
+]);

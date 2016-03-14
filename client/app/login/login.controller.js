@@ -30,50 +30,27 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
      */
     $scope.connectMicrosoft = function() {
         $log.debug('Connecting to Office 365...');
-        AzureService.login();
+        AzureService.login().then(function(data){
+            appAuth.setData({
+                authenticated: true,
+                token: data.token,
+                role: AUTHConfig.userRoles[data.role || 'teacher'],
+                expires: (new Date()).setSeconds(24 * 60 * 60),
+                data: data
+            });
+            setTimeout(function(){
+                appAuth.getMe().then(function(me) {
+                    if (appAuth.data.role === 'teacher') {
+                        $state.go('main.activity');
+                    } else if (appAuth.data.role === 'parent') {
+                        $state.go('main.diary', {
+                            id: appAuth.profile._student[0]._id
+                        });
+                    }
+                });
+            }, 2000);
+        }, function(data) {
+            alert(data.error);
+        });
     };
-}]).controller('CallbackCtrl', ['$scope', 'appAuth', '$state', 'adalAuthenticationService', '$log', function($scope, appAuth, $state, adalAuthenticationService, $log) {
-    (function activate() {
-        if (adalAuthenticationService.userInfo.isAuthenticated) {
-            $log.debug('adalAuthenticationService.userInfo.isAuthenticated');
-            // var activeSnippet = vm.snippetGroups[0].snippets[0];
-            // var tenant = adalAuthenticationService.userInfo.userName.split('@')[1];
-            $log.debug(adalAuthenticationService)
-        }
-    })();
-}]).factory('AzureService', ['$window', '$q', '$log',
-    function($window, $q, $log) {
-        var deferred = null;
-        $window.authOk = function(data) {
-            $log.debug('authOk', data);
-            if (deferred) {
-                if (data) {
-                    deferred.resolve(data);
-                } else {
-                    deferred.reject('Token not available');
-                }
-            }
-        };
-        $window.authDenied = function(error) {
-            $log.debug('authDenied', error);
-            if (deferred) {
-                deferred.reject(error);
-            }
-        };
-        $window.authClose = function() {
-            $log.debug('authClose');
-            if (deferred) {
-                deferred.notify('Auth closed');
-            }
-        };
-        var obj = {
-            login: function() {
-                deferred = $q.defer();
-                var url = '/auth/azure';
-                $window.open(url, "azure_connect", "width=600,height=400");
-                return deferred.promise;
-            }
-        };
-        return obj;
-    }
-]);
+}]);

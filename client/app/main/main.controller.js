@@ -34,7 +34,9 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
         if (appAuth.data.role === 'teacher') {
             $state.go('main.activity');
         } else if (appAuth.data.role === 'parent') {
-            $state.go('main.diary', {id: appAuth.profile._student[0]._id });
+            $state.go('main.diary', {
+                id: appAuth.profile._student[0]._id
+            });
         }
     }
     // Listeners
@@ -80,5 +82,33 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
         $("html, body").animate({
             scrollTop: 0
         }, 700);
+    };
+}]).controller('UpdateProfilePict', ['$scope', 'Upload', '$timeout', function($scope, Upload, $timeout) {
+    $scope.temp = null;
+    $scope.onFileSelect = function(files) {
+        $scope.temp = {
+            id: 0,
+            file: files[0]
+        };
+        $scope.updateProfile();
+    };
+    $scope.updateProfile = function() {
+        Upload.upload({
+            url: '/api/users/upload-profile',
+            data: angular.extend({
+                files: [$scope.temp.file]
+            })
+        }).then(function(response) {
+            $timeout(function() {
+                $scope.result = response.data;
+            });
+            // $modalInstance.close(response);
+        }, function(response) {
+            if (response.status > 0) {
+                $scope.errorMsg = response.status + ': ' + response.data;
+            }
+        }, function(evt) {
+            $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
     };
 }]);

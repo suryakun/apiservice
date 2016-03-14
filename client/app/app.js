@@ -98,7 +98,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
                     config.headers.Authorization = 'Bearer ' + $store.get('token');
                 }
                 if ($store.get('data')) {
-                    config.headers.user_id = $store.get('data').id;
+                    config.headers.user_id = $store.get('profile')._id;
                 }
             }
             return config;

@@ -4,10 +4,10 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
     //     email: 'adelia@kidzpotentia.sch.id',
     //     password: 'parent.adelia'
     // };
-    $scope.data = {
-        email: 'denia@kidzpotentia.sch.id',
-        password: 'teacher.denia'
-    };
+    // $scope.data = {
+    //     email: 'denia@kidzpotentia.sch.id',
+    //     password: 'teacher.denia'
+    // };
     $scope.onFormSubmit = function(form) {
         if (form.$valid) {
             $scope.promise = appAuth.login($scope.data).then(function(response) {
@@ -25,9 +25,6 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
             });
         }
     };
-    /**
-     * Expose the login method to the view.
-     */
     $scope.connectMicrosoft = function() {
         $log.debug('Connecting to Office 365...');
         AzureService.login().then(function(data){

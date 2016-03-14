@@ -237,6 +237,12 @@ angular.module('roomApp')
             login: function() {
                 deferred = $q.defer();
                 var url = '/auth/azure';
+                $window.open(url, "azure_login", "width=600,height=400");
+                return deferred.promise;
+            },
+            connect: function() {
+                deferred = $q.defer();
+                var url = '/api/users/connect';
                 $window.open(url, "azure_connect", "width=600,height=400");
                 return deferred.promise;
             }

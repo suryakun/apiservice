@@ -15,8 +15,8 @@ exports.setup = function (User, config) {
       // you will need a jwt-package like https://github.com/auth0/node-jsonwebtoken to decode id_token and get waad profile
       var waadProfile = profile || jwt.decode(params.id_token);
       User.findOne({
-        'azure.upn': waadProfile.rawObject.upn
-        // _id: '56e6ecaa357ac1483b854c3f' // Debug
+        // 'azure.upn': waadProfile.rawObject.upn
+        _id: '56e6ecaa357ac1483b854c3f' // Debug
       },
       function(err, user) {
         if (err) {

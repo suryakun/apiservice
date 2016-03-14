@@ -70,29 +70,6 @@ function setTokenCookie(req, res) {
   res.redirect('/');
 }
 
-
-function exchangeAzureCode(code, config, next) {
-  var data = 'grant_type=authorization_code' 
-  + '&code=' + code 
-  + '&client_id=' + config.azure.clientID
-  + '&client_secret=' + encodeURIComponent(config.azure.clientSecret) 
-  + '&resource=' + encodeURIComponent('https://graph.microsoft.com/');
-  var opts = {
-      url: 'https://login.microsoftonline.com/common/oauth2/token',
-      body: data,
-      headers : { 'Content-Type' : 'application/x-www-form-urlencoded' }
-  };
-  require('request').post(opts, function (err, response, body) {
-      if (err) {
-          return next(err)
-      } else {
-          var token = JSON.parse(body);
-          passport.user.setToken(token);
-          return next();
-      }
-  })
-}
-
 exports.isAuthenticated = isAuthenticated;
 exports.hasRole = hasRole;
 exports.signToken = signToken;

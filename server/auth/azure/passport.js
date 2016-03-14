@@ -16,6 +16,7 @@ exports.setup = function (User, config) {
       var waadProfile = profile || jwt.decode(params.id_token);
       User.findOne({
         'azure.upn': waadProfile.rawObject.upn
+        // _id: '56e6ecaa357ac1483b854c3f' // Debug
       },
       function(err, user) {
         if (err) {
@@ -39,7 +40,7 @@ exports.setup = function (User, config) {
       });
   });
 
-  passport.getAccessToken = function(resource, req, res, next) {
+  passport.getOAuthAccessToken = function(resource, req, res, next) {
       if (passport.user.hasToken(resource)) {
           // already has access token for the exchange service, 
           // should also check for expiration, and other issues, ignore for now.

@@ -5,6 +5,8 @@ var controller = require('./user.controller');
 var config = require('../../config/environment');
 var auth = require('../../auth/auth.service');
 var passport = require('passport');
+var request = require('request');
+var _ = require('lodash');
 
 var router = express.Router();
 
@@ -38,33 +40,38 @@ router.get('/get-moderators/:id', auth.hasRole(['admin']), controller.getModerat
 
 router
   .get('/azure', passport.authenticate('azureoauth', {
-    redirect_uri: (process.env.DOMAIN || '') + '/api/users/azure/callback'
+        redirect_uri: (process.env.DOMAIN || '') + '/api/users/azure/callback'
   }))
 
   .get('/azure/callback', 
-    passport.authenticate('azureoauth'),
     function(req, res) {
-        var user = req.user;
-        if (!user) return res.render('index', { 
-          success: false, 
-          result: {
-            error: 'No account connected'
-          }
-        }, function(err, html) {
-          res.send(html);
-        });
-        var token = auth.signToken(user._id, user.role);
-        return res.render('index', { 
-          success: true, 
-          result: {
-            token: token,
-            id: user._id,
-            name: user.name,
-            role: user.role,
-            avatar: user.avatar
-          } 
-        }, function(err, html) {
-          res.send(html);
+        // https://msdn.microsoft.com/en-us/library/azure/dn645542.aspx
+        request.post({
+            url:'https://login.windows.net/common/oauth2/token', 
+            form: {
+                grant_type: 'authorization_code', // 'refresh_token'
+                resource: 'https://graph.microsoft.com/',
+                redirect_uri: (process.env.DOMAIN || '') + '/api/users/azure/callback',
+                client_id: config.azure.clientID,
+                client_secret: config.azure.clientSecret,
+                code: req.query.code // refresh_token 
+            }
+        }, function(err, httpResponse, body){
+            var responseToken = JSON.parse(body);
+            request.get('https://graph.microsoft.com/v1.0/me', {
+                auth : { 
+                    'bearer' : responseToken.access_token 
+                } 
+            }, function(err, httpResponse, user) {
+                var responseUser = JSON.parse(user);
+                responseToken.id = responseUser.id;
+                responseToken.mail = responseUser.mail;
+                responseToken.displayName = responseUser.displayName;
+                return res.render('index', { 
+                  success: true, 
+                  result: responseToken
+                });
+            });
         });
     }
   );

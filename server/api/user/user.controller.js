@@ -237,6 +237,7 @@ exports.updateProfile = function (req, res) {
         if (fields.hasOwnProperty("azure")) {
             optionSet['azure'] = JSON.parse(fields.azure);
         }
+        console.log(optionSet);
         
         if (!isEmptyObject(fields)) {
             User.update({'_id': req.user._id}, {$set: optionSet }, {multi:false}, function (err, ok) {

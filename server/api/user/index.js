@@ -6,6 +6,7 @@ var config = require('../../config/environment');
 var auth = require('../../auth/auth.service');
 var passport = require('passport');
 var request = require('request');
+var _ = require('lodash');
 
 var router = express.Router();
 
@@ -53,13 +54,23 @@ router
                 redirect_uri: (process.env.DOMAIN || '') + '/api/users/azure/callback',
                 client_id: config.azure.clientID,
                 client_secret: config.azure.clientSecret,
-                code: req.query.code // refresh_token
+                code: req.query.code // refresh_token 
             }
         }, function(err, httpResponse, body){
-            // console.log(err, httpResponse, body);
-            return res.render('index', { 
-              success: true, 
-              result: JSON.parse(body) 
+            var responseToken = JSON.parse(body);
+            request.get('https://graph.microsoft.com/v1.0/me', {
+                auth : { 
+                    'bearer' : responseToken.access_token 
+                } 
+            }, function(err, httpResponse, user) {
+                var responseUser = JSON.parse(user);
+                responseToken.id = responseUser.id;
+                responseToken.mail = responseUser.mail;
+                responseToken.displayName = responseUser.displayName;
+                return res.render('index', { 
+                  success: true, 
+                  result: responseToken
+                });
             });
         });
     }

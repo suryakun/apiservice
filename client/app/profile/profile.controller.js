@@ -5,17 +5,19 @@ angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'Azure
     $scope.connectMicrosoft = function() {
         $log.debug('Connecting to Office 365...');
         AzureService.connect().then(function(data) {
-            profile.azure = data;
+            $scope.profile.azure = data;
         }, function(data) {
             alert(data.error);
         });
     };
     $scope.updateProfile = function() {
+        var data = {
+            username: $scope.profile.name 
+        };
+        if ($scope.profile.azure) data['azure'] = JSON.stringify($scope.profile.azure);
         $scope.promiseProfile = Upload.upload({
             url: '/api/users/upload-profile',
-            data: angular.extend({
-                username: $scope.profile.name
-            })
+            data: angular.extend(data)
         }).then(function(response) {
             $timeout(function() {
                 $scope.result = response.data;
@@ -36,10 +38,10 @@ angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'Azure
             $scope.promisePassword = $http.put('/api/users/' + appAuth.profile._id + '/password', $scope.password).then(function() {
                 $scope.password = null;
             }, function() {
-                alert('Update failed'); 
+                alert('Update failed');
             });
-    } else {
-        alert('Invalid data');
-    }
-};
+        } else {
+            alert('Invalid data');
+        }
+    };
 }]);

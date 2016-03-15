@@ -233,10 +233,9 @@ exports.updateProfile = function (req, res) {
     });
 
     form.parse(req, function(err, fields, files) {
+        var optionSet = {name: fields.username};
         if (fields.hasOwnProperty("azure")) {
-            var optionSet = {name: fields.username, azure: fields.azure };
-        } else {
-            var optionSet = {name: fields.username};
+            optionSet['azure'] = JSON.parse(fields.azure);
         }
         
         if (!isEmptyObject(fields)) {

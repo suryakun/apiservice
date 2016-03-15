@@ -6,7 +6,7 @@ exports.setup = function (User, config) {
   passport.use(new AzureOAuthStrategy({
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
-      redirectURL: config.azure.callbackURL,
+      // redirectURL: config.azure.callbackURL,
       tenantId: 'common',
       resource: 'https://graph.microsoft.com/'
   },
@@ -16,7 +16,7 @@ exports.setup = function (User, config) {
       var waadProfile = profile || jwt.decode(params.id_token);
       User.findOne({
         // 'azure.upn': waadProfile.rawObject.upn
-        _id: '56e6ecaa357ac1483b854c3f' // Denia
+        _id: '56949ef7f9357f8186b72b44' // Denia
         // _id: '56e6eca7357ac1483b854c0b' // Adelia
       },
       function(err, user) {

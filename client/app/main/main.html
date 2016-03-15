@@ -31,8 +31,8 @@
                                     <div class="pull-right user">
                                         <div class="chat-toggler nav" data-dropdown="">
                                             <a href="javascript:void(0)" class="dropdown-toggle" data-content='' data-toggle="dropdown" data-dropdown-toggle="">
-                                            <span ng-bind="appAuth.data.name">User Name</span>
-                                            <span class="profile-pic"> <img ng-src="{{ appAuth.data.avatar ? (appAuth.data.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg'}}" alt="avatar" /> </span>
+                                            <span ng-bind="appAuth.profile.name">User Name</span>
+                                            <span class="profile-pic"> <img ng-src="{{ appAuth.profile.avatar ? (appAuth.profile.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg'}}" alt="avatar" /> </span>
                                             <span class="iconset top-down-arrow"></span>
                                             </a>
                                             <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
@@ -130,8 +130,7 @@
                                 <label class="foto-upload">
                                     <i class="fa fa-upload"></i>
                                     <input type="file" nv-file-select="" uploader="uploader" ngf-select="onFileSelect($files)"  accept="image/*"/>
-                                    <img ng-hide="temp" width="69" height="69"  ng-src="{{ appAuth.data.avatar ? (appAuth.data.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg'}}" alt="" />
-                                    <div ng-show="temp" ng-thumb="{ file: temp.file, height: 69, width: 69 }"></div>
+                                    <img width="69" height="69"  ng-src="{{ appAuth.profile.avatar ? (appAuth.profile.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg'}}" alt="" />
                                 </label>
                                 <h4 class="school-name" ng-bind="appAuth.profile.name"></h4>
                                 <h5 class="class-name" ng-bind="appAuth.profile._class.name"></h5>

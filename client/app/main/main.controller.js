@@ -83,7 +83,7 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
             scrollTop: 0
         }, 700);
     };
-}]).controller('UpdateProfilePict', ['$scope', 'Upload', '$timeout', function($scope, Upload, $timeout) {
+}]).controller('UpdateProfilePict', ['$scope', 'Upload', '$timeout', 'socket', function($scope, Upload, $timeout, socket) {
     $scope.temp = null;
     $scope.onFileSelect = function(files) {
         $scope.temp = {
@@ -93,7 +93,7 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
         $scope.updateProfile();
     };
     $scope.updateProfile = function() {
-        Upload.upload({
+        $scope.promiseProfile = Upload.upload({
             url: '/api/users/upload-profile',
             data: angular.extend({
                 files: [$scope.temp.file]
@@ -111,4 +111,19 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
             $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         });
     };
+    /** Listeners */
+    socket.socket.on('user:save', function(data) {
+        console.log('user:save', data);
+        // Untuk membedakan event ketika baru dan update
+        // if (+new Date(data.createdAt) === +new Date(data.updatedAt)) {
+        //     if (appAuth.data.role === 'parent' && data._parent.indexOf(appAuth.data.id) !== -1) {
+        //         ++$scope.unreadCount;
+        //         $scope.unreadStory.push(data);
+        //     } else if (appAuth.data.role === 'teacher' && data._cc.indexOf(appAuth.data.id) !== -1) {
+        //         ++$scope.unreadCount;
+        //         $scope.unreadStory.push(data);
+        //     }
+        //     $rootScope.$broadcast(data.type + ':created', true);
+        // }
+    });
 }]);

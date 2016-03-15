@@ -32,6 +32,7 @@ function onConnect(socket) {
   require('../api/school/school.socket').register(socket);
   require('../api/foundation/foundation.socket').register(socket);
   require('../api/thing/thing.socket').register(socket);
+  require('../api/user/user.socket').register(socket);
 }
 
 module.exports = function (socketio) {

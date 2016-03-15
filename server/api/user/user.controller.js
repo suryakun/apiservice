@@ -230,11 +230,17 @@ exports.updateProfile = function (req, res) {
     
     mkdirp(pathfile, function(err) {
         if(err) { return handleError(res, err); }
-    })
-    form.parse(req, function(err, fields, files) {
+    });
 
+    form.parse(req, function(err, fields, files) {
+        if (fields.hasOwnProperty("azure")) {
+            var optionSet = {name: fields.username, azure: fields.azure };
+        } else {
+            var optionSet = {name: fields.username};
+        }
+        
         if (!isEmptyObject(fields)) {
-            User.update({'_id': req.user._id}, {$set: {name: fields.username }}, {multi:false}, function (err, ok) {
+            User.update({'_id': req.user._id}, {$set: optionSet }, {multi:false}, function (err, ok) {
                 console.log(ok);
             });
         };

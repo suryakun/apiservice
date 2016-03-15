@@ -75,7 +75,8 @@ UserSchema
             'role': this.role,
             '_student': this._student,
             '_parent': this._parent,
-            '_class': this._class
+            '_class': this._class,
+            'email': this.email 
         };
     });
 

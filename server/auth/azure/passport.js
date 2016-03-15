@@ -16,7 +16,8 @@ exports.setup = function (User, config) {
       var waadProfile = profile || jwt.decode(params.id_token);
       User.findOne({
         // 'azure.upn': waadProfile.rawObject.upn
-        _id: '56e6ecaa357ac1483b854c3f' // Debug
+        _id: '56e6ecaa357ac1483b854c3f' // Denia
+        // _id: '56e6eca7357ac1483b854c0b' // Adelia
       },
       function(err, user) {
         if (err) {

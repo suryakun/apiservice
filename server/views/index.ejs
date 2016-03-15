@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>
+            Azure Login (<% if (success) { %> Success <% } else { %> Failed <% } %>)
+        </title>
+        <script type="text/javascript">
+            function putData() {
+                <% if (success) { %>
+                if (window.opener) window.opener.authOk('<%- JSON.stringify(result) %>');
+                <% } else { %>
+                if (window.opener) window.opener.authDenied('<%- JSON.stringify(result) %>');
+                <% } %>
+                window.close();
+            }
+            function closeWindow() {
+                if (window.opener) window.opener.authClose();
+            }
+        </script>
+    </head>
+    <body onload="javascript:putData();" onunload="javascript:closeWindow()">
+    Please wait ....
+    </body>
+</html>

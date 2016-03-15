@@ -60,6 +60,12 @@ var all = {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+  },
+
+  azure: {
+    clientID:     process.env.AZURE_ID || 'id',
+    clientSecret: process.env.AZURE_SECRET || 'secret',
+    callbackURL:  (process.env.DOMAIN || '') + '/auth/azure/callback'
   }
 };
 

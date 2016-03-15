@@ -105,7 +105,7 @@
         <div class="container content profile-detail">
             <div class="row">
                 <aside id="sidebar_menu" class="col-md-3">
-                    <ul class="main-menu" ng-if="$state.current.name !== 'main.profile'">
+                    <ul class="main-menu animated fadeIn" ng-if="$state.current.name !== 'main.profile'">
                         <li ng-if="appAuth.data.role === 'teacher'">
                             <button ng-click="onPostNewClick()" id="post_new" class="btn btn-primary btn-sm"><i class="no-margin fa fa-plus"></i> Post New</button>
                             <ul class="create-new">
@@ -124,16 +124,17 @@
                         <li><a href="javascript:void(0)"><i class="icon7p-message"></i> Send Feedback</a></li>
                         <li><a href="javascript:void(0)"><i class="icon7p-about"></i> About</a></li>
                     </ul>
-                    <div class=" tiles white col-md-12 no-padding" ng-if="$state.current.name === 'main.profile'">
+                    <div class=" tiles white col-md-12 no-padding animated fadeIn" ng-if="$state.current.name === 'main.profile'" ng-controller="UpdateProfilePict">
                         <div class="school-info">
                             <div class="user-profile-pic clearfix">
                                 <label class="foto-upload">
                                     <i class="fa fa-upload"></i>
-                                    <input type="file" />
-                                    <img width="69" height="69" src="assets/img/pp-def.jpg" alt="" />
+                                    <input type="file" nv-file-select="" uploader="uploader" ngf-select="onFileSelect($files)"  accept="image/*"/>
+                                    <img ng-hide="temp" width="69" height="69"  ng-src="{{ appAuth.data.avatar ? (appAuth.data.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg'}}" alt="" />
+                                    <div ng-show="temp" ng-thumb="{ file: temp.file, height: 69, width: 69 }"></div>
                                 </label>
-                                <h4 class="school-name">Grace Andhita Puspasari</h4>
-                                <h5 class="class-name">Kelas 5A</h5>
+                                <h4 class="school-name" ng-bind="appAuth.profile.name"></h4>
+                                <h5 class="class-name" ng-bind="appAuth.profile._class.name"></h5>
                             </div>
                         </div>
                     </div>

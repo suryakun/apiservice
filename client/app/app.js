@@ -1,7 +1,7 @@
 'use strict';
-angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize', 'ui.calendar']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', function($urlRouterProvider, $locationProvider, $httpProvider) {
+angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize', 'ui.calendar', 'AdalAngular', 'LocalStorageModule']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider', 'localStorageServiceProvider', function($urlRouterProvider, $locationProvider, $httpProvider, adalAuthenticationServiceProvider, localStorageServiceProvider) {
     $urlRouterProvider.otherwise('/activity');
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(true).hashPrefix('!');
     /**
      * Setup CORS
      */
@@ -30,6 +30,23 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
     $httpProvider.interceptors.push('authInterceptor');
     // https://code.angularjs.org/1.4.8/docs/api/ng/service/$http
     $httpProvider.useLegacyPromiseExtensions = false;
+
+    // Configure ADAL JS. 
+    adalAuthenticationServiceProvider.init(
+      {
+        clientId: 'd081090e-7e9f-4e95-8983-187e6e2fe264',
+        endpoints: {
+          'https://graph.microsoft.com': 'https://graph.microsoft.com'
+        },
+        redirectUri: window.location.origin + '/callback'
+      },
+      $httpProvider
+      );
+
+    // Local storage configuration.
+    localStorageServiceProvider
+      .setPrefix('unifiedApiSnippets');
+    
 }]).run(['$rootScope', '$state', '$stateParams', 'appAuth', function($rootScope, $state, $stateParams, appAuth) {
     $rootScope.containerClass = null;
     $rootScope.$state = $state;
@@ -81,7 +98,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
                     config.headers.Authorization = 'Bearer ' + $store.get('token');
                 }
                 if ($store.get('data')) {
-                    config.headers.user_id = $store.get('data').id;
+                    config.headers.user_id = $store.get('profile')._id;
                 }
             }
             return config;

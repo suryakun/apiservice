@@ -13,7 +13,7 @@
                         Name
                     </label>
                     <div class="controls">
-                        <input type="text" class="form-control" value="Jane Doe" ng-model="profile.name" />
+                        <input type="text" class="form-control" ng-model="profile.name" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -21,7 +21,7 @@
                         Email
                     </label>
                     <div class="controls">
-                        <input type="email" class="form-control" value="jane@mail.com" ng-model="profile.email"/>
+                        <input type="email" class="form-control" disabled="disabled" ng-model="profile.email"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -47,10 +47,10 @@
                         Name
                     </label>
                     <div class="controls">
-                        <input type="text" class="form-control" value="Jane Doe" />
+                        <input type="text" class="form-control" ng-model="profile.name" />
                     </div>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label class="form-label">
                         Status
                     </label>
@@ -70,13 +70,13 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label class="form-label">
                         Email
                     </label>
                     <div class="controls">
-                        <input type="email" class="form-control" value="jane@mail.com" />
+                        <input type="email" class="form-control" disabled="disabled" ng-model="profile.email" />
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                         Name
                     </label>
                     <div class="controls">
-                        <input type="text" class="form-control" value="Grace Andhita Puspasari" />
+                        <input type="text" class="form-control" disabled="disabled" ng-model="profile._student[0].name" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -100,7 +100,7 @@
                         Class
                     </label>
                     <div class="controls">
-                        <input type="text" class="form-control" value="Bunga Tumtum" />
+                        <input type="text" class="form-control" disabled="disabled" ng-model="profile._student[0]._class" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -108,7 +108,7 @@
                         Email
                     </label>
                     <div class="controls">
-                        <input type="email" class="form-control" value="grace@mail.com" />
+                        <input type="email" class="form-control" disabled="disabled" ng-model="profile._student[0].email" />
                     </div>
                 </div>
             </div>

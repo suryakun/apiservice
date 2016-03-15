@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'AzureService', '$log', '$http', function($scope, appAuth, AzureService, $log, $http) {
+angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'AzureService', '$log', '$http', 'Upload', '$timeout', function($scope, appAuth, AzureService, $log, $http, Upload, $timeout) {
     /** Update Profile */
     $scope.profile = angular.copy(appAuth.profile);
     $scope.connectMicrosoft = function() {
@@ -11,11 +11,23 @@ angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'Azure
         });
     };
     $scope.updateProfile = function() {
-        if (true) {
-            $scope.promiseProfile = $http.post('/api/update-user/' + appAuth.profile._id, $scope.profile).then(function() {});
-        } else {
-            alert('Invalid data');
-        }
+        $scope.promiseProfile = Upload.upload({
+            url: '/api/users/upload-profile',
+            data: angular.extend({
+                username: $scope.profile.name
+            })
+        }).then(function(response) {
+            $timeout(function() {
+                $scope.result = response.data;
+            });
+            // $modalInstance.close(response);
+        }, function(response) {
+            if (response.status > 0) {
+                $scope.errorMsg = response.status + ': ' + response.data;
+            }
+        }, function(evt) {
+            $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
     };
     /** Update Password */
     $scope.password = null;

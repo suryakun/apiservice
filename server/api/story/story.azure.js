@@ -1,4 +1,5 @@
 var outlook = require('node-outlook');
+var email   = require("emailjs");
 
 exports.createCalendar = function (email, event) {
     // Set the API endpoint to use the v2.0 endpoint
@@ -58,4 +59,28 @@ exports.getEvents = function (email) {
           });
         }
       });
+}
+
+exports.sendMail = function (to, text) {
+    var server  = email.server.connect({
+       user:    "azhararraniry@hotmail.com", 
+       password:"Pa55word!*", 
+       host:    "smtp-mail.outlook.com", 
+       tls: {ciphers: "SSLv3"}
+    });
+
+    var completeText = "<html> Hi, you have some notification from 7pagi <br/> Here is the description: <br/> created by:" + text.author + "<br/> content : " + text.description + "</html>";
+
+    var message = {
+       from:    "Azhar <azhararraniry@hotmail.com>", 
+       to:      to,
+       subject: "7pagi notification",
+       attachment: 
+       [
+          {data:completeText, alternative:true}
+       ]
+    };
+
+    // send the message and get a callback with an error or details of the message that was sent
+    server.send(message, function(err, message) { console.log(err || message); });
 }

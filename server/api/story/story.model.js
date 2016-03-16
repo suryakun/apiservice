@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 var Classd = require('../class/class.model');
 var User = require('../user/user.model');
+var _ = require('lodash');
 
 var StorySchema = new Schema({
     _teacher: { type: Schema.ObjectId, ref: 'User' },
@@ -14,6 +15,7 @@ var StorySchema = new Schema({
     _reply: [{ type: Schema.ObjectId, ref: 'Reply' }],
     _readed: [{ type: Schema.ObjectId, ref: 'User' }],
     _cc: [{ type: Schema.ObjectId, ref: 'User' }],
+    calendar: {},
     name: String,
     info: String,
     type: String,
@@ -57,6 +59,15 @@ StorySchema.statics.readStory = function (story_id, user_id, callback) {
 
 StorySchema.statics.getReader = function (story_id, callback) {
   return this.findById(story_id).populate("_readed").exec(callback);
+}
+
+StorySchema.statics.getInfoBySchool = function (school_id, callback) {
+  return Classd.find({_school: school_id}, "name _story").populate("_story", "info createdAt", {type:"info"}).exec(callback);
+}
+
+StorySchema.statics.getInfoByUser = function (user_id, callback) {
+  var Userd = require('../user/user.model');
+  return Userd.findById(user_id, "name _story").populate("_story", "info createdAt", {type:"info"}).exec(callback);
 }
 
 module.exports = mongoose.model('Story', StorySchema);

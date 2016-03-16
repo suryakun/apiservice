@@ -843,6 +843,22 @@ exports.getReader = function (req, res) {
     });    
 }
 
+exports.getCalendarOfSchool = function (req, res) {
+    Story.getInfoBySchool(req.params.school_id, function (err, info) {
+        if(err) { return handleError(res, err); }
+        if(!info) { return res.status(404).send('Not Found'); }
+        res.status(200).json(info); 
+    });
+}
+
+exports.getCalendarOfUser = function (req, res) {
+    Story.getInfoByUser(req.params.user_id, function (err, info) {
+        if(err) { return handleError(res, err); }
+        if(!info) { return res.status(404).send('Not Found'); }
+        res.status(200).json(info); 
+    });
+}
+
 function handleString(res, string) {
     var type = typeof string;
     if ( type !== 'string' ) res.status(401).send({message: 'Bad Request'});

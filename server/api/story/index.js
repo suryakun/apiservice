@@ -23,4 +23,7 @@ router.get('/get-reader/:id', auth.hasRole(['teacher','parent']), controller.get
 router.get('/:id', controller.detail);
 router.get('/:id/replies', controller.getReply);
 
+router.get('/get-calendar-of-school/:school_id', auth.hasRole(['teacher','admin','parent']), controller.getCalendarOfSchool);
+router.get('/get-calendar-of-user/:user_id', auth.hasRole(['teacher','admin','parent']), controller.getCalendarOfUser);
+
 module.exports = router;

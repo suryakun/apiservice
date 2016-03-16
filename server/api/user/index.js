@@ -51,7 +51,7 @@ router
             form: {
                 grant_type: 'authorization_code', // 'refresh_token'
                 resource: 'https://graph.microsoft.com/',
-                redirect_uri: (process.env.DOMAIN || '') + '/api/users/azure/callback',
+                redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/api/users/azure/callback',
                 client_id: config.azure.clientID,
                 client_secret: config.azure.clientSecret,
                 code: req.query.code // refresh_token 

@@ -40,7 +40,7 @@ router.get('/get-moderators/:id', auth.hasRole(['admin']), controller.getModerat
 
 router
   .get('/azure', passport.authenticate('azureoauthuser', {
-        redirect_uri: (process.env.DOMAIN || '') + '/api/users/azure/callback'
+        redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/api/users/azure/callback'
   }))
 
   .get('/azure/callback', 

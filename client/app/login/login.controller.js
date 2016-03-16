@@ -36,7 +36,7 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
                 data: data
             });
             setTimeout(function(){
-                appAuth.getMe().then(function(me) {
+                $scope.promise = appAuth.getMe().then(function(me) {
                     if (appAuth.data.role === 'teacher') {
                         $state.go('main.activity');
                     } else if (appAuth.data.role === 'parent') {

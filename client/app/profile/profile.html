@@ -29,8 +29,11 @@
                         Connect to Microsoft
                     </label>
                     <div class="controls">
-                        <button ng-click="connectMicrosoft()" type="button" class="btn btn-cons" style="background-color: transparent !important;">
+                        <button ng-click="connectMicrosoft()" type="button" class="btn btn-cons" style="background-color: transparent !important;" ng-hide="profile.azure">
                             <img src="assets/img/microsoft_logo.png" />
+                        </button>
+                        <button ng-click="disconnectMicrosoft()" type="button" class="btn btn-cons" style="background-color: transparent !important;" ng-show="profile.azure">
+                            <i class="fa fa-times"></i> <span ng-bind="profile.azure.displayName"></span>
                         </button>
                     </div>
                 </div>
@@ -77,6 +80,19 @@
                     </label>
                     <div class="controls">
                         <input type="email" class="form-control" disabled="disabled" ng-model="profile.email" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        Connect to Microsoft
+                    </label>
+                    <div class="controls">
+                        <button ng-click="connectMicrosoft()" type="button" class="btn btn-cons" style="background-color: transparent !important;" ng-hide="profile.azure">
+                            <img src="assets/img/microsoft_logo.png" />
+                        </button>
+                        <button ng-click="disconnectMicrosoft()" type="button" class="btn btn-cons" style="background-color: transparent !important;" ng-show="profile.azure">
+                            <i class="fa fa-times"></i> <span ng-bind="profile.azure.displayName"></span>
+                        </button>
                     </div>
                 </div>
             </div>

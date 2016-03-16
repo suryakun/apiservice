@@ -10,11 +10,18 @@ angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'Azure
             alert(data.error);
         });
     };
+    $scope.disconnectMicrosoft = function() {
+        $scope.profile.azure = false;
+    };
     $scope.updateProfile = function() {
         var data = {
             username: $scope.profile.name 
         };
-        if ($scope.profile.azure) data['azure'] = JSON.stringify($scope.profile.azure);
+        if ($scope.profile.azure) {
+            data['azure'] = JSON.stringify($scope.profile.azure);
+        } else if ($scope.profile.azure === false) { // Disconnected
+            data['azure'] = JSON.stringify({});
+        }
         $scope.promiseProfile = Upload.upload({
             url: '/api/users/upload-profile',
             data: angular.extend(data)

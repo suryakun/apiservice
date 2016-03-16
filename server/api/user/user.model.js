@@ -76,7 +76,8 @@ UserSchema
             '_student': this._student,
             '_parent': this._parent,
             '_class': this._class,
-            'email': this.email 
+            'email': this.email, 
+            'azure': this.azure  
         };
     });
 

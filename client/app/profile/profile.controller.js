@@ -29,7 +29,7 @@ angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'Azure
             $timeout(function() {
                 $scope.result = response.data;
             });
-            // $modalInstance.close(response);
+            $scope.promiseProfile = appAuth.getMe();
         }, function(response) {
             if (response.status > 0) {
                 $scope.errorMsg = response.status + ': ' + response.data;

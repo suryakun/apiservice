@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Story = require('./story.model');
+var Azure = require('./story.azure');
 var User = require('../user/user.model');
 var Photo = require('../photo/photo.model');
 var Teacher = require('../teacher/teacher.model');
@@ -215,7 +216,6 @@ exports.create = function(req, res) {
                     dataDescription._group = fields.group.split(",");;
                 };                  
 
-                console.log(dataDescription);
                 Classd.find({_id: {$in:dataDescription._class}}).populate("_student").exec(function (err, destClass) {
                     var ids_parent = [];
                     if (err) console.log(err);
@@ -340,6 +340,48 @@ exports.create = function(req, res) {
                                     })
                                 });
                             };
+
+                            User.find({_id: { $in : dataDescription._parent }}, function (err, parents) {
+                                // var azureTokens = _.filter(_.pluck(parents, "azure"), function (p) {
+                                //     return p.azure !== undefined;
+                                // });
+                                var newEvent = {
+                                  "Subject": "Discuss the Calendar REST API",
+                                  "Body": {
+                                    "ContentType": "HTML",
+                                    "Content": "I think it will meet our requirements!"
+                                  },
+                                  "Start": {
+                                    "DateTime": "2016-05-03T18:00:00",
+                                    "TimeZone": "Eastern Standard Time"
+                                  },
+                                  "End": {
+                                    "DateTime": "2016-05-03T19:00:00",
+                                    "TimeZone": "Eastern Standard Time"
+                                  },
+                                  "Attendees": [
+                                    {
+                                      "EmailAddress": {
+                                        "Address": "allieb@contoso.com",
+                                        "Name": "Allie Bellew"
+                                      },
+                                      "Type": "Required"
+                                    }
+                                  ]
+                                };
+
+                                Azure.createCalendar("azhararr@cendekialeadershipschool.onmicrosoft.com", newEvent);
+                                Azure.getEvents("azhararr@cendekialeadershipschool.onmicrosoft.com");
+
+                                var emails = _.pluck(parents, "email");
+                                var joinMail = emails.join();
+                                var text = {
+                                    author: req.user.name,
+                                    description: dataDescription.info
+                                }
+                                Azure.sendMail(joinMail, text);
+
+                            });
 
                         });
                     });

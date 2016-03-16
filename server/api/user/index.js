@@ -39,7 +39,7 @@ router.put('/update-teacher/:id', auth.hasRole(['admin']), controller.updateTeac
 router.get('/get-moderators/:id', auth.hasRole(['admin']), controller.getModerator);
 
 router
-  .get('/azure', passport.authenticate('azureoauth', {
+  .get('/azure', passport.authenticate('azureoauthuser', {
         redirect_uri: (process.env.DOMAIN || '') + '/api/users/azure/callback'
   }))
 

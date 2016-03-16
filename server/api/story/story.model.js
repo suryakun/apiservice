@@ -65,4 +65,9 @@ StorySchema.statics.getInfoBySchool = function (school_id, callback) {
   return Classd.find({_school: school_id}, "name _story").populate("_story", "info createdAt", {type:"info"}).exec(callback);
 }
 
+StorySchema.statics.getInfoByUser = function (user_id, callback) {
+  var Userd = require('../user/user.model');
+  return Userd.findById(user_id, "name _story").populate("_story", "info createdAt", {type:"info"}).exec(callback);
+}
+
 module.exports = mongoose.model('Story', StorySchema);

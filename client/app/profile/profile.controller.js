@@ -20,7 +20,7 @@ angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'Azure
         if ($scope.profile.azure) {
             data['azure'] = JSON.stringify($scope.profile.azure);
         } else if ($scope.profile.azure === false) { // Disconnected
-            data['azure'] = JSON.stringify({});
+            data['azure'] = false;
         }
         $scope.promiseProfile = Upload.upload({
             url: '/api/users/upload-profile',

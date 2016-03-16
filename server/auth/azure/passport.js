@@ -6,7 +6,7 @@ exports.setup = function (User, config) {
   passport.use(new AzureOAuthStrategy({
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
-      // redirectURL: config.azure.callbackURL,
+      redirectURL: config.azure.callbackURL, 
       tenantId: 'common',
       resource: 'https://graph.microsoft.com/'
   },
@@ -29,6 +29,16 @@ exports.setup = function (User, config) {
           return done(err, user);
         }
       })
+  }));
+
+  /**
+   * Passport untuk get access token only
+   */
+  passport.use('azureoauthuser', new AzureOAuthStrategy({
+      clientId: config.azure.clientID,
+      clientSecret: config.azure.clientSecret,
+      tenantId: 'common',
+      resource: 'https://graph.microsoft.com/' 
   }));
 
   passport.serializeUser(function (user, next) {

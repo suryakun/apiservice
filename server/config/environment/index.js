@@ -63,8 +63,8 @@ var all = {
   },
 
   azure: {
-    clientID:     process.env.AZURE_ID || 'id',
-    clientSecret: process.env.AZURE_SECRET || 'secret',
+    clientID:     process.env.AZURE_ID || '6ba57872-459a-4647-9022-0c4a78800fdb',
+    clientSecret: process.env.AZURE_SECRET || 'oISP3dRBHjV8lfWoXDmihFf1i6KDh1xh027whhCa2o8=',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/azure/callback'
   }
 };

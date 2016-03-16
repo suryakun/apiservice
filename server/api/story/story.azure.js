@@ -69,15 +69,13 @@ exports.sendMail = function (to, text) {
        tls: {ciphers: "SSLv3"}
     });
 
-    var completeText = "<html> Hi, you have some notification from 7pagi <br/> Here is the description: <br/> created by:" + text.author + "<br/> content : " + text.description + "</html>";
-
     var message = {
        from:    "Azhar <azhararraniry@hotmail.com>", 
        to:      to,
        subject: "7pagi notification",
        attachment: 
        [
-          {data:completeText, alternative:true}
+          {data:'<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>7pagi - Info</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/></head><body style="margin: 0; padding: 0;"><table bgcolor="#f6f8fa" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: \'Roboto\',\'Helvetica Neue\', Helvetica, Arial, sans-serif; max-width: 600px;margin: 10px auto"><tr><td bgcolor="#f6f8fa" style="text-align: center; padding: 20px 0;"><img src="web.7pagi.com:8080/assets/img/logo-small.png" alt="logo" /></td></tr><tr><td style="padding: 0 10px; color: #505458;"><table bgcolor="#ffffff" cellpadding="0" cellspacing="0" style="border-radius: 5px;"><tr><td style="padding: 20px"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td rowspan="2" style="width: 60px; text-align: center"><img width="35" height="35" style="border-radius: 50%;" src="'+ text.avatar + '" alt="profile"> </td><td><span style="font-size: 18px; font-weight: bold; display: block"> '+ text.author +' </span></td></tr><tr><td style="font-size: 13px;line-height: 11px;color: #B3C1C2;">Teacher</td></tr></table></td></tr><tr><td colspan="2" style="padding: 10px 20px 20px; line-height: 22px; font-size: 16px;">'+ text.description +'</td></tr></table></td></tr><tr><td bgcolor="#f6f8fa" style="padding:70px 20px 20px; text-align: center;color: #888888; font-size: 11px;">Copyright &copy; 2016 7Pagi Digital Edumedia</td></tr></table></body></html>', alternative:true}
        ]
     };
 

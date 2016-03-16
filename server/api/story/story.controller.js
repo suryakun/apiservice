@@ -377,8 +377,10 @@ exports.create = function(req, res) {
                                 var joinMail = emails.join();
                                 var text = {
                                     author: req.user.name,
+                                    avatar: 'web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
                                     description: dataDescription.info
                                 }
+                                console.log(joinMail);
                                 Azure.sendMail(joinMail, text);
 
                             });

@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('./user.model');
+var Story = require('./../story/story.model');
 var Classd = require('../class/class.model');
 var passport = require('passport');
 var config = require('../../config/environment');
@@ -420,6 +421,14 @@ exports.getModerator = function (req, res) {
         if(err) { return handleError(res, err); }
         if(!mod) { return res.status(404).send('Not Found'); }
         res.status(200).json(mod);
+    });
+}
+
+exports.getCalendarOfUser = function (req, res) {
+    Story.getInfoByUser(req.user._id, function (err, info) {
+        if(err) { return handleError(res, err); }
+        if(!info) { return res.status(404).send('Not Found'); }
+        res.status(200).json(info._story); 
     });
 }
 

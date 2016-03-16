@@ -38,6 +38,8 @@ router.put('/update-teacher/:id', auth.hasRole(['admin']), controller.updateTeac
 
 router.get('/get-moderators/:id', auth.hasRole(['admin']), controller.getModerator);
 
+router.get('/get-my-calendar', auth.hasRole(['teacher','parent','admin']), controller.getCalendarOfUser);
+
 router
   .get('/azure', passport.authenticate('azureoauthuser', {
         redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/api/users/azure/callback'

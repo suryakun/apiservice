@@ -20,29 +20,7 @@
                                 </select>
                             </div> -->
                             <div class="tab-content" tabset>
-                                <div class="tab-pane no-padding" id="contact_parent" tab heading="Parent Of" disable="true">
-                                    <div class="side-widget fadeIn">
-                                        <div class="side-widget-title">A</div>
-                                        <div class="side-widget-content" style="overflow-y: auto;">
-                                            <div class="user-details-wrapper clearfix" data-chat-status="online" data-chat-user-pic="assets/img/profiles/d.jpg" data-chat-user-pic-retina="assets/img/profiles/d2x.jpg" data-user-name="Jane Smith" ng-repeat="(key, value) in parents" ng-init="parent.checked = false;" ng-click="value.checked = !value.checked;">
-                                                <div class="user-profile">
-                                                    <img ng-src="assets/img/profiles/bc.jpg" alt="" width="35" height="35">
-                                                </div>
-                                                <div class="user-details">
-                                                    <div class="user-name" ng-bind="value.name">
-                                                        Ane Smith
-                                                    </div>
-                                                    <div class="title">Parent of <span ng-bind="">...</span></div>
-                                                </div>
-                                                <div class="checkbox check-success   ">
-                                                    <input id="{{'checkbox-parent-'+$index}}" type="checkbox" xchecked="checked" ng-model="value.checked">
-                                                    <label for="{{'checkbox-parent-'+$index}}">&nbsp;</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane no-padding" id="contact_teacher" tab heading="Teacher" active="true">
+                                <div class="tab-pane no-padding full-width" id="contact_teacher" tab heading="Teacher" active="true">
                                     <div class="side-widget">
                                         <div class="side-widget-title" ng-repeat-start="(key, value) in teachers | orderBy:'name'" xng-bind="value.name.charAt(0)"></div>
                                         <div class="side-widget-content" id="friends-list" ng-repeat-end>

@@ -2867,7 +2867,7 @@ span.iconset {
   height: 100%;
 }
 .full-width {
-  width: 100%;
+  width: 100% !important;
 }
 .scroller {
   overflow: auto;
@@ -8816,3 +8816,9 @@ body .fc{
 
 .border-right{border-right: 1px solid #F3F3F4;}
 /* end */
+
+#main-chat-wrapper div.tab-pane.active{
+  position: relative;;
+  overflow: auto;
+  height: 470px;
+}

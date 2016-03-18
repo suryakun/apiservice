@@ -16,7 +16,7 @@ router
     passport.authenticate('azureoauth'),
     function(req, res) {
         var user = req.user;
-        if (!user) return res.render('index', { 
+        if (!user || user === 401) return res.render('index', { 
           success: false, 
           result: {
             error: 'No account connected'

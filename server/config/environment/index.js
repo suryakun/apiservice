@@ -63,8 +63,8 @@ var all = {
   },
 
   azure: {
-    clientID:     process.env.AZURE_ID || '6ba57872-459a-4647-9022-0c4a78800fdb',
-    clientSecret: process.env.AZURE_SECRET || 'oISP3dRBHjV8lfWoXDmihFf1i6KDh1xh027whhCa2o8=',
+    clientID:     process.env.AZURE_ID || '001224f4-fe67-4a31-a396-0f2699eb210d',
+    clientSecret: process.env.AZURE_SECRET || '38UrBwFLaNQswm8+CxKIonFBd0VWgV9Ye+RBWEX0QV4=',
     callbackURL:  (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/auth/azure/callback'
   }
 };

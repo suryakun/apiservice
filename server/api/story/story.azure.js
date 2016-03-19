@@ -1,5 +1,6 @@
 var outlook = require('node-outlook');
 var nodemailer = require("nodemailer");
+var smtpTransport = require('nodemailer-smtp-transport');
 
 exports.createCalendar = function (email, event) {
     // Set the API endpoint to use the v2.0 endpoint
@@ -63,18 +64,16 @@ exports.getEvents = function (email) {
 
 exports.sendMail = function (to, text) {
 
-  // create reusable transport method (opens pool of SMTP connections)
-  var smtpTransport = nodemailer.createTransport("SMTP",{
-      service: "Office365",
+  var transporter = nodemailer.createTransport(smtpTransport({
+    service: "Office365",
       host: "smtp.office365.com",
-      tls: true,
       port:587,
       auth: {
           user: "halo@7pagi.com",
           pass: "7Pagi123"
       }
-  });
-
+  }));
+  
   // setup e-mail data with unicode symbols
   var mailOptions = {
       from: "7Pagi <halo@7pagi.com>", // sender address
@@ -84,7 +83,7 @@ exports.sendMail = function (to, text) {
   }
 
   // send mail with defined transport object
-  smtpTransport.sendMail(mailOptions, function(error, response){
+  transporter.sendMail(mailOptions, function(error, response){
       if(error){
           console.log(error);
       }else{
@@ -93,4 +92,5 @@ exports.sendMail = function (to, text) {
       // if you don't want to use this transport object anymore, uncomment following line
       //smtpTransport.close(); // shut down the connection pool, no more messages
   });
+
 }

@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('./user.model');
+var Story = require('./../story/story.model');
 var Classd = require('../class/class.model');
 var passport = require('passport');
 var config = require('../../config/environment');
@@ -88,8 +89,6 @@ exports.createParent = function (req, res, next) {
             setTimeout(function () {
                 User.findOne({email: req.body.student.email}, function (err, std) {
                     User.findOne({email: req.body.parent.email}, function (err, prn) {
-                        console.log(std);
-                        console.log(prn);
                         std._parent = mongoose.Types.ObjectId(prn._id);
                         std.save();
 
@@ -150,7 +149,6 @@ exports.show = function (req, res, next) {
  * restriction: 'admin'
  */
 exports.destroy = function(req, res) {
-    console.log(req.params.id);
     User.findByIdAndRemove(req.params.id, function(err, user) {
         if(err) return res.status(500).send(err);
         return res.status(204).send('No Content');
@@ -237,11 +235,9 @@ exports.updateProfile = function (req, res) {
         if (fields.hasOwnProperty("azure")) {
             optionSet['azure'] = JSON.parse(fields.azure);
         }
-        console.log(optionSet);
         
         if (!isEmptyObject(fields)) {
             User.update({'_id': req.user._id}, {$set: optionSet }, {multi:false}, function (err, ok) {
-                console.log(ok);
             });
         };
 
@@ -257,7 +253,6 @@ exports.updateProfile = function (req, res) {
             });
 
             User.update({'_id': req.user._id}, {$set: {avatar: filename }}, {multi:false}, function (err, ok) {
-                console.log(ok);
             });
         };
 
@@ -399,7 +394,6 @@ exports.getParentForAdmin = function (req, res) {
 
 exports.getTeacherOfMySchool = function (req, res) {
     User.getTeacherOfMySchool(req.user._id, function (err, user) {
-        console.log(user.length);
         var tmp = [];
         user.forEach(function (p) {
             _.each(p._teacher, function (t) {
@@ -427,6 +421,14 @@ exports.getModerator = function (req, res) {
         if(err) { return handleError(res, err); }
         if(!mod) { return res.status(404).send('Not Found'); }
         res.status(200).json(mod);
+    });
+}
+
+exports.getCalendarOfUser = function (req, res) {
+    Story.getInfoByUser(req.user._id, function (err, info) {
+        if(err) { return handleError(res, err); }
+        if(!info) { return res.status(404).send('Not Found'); }
+        res.status(200).json(info._story); 
     });
 }
 

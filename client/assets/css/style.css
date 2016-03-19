@@ -2867,7 +2867,7 @@ span.iconset {
   height: 100%;
 }
 .full-width {
-  width: 100%;
+  width: 100% !important;
 }
 .scroller {
   overflow: auto;
@@ -7216,7 +7216,6 @@ input[type="checkbox"] {
 .table-fixed-layout td, table#emails td {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .table-condensed > thead > tr > th,
 .table-condensed > tbody > tr > th,
@@ -8478,6 +8477,13 @@ aside .tiles.white{}
 .people-list .profile-img-wrapper{width: 70px; height: 70px;float: none}
 .people-list .profile-img-wrapper img{width: 100%;height: auto}
 .people-list .name{  display: block;color: rgb(83, 92, 92);font-weight: 600;}
+.people-list .name span{
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+}
 
 .banner-profile .btn{color: #fff; opacity:0}
 .banner-profile:hover .btn{opacity: .8}
@@ -8810,3 +8816,9 @@ body .fc{
 
 .border-right{border-right: 1px solid #F3F3F4;}
 /* end */
+
+#main-chat-wrapper div.tab-pane.active{
+  position: relative;;
+  overflow: auto;
+  height: 470px;
+}

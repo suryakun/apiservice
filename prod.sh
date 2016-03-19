@@ -13,5 +13,5 @@ export TWITTER_SECRET='secret'
 export GOOGLE_ID='app-id'
 export GOOGLE_SECRET='secret'
 
-export AZURE_ID='6ba57872-459a-4647-9022-0c4a78800fdb'
-export AZURE_SECRET='oISP3dRBHjV8lfWoXDmihFf1i6KDh1xh027whhCa2o8='
+export AZURE_ID='001224f4-fe67-4a31-a396-0f2699eb210d'
+export AZURE_SECRET='38UrBwFLaNQswm8+CxKIonFBd0VWgV9Ye+RBWEX0QV4='

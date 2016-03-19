@@ -16,7 +16,7 @@ exports.setup = function (User, config) {
       var waadProfile = profile || jwt.decode(params.id_token);
       // console.log(waadProfile.rawObject.upn, params); 
       User.findOne({
-        'email': waadProfile.rawObject.upn
+        'email': waadProfile.rawObject.upn ? waadProfile.rawObject.upn.toLowerCase() : null
       },
       function(err, user) {
         if (err) {

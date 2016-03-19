@@ -44,6 +44,8 @@ router
   .get('/azure', passport.authenticate('azureoauthuser', {
         redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/api/users/azure/callback'
   }))
+  
+  .get('/azure/refresh', auth.hasRole(['teacher','parent','admin']), controller.refreshToken)
 
   .get('/azure/callback', 
     function(req, res) {

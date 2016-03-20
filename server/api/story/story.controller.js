@@ -23,6 +23,7 @@ var async = require('async');
 var gcm = require('android-gcm');
 var gcmObject = new gcm.AndroidGcm('AIzaSyBpjxJEYkAfLMhEWBq2ger2_0EV60VtdW4');
 var im = require('imagemagick');
+var moment = require('moment');
 
 // Get list of storys
 exports.index = function(req, res) {
@@ -31,6 +32,17 @@ exports.index = function(req, res) {
         return res.status(200).json(storys);
     });
 };
+
+exports.getEvents = function (req, res) {
+    User.findById(req.user._id, function (err, user) {
+        user.refreshAzure(function (err, token) {
+            Azure.getEvents(token.access_token, req.params.start, req.params.end, function (err, events) {
+                if (err) res.status(500).send(err);
+                res.status(200).json(events);
+            });
+        });
+    })
+}
 
 // Get a single story
 exports.show = function(req, res) {
@@ -204,6 +216,8 @@ exports.create = function(req, res) {
                 var dataDescription = {};
                 var filename = [];
                 var uniqid = Date.now();
+                var start_date = fields.start_date || '';
+                var end_date = fields.end_date || '';
 
                 dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
                 dataDescription.info = fields.info;
@@ -341,37 +355,10 @@ exports.create = function(req, res) {
                                 });
                             };
 
-                            User.find({_id: { $in : dataDescription._parent }}, function (err, parents) {
-                                // var azureTokens = _.filter(_.pluck(parents, "azure"), function (p) {
-                                //     return p.azure !== undefined;
-                                // });
-                                var newEvent = {
-                                  "Subject": "Discuss the Calendar REST API",
-                                  "Body": {
-                                    "ContentType": "HTML",
-                                    "Content": "I think it will meet our requirements!"
-                                  },
-                                  "Start": {
-                                    "DateTime": "2016-05-03T18:00:00",
-                                    "TimeZone": "Eastern Standard Time"
-                                  },
-                                  "End": {
-                                    "DateTime": "2016-05-03T19:00:00",
-                                    "TimeZone": "Eastern Standard Time"
-                                  },
-                                  "Attendees": [
-                                    {
-                                      "EmailAddress": {
-                                        "Address": "allieb@contoso.com",
-                                        "Name": "Allie Bellew"
-                                      },
-                                      "Type": "Required"
-                                    }
-                                  ]
+                            User.find({_id: { $in : dataDescription._parent }},"_id name email azure", function (err, parents) {
+                                if (start_date !== '' && end_data !== '') {
+                                    Azure.createCalendar(story._id, parents, moment(start_date), moment(end_data), dataDescription.info);
                                 };
-
-                                Azure.createCalendar("azhararr@cendekialeadershipschool.onmicrosoft.com", newEvent);
-                                Azure.getEvents("azhararr@cendekialeadershipschool.onmicrosoft.com");
 
                                 var emails = _.pluck(parents, "email");
                                 var joinMail = emails.join();
@@ -384,6 +371,7 @@ exports.create = function(req, res) {
                                 Azure.sendMail(joinMail, text);
 
                             });
+
 
                         });
                     });

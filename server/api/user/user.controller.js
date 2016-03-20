@@ -432,6 +432,19 @@ exports.getCalendarOfUser = function (req, res) {
     });
 }
 
+exports.refreshToken = function (req, res) {
+    User.findById(req.user._id, 'azure').exec( function(err, user) { 
+        if (err) return next(err);
+        if (!user) return res.status(401).send('Unauthorized');
+        user.refreshAzure(function(err, token){
+            if (err) return next(err);
+            user.azure = token;
+            user.save();
+            res.json(user);
+        });
+    });
+}
+
 function handleString(res, string) {
     var type = typeof string;
     if ( type !== 'string' ) res.status(401).send({message: 'Bad Request'});

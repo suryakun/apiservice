@@ -11,6 +11,7 @@ var Reply = require('../reply/reply.model');
 var Photo = require('../photo/photo.model');
 var Group = require('../group/group.model');
 var _ = require('lodash');
+var config = require('../../config/environment');
 
 var UserSchema = new Schema({
     _parent: { type: Schema.ObjectId, ref: 'User' },
@@ -179,6 +180,37 @@ UserSchema.methods = {
         if (!password || !this.salt) return '';
         var salt = new Buffer(this.salt, 'base64');
         return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+    },
+
+    /**
+     * Request to Refresh azure token
+     *
+     * @param {Function} next function for passing new token
+     *
+     */
+    refreshAzure: function(next) {
+        if (!this.azure) {
+            return next();
+        } else {
+            var data = 'grant_type=refresh_token' 
+            + '&refresh_token=' + this.azure.refresh_token 
+            + '&client_id=' + config.azure.clientID
+            + '&client_secret=' + encodeURIComponent(config.azure.clientSecret) 
+            + '&resource=' + this.azure.resource;
+            var opts = {
+                url: 'https://login.microsoftonline.com/common/oauth2/token',
+                body: data,
+                headers : { 'Content-Type' : 'application/x-www-form-urlencoded' }
+            };
+            require('request').post(opts, function (err, response, body) {
+                if (err) {
+                    return next(err)
+                } else {
+                    var token = JSON.parse(body); 
+                    return next(false, token);
+                }
+            })
+        }
     }
 };
 

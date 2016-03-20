@@ -33,6 +33,17 @@ exports.index = function(req, res) {
     });
 };
 
+exports.getEvents = function (req, res) {
+    User.findById(req.user._id, function (err, user) {
+        user.refreshAzure(function (err, token) {
+            Azure.getEvents(token.access_token, req.params.start, req.params.end, function (err, events) {
+                if (err) res.status(500).send(err);
+                res.status(200).json(events);
+            });
+        });
+    })
+}
+
 // Get a single story
 exports.show = function(req, res) {
     Story.find({_id: req.params.id, active: true}, function (err, story) {
@@ -346,7 +357,7 @@ exports.create = function(req, res) {
 
                             User.find({_id: { $in : dataDescription._parent }},"_id name email azure", function (err, parents) {
                                 if (start_date !== '' && end_data !== '') {
-                                    Azure.createCalendar(parents, moment().add(11, 'days').format(), moment().add(14, 'days').format(), dataDescription.info);
+                                    Azure.createCalendar(story._id, parents, moment(start_date), moment(end_data), dataDescription.info);
                                 };
 
                                 var emails = _.pluck(parents, "email");
@@ -360,6 +371,7 @@ exports.create = function(req, res) {
                                 Azure.sendMail(joinMail, text);
 
                             });
+
 
                         });
                     });

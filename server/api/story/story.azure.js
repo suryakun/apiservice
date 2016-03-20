@@ -2,61 +2,76 @@ var nodemailer = require("nodemailer");
 var smtpTransport = require('nodemailer-smtp-transport');
 var request = require("request");
 var User = require('../user/user.model');
+var Story = require('./story.model');
 
 var _ = require('lodash');
 var https = require('https');
 
-exports.createCalendar = function (receivers, start, end, description) {
-    var filterAzureUser = _.pluck(receivers, "azure");
-    var filterAzureUser = filterAzureUser.filter(function (o) {
-        return !!o;
-    })
-    if (filterAzureUser.length > 0) {
+exports.createCalendar = function (story_id, receivers, start, end, description) {
+    if (receivers.length > 0) {
         
-        _.each(filterAzureUser, function (azure) {
-            
-            request.post({
-                url: 'https://graph.microsoft.com/v1.0/me/calendar/events',
-                headers: {
-                  'content-type': 'application/json',
-                  'authorization': 'Bearer ' + azure.access_token,
-                },
-                body: JSON.stringify({
-                        "originalStartTimeZone": start,
-                        "originalEndTimeZone": end,
-                        "body" : {"contentType": "text",
-                                    "content": description},
-                        "subject" : "7pagi update event",
-                        "bodyPreview": description,
-                        "reminderMinutesBeforeStart": 99,
-                        "isReminderOn": true
-                })
-            }, function (err, response, body) {
-                if (err) {
-                  console.error('>>> Application error: ' + err);
-                } else {
-                  var parsedBody = JSON.parse(body);
-                  var displayName = "surya";
+      var options = {
+        "originalStartTimeZone": start,
+        "originalEndTimeZone": end,
+        "body" : {"contentType": "text",
+                    "content": description},
+        "subject" : "7pagi update event",
+        "bodyPreview": description,
+        "reminderMinutesBeforeStart": 99,
+        "isReminderOn": true
+      }
 
-                  if (parsedBody.error) {
-                    if (parsedBody.error.code === 'RequestBroker-ParseUri') {
-                      console.error('>>> Error creating an event for ' + displayName  + '. Most likely due to this user having a MSA instead of an Office 365 account.');
-                    } else {
-                      console.error('>>> Error creating an event for ' + displayName  + '.' + parsedBody.error.message);
-                    }
-                  } else {
-                    console.log('>>> Successfully created an event on ' + displayName + "'s calendar.");
-                  }
-                }
-            });
+        _.each(receivers, function (azureReceiver) {
             
+            if (azureReceiver.azure) {
+                azureReceiver.refreshAzure(function (azure) {
+                    request.post({
+                        url: 'https://graph.microsoft.com/v1.0/me/calendar/events',
+                        headers: {
+                          'content-type': 'application/json',
+                          'authorization': 'Bearer ' + azure.access_token,
+                        },
+                        body: JSON.stringify(options)
+                    }, function (err, response, body) {
+                        if (err) {
+                          console.error('>>> Application error: ' + err);
+                        } else {
+                          var parsedBody = JSON.parse(body);
+                          var displayName = "surya";
+
+                          if (parsedBody.error) {
+                            if (parsedBody.error.code === 'RequestBroker-ParseUri') {
+                              console.error('>>> Error creating an event for ' + displayName  + '. Most likely due to this user having a MSA instead of an Office 365 account.');
+                            } else {
+                              console.error('>>> Error creating an event for ' + displayName  + '.' + parsedBody.error.message);
+                            }
+                          } else {
+                            console.log('>>> Successfully created an event on ' + displayName + "'s calendar.");
+                          }
+                        }
+                    });
+                })
+            };
+        })
+
+        Story.update({_id:story_id}, {$set:{calendar: options}}, {multi: false}, function (err, ok) {
+            if (err) console.log(err);
+            console.log(ok);
         })
 
     };    
 }
 
-exports.getEvents = function (email) {
-    
+exports.getEvents = function (access_token, start, end, callback) {
+    request.get({
+        url: 'https://graph.microsoft.com/v1.0/me/calendar/calendarView?startDateTime='+start+'&endDateTime=' + end,
+        headers: {
+            'authorization': 'Bearer ' + access_token,
+        }
+    }, function (err, response, body) {
+        if (err) {callback(err, null)};
+        callback(null, body);
+    })
 }
 
 exports.sendMail = function (to, text) {

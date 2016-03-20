@@ -63,18 +63,18 @@ var all = {
   },
 
   //production tenant azure
-  azure: {
-    clientID:     process.env.AZURE_ID || '001224f4-fe67-4a31-a396-0f2699eb210d',
-    clientSecret: process.env.AZURE_SECRET || '38UrBwFLaNQswm8+CxKIonFBd0VWgV9Ye+RBWEX0QV4=',
-    callbackURL:  (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/auth/azure/callback'
-  }
+  // azure: {
+  //   clientID:     process.env.AZURE_ID || '001224f4-fe67-4a31-a396-0f2699eb210d',
+  //   clientSecret: process.env.AZURE_SECRET || '38UrBwFLaNQswm8+CxKIonFBd0VWgV9Ye+RBWEX0QV4=',
+  //   callbackURL:  (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/auth/azure/callback'
+  // }
 
   //Development Tenant Azure
-  // azure: {
-  //   clientID:     process.env.AZURE_ID || '62cf7b77-e646-4dd2-b796-337209f36447',
-  //   clientSecret: process.env.AZURE_SECRET || '+G2Rd+LRFb9/+GfSmPpSFtcvfe2Dmg8ZpTfUmnnPS3I=',
-  //   callbackURL:  (process.env.DOMAIN || 'http://7pagi.dev:9000') + '/auth/azure/callback'
-  // }
+  azure: {
+    clientID:     process.env.AZURE_ID || '62cf7b77-e646-4dd2-b796-337209f36447',
+    clientSecret: process.env.AZURE_SECRET || '+G2Rd+LRFb9/+GfSmPpSFtcvfe2Dmg8ZpTfUmnnPS3I=',
+    callbackURL:  (process.env.DOMAIN || 'http://7pagi.dev:9000') + '/auth/azure/callback'
+  }
 };
 
 // Export the config object based on the NODE_ENV

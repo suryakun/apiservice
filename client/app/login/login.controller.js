@@ -47,7 +47,7 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
                 });
             }, 2000);
         }, function(data) {
-            alert(data.error);
+            $state.go('info');
         });
     };
 }]);

@@ -9,7 +9,7 @@ angular.module('roomApp').config(['$stateProvider', function($stateProvider) {
         templateUrl: 'app/login/login.html',
         controller: 'CallbackCtrl'
     }).state('info', {
-        url: '/info',
+        url: '/info?email',
         templateUrl: 'app/login/info.html'
     });
 }]);

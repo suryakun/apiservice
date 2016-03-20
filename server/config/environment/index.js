@@ -73,7 +73,7 @@ var all = {
   azure: {
     clientID:     process.env.AZURE_ID || '62cf7b77-e646-4dd2-b796-337209f36447',
     clientSecret: process.env.AZURE_SECRET || '+G2Rd+LRFb9/+GfSmPpSFtcvfe2Dmg8ZpTfUmnnPS3I=',
-    callbackURL:  (process.env.DOMAIN || 'http://7pagi.dev:9000') + '/auth/azure/callback'
+    callbackURL:  (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/auth/azure/callback'
   }
 };
 

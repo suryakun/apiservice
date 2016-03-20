@@ -35,17 +35,15 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
                 expires: (new Date()).setSeconds(24 * 60 * 60),
                 data: data
             });
-            setTimeout(function(){
-                $scope.promise = appAuth.getMe().then(function(me) {
-                    if (appAuth.data.role === 'teacher') {
-                        $state.go('main.activity');
-                    } else if (appAuth.data.role === 'parent') {
-                        $state.go('main.diary', {
-                            id: appAuth.profile._student[0]._id
-                        });
-                    }
-                });
-            }, 2000);
+            $scope.promise = appAuth.getMe().then(function(me) {
+                if (appAuth.data.role === 'teacher') {
+                    $state.go('main.activity');
+                } else if (appAuth.data.role === 'parent') {
+                    $state.go('main.diary', {
+                        id: appAuth.profile._student[0]._id
+                    });
+                }
+            });
         }, function(data) {
             $state.go('info', { 
                 email: data.email

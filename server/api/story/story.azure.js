@@ -1,65 +1,62 @@
-var outlook = require('node-outlook');
 var nodemailer = require("nodemailer");
 var smtpTransport = require('nodemailer-smtp-transport');
+var request = require("request");
+var User = require('../user/user.model');
 
-exports.createCalendar = function (email, event) {
-    // Set the API endpoint to use the v2.0 endpoint
-    outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
+var _ = require('lodash');
+var https = require('https');
 
-    // This is the oAuth token 
-    var token = "token";
+exports.createCalendar = function (receivers, start, end, description) {
+    var filterAzureUser = _.pluck(receivers, "azure");
+    var filterAzureUser = filterAzureUser.filter(function (o) {
+        return !!o;
+    })
+    if (filterAzureUser.length > 0) {
+        
+        _.each(filterAzureUser, function (azure) {
+            
+            request.post({
+                url: 'https://graph.microsoft.com/v1.0/me/calendar/events',
+                headers: {
+                  'content-type': 'application/json',
+                  'authorization': 'Bearer ' + azure.access_token,
+                },
+                body: JSON.stringify({
+                        "originalStartTimeZone": start,
+                        "originalEndTimeZone": end,
+                        "body" : {"contentType": "text",
+                                    "content": description},
+                        "subject" : "7pagi update event",
+                        "bodyPreview": description,
+                        "reminderMinutesBeforeStart": 99,
+                        "isReminderOn": true
+                })
+            }, function (err, response, body) {
+                if (err) {
+                  console.error('>>> Application error: ' + err);
+                } else {
+                  var parsedBody = JSON.parse(body);
+                  var displayName = "surya";
 
-    var newEvent = event;
+                  if (parsedBody.error) {
+                    if (parsedBody.error.code === 'RequestBroker-ParseUri') {
+                      console.error('>>> Error creating an event for ' + displayName  + '. Most likely due to this user having a MSA instead of an Office 365 account.');
+                    } else {
+                      console.error('>>> Error creating an event for ' + displayName  + '.' + parsedBody.error.message);
+                    }
+                  } else {
+                    console.log('>>> Successfully created an event on ' + displayName + "'s calendar.");
+                  }
+                }
+            });
+            
+        })
 
-    // Pass the user's email address
-    var userInfo = {
-        email: email
-    };
-
-    outlook.calendar.createEvent({token: token, event: newEvent, user: userInfo},
-        function(error, result){
-            if (error) {
-                console.log('createEvent returned an error: ' + error);
-            }
-            else if (result) {
-                console.log(JSON.stringify(result, null, 2));
-            }
-    });
+    };    
 }
 
 exports.getEvents = function (email) {
-        // Set the API endpoint to use the v2.0 endpoint
-    outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
-
-    // This is the oAuth token 
-    var token = "";
-
-    // Set up oData parameters
-    var queryParams = {
-      '$select': 'Subject,Start,End',
-      '$orderby': 'Start/DateTime desc',
-      '$top': 20
-    };
-
-    // Pass the user's email address
-    var userInfo = {
-      email: email
-    };
-
-    outlook.calendar.getEvents({token: token, folderId: 'Inbox', odataParams: queryParams, user: userInfo},
-      function(error, result){
-        if (error) {
-          console.log('getEvents returned an error: ' + error);
-        }
-        else if (result) {
-          console.log('getEvents returned ' + result.value.length + ' events.');
-          result.value.forEach(function(event) {
-            console.log('  Subject:', event.Subject);
-            console.log('  Start:', event.Start.DateTime.toString());
-            console.log('  End:', event.End.DateTime.toString());
-          });
-        }
-      });
+    
 }
 
 exports.sendMail = function (to, text) {

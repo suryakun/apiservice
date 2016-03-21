@@ -8,5 +8,8 @@ angular.module('roomApp').config(['$stateProvider', function($stateProvider) {
         url: '/callback',
         templateUrl: 'app/login/login.html',
         controller: 'CallbackCtrl'
+    }).state('info', {
+        url: '/info?email',
+        templateUrl: 'app/login/info.html'
     });
 }]);

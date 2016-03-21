@@ -4623,34 +4623,34 @@ form legend,
   font-size: 13px;
 }
 .datepicker thead tr .prev {
-  color: #0090d9;
+  color: #40C4D0;
   content: '';
   font-size: 0px;
 }
 .datepicker thead tr .prev:before {
-  color: #0090d9;
+  color: #40C4D0;
   font-family: 'FontAwesome';
   content: "\f053";
   font-size: 13px;
 }
 .datepicker thead tr .next {
-  color: #0090d9;
+  color: #40C4D0;
   content: '';
   font-size: 0px;
 }
 .datepicker thead tr .next:before {
-  color: #0090d9;
+  color: #40C4D0;
   font-family: 'FontAwesome';
   content: "\f054";
   font-size: 13px;
 }
 .datepicker thead tr .dow {
-  color: #0090d9;
+  color: #40C4D0;
   text-transform: uppercase;
   font-size: 11px;
 }
 .datepicker tbody tr .odd {
-  color: #d0d3d8;
+  color: #40C4D0;
 }
 .datepicker table tr td.day:hover {
   background: #eeeeee;
@@ -4703,7 +4703,7 @@ form legend,
 .datepicker table tr td.active[disabled]:hover,
 .datepicker table tr td.active.disabled[disabled],
 .datepicker table tr td.active.disabled[disabled]:hover {
-  background-color: #0090d9;
+  background-color: #40C4D0;
 }
 .datepicker table tr td span.active,
 .datepicker table tr td span.active:hover,
@@ -8818,7 +8818,15 @@ body .fc{
 /* end */
 
 #main-chat-wrapper div.tab-pane.active{
-  position: relative;;
+  position: relative;
   overflow: auto;
   height: 470px;
+}
+
+.add-status .message .input-append .add-on {
+    right: 0;
+}
+
+.dropdown-menu.datepicker {
+    z-index: 2000 !important;
 }

@@ -3,12 +3,17 @@ angular.module('roomApp').controller('ProfileCtrl', ['$scope', 'appAuth', 'Azure
     /** Update Profile */
     $scope.profile = angular.copy(appAuth.profile);
     $scope.connectMicrosoft = function() {
-        $log.debug('Connecting to Office 365...');
-        AzureService.connect().then(function(data) {
-            $scope.profile.azure = data;
-        }, function(data) {
-            alert(data.error);
+        $http.get('/api/users/refresh').then(function() {
+            $scope.password = null;
+        }, function() {
+            alert('Update failed');
         });
+        // $log.debug('Connecting to Office 365...');
+        // AzureService.connect().then(function(data) {
+        //     $scope.profile.azure = data;
+        // }, function(data) {
+        //     alert(data.error);
+        // });
     };
     $scope.disconnectMicrosoft = function() {
         $scope.profile.azure = false;

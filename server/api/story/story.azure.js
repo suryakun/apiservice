@@ -24,7 +24,7 @@ exports.createCalendar = function (story_id, receivers, start, end, description)
         _.each(receivers, function (azureReceiver) {
             
             if (azureReceiver.azure) {
-                azureReceiver.refreshAzure(function (azure) {
+                azureReceiver.refreshAzure(function (err, azure) {
                     request.post({
                         url: 'https://graph.microsoft.com/v1.0/me/calendar/events',
                         headers: {

@@ -35,12 +35,23 @@ exports.index = function(req, res) {
 
 exports.getEvents = function (req, res) {
     User.findById(req.user._id, function (err, user) {
-        user.refreshAzure(function (err, token) {
-            Azure.getEvents(token.access_token, req.params.start, req.params.end, function (err, events) {
+        if (user.azure) {
+            user.refreshAzure(function (err, token) {
+                Azure.getEvents(token.access_token, req.params.start, req.params.end, function (err, events) {
+                    if (err) res.status(500).send(err);
+                    res.status(200).json(events);
+                });
+            });
+        } else {
+            User.findById(user._id).populate("_story", "calendar", {type:"info", calendar:{$ne:null}}).exec(function (err, call) {
+                var events = [];
+                _.each(call._story, function (story) {
+                    events.push(story.calendar);
+                })
                 if (err) res.status(500).send(err);
                 res.status(200).json(events);
-            });
-        });
+            })
+        }
     })
 }
 
@@ -356,8 +367,8 @@ exports.create = function(req, res) {
                             };
 
                             User.find({_id: { $in : dataDescription._parent }},"_id name email azure", function (err, parents) {
-                                if (start_date !== '' && end_data !== '') {
-                                    Azure.createCalendar(story._id, parents, moment(start_date), moment(end_data), dataDescription.info);
+                                if (start_date !== '' && end_date !== '') {
+                                    Azure.createCalendar(story._id, parents, moment(start_date), moment(end_date), dataDescription.info);
                                 };
 
                                 var emails = _.pluck(parents, "email");
@@ -367,7 +378,6 @@ exports.create = function(req, res) {
                                     avatar: 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
                                     description: dataDescription.info
                                 }
-                                console.log(joinMail);
                                 Azure.sendMail(joinMail, text);
 
                             });

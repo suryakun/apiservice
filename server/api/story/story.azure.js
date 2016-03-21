@@ -3,6 +3,7 @@ var smtpTransport = require('nodemailer-smtp-transport');
 var request = require("request");
 var User = require('../user/user.model');
 var Story = require('./story.model');
+var moment = require('moment');
 
 var _ = require('lodash');
 var https = require('https');
@@ -11,14 +12,20 @@ exports.createCalendar = function (story_id, receivers, start, end, description)
     if (receivers.length > 0) {
         
       var options = {
-        "originalStartTimeZone": start,
-        "originalEndTimeZone": end,
+        "start": {
+          "dateTime": start,
+          "timeZone": "Asia/Bangkok"
+        },
+        "end": {
+          "dateTime": end,
+          "timeZone": "Asia/Bangkok"
+        },
         "body" : {"contentType": "text",
                     "content": description},
         "subject" : "7pagi update event",
         "bodyPreview": description,
         "reminderMinutesBeforeStart": 99,
-        "isReminderOn": true
+        "isReminderOn": true,
       }
 
         _.each(receivers, function (azureReceiver) {

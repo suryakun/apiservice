@@ -862,16 +862,23 @@
         width: 60px;
         height: 60px;
         box-shadow: 0 0 10px -1px rgba(0, 0, 0, 0.5);
+        right: 5px;
+        bottom: 10px;
   }
   #sidebar_menu .create-new{
         position: absolute;
-        bottom: 100%;
         border: none;
         padding: 0 20px;
+        right: 0;
+        width: 100%;
+        bottom: 70px;
+  }
+  #sidebar_menu .create-new li{
+      text-align: right;
   }
   #sidebar_menu .create-new li a span{
         position: absolute;
-        right: 100%;
+        right: 50px;
         white-space: nowrap;
         box-shadow: 0 0 7px -1px rgba(0, 0, 0, 0.3);
         top: 15px;

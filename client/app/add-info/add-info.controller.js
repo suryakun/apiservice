@@ -1,5 +1,18 @@
 'use strict';
 angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope', 'Upload', 'appConfig', 'appAuth', '$q', '$timeout', 'apiConnector', function($modalInstance, $scope, Upload, appConfig, appAuth, $q, $timeout, apiConnector) {
+    $scope.date = {
+        dateOptions: {
+            formatYear: 'yy',
+            startingDay: 1
+        },
+        format: 'dd-MMMM-yyyy',
+        opened: false,
+        minDate: new Date(),
+        model: new Date()
+    };
+    $scope.open = function($event) {
+        $scope.date.opened = true;
+    };
     $scope.data = {
         type: 'info',
         info: '',
@@ -76,6 +89,10 @@ angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope',
             }
         }
         $scope.data.cc = $scope.data.cc.toString();
+        if($scope.date.model) {
+            $scope.data.start_date = moment($scope.date.model).toISOString();
+            $scope.data.end_date = $scope.data.start_date;
+        }
         Upload.upload({
             url: appConfig.baseAPIUrl + '/api/stories',
             headers: {

@@ -2,13 +2,13 @@
 angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compile', 'uiCalendarConfig', function($scope, $http, $compile, uiCalendarConfig) {
     $scope.eventsF = function(start, end, timezone, callback) {
         $scope.promise = $http.get('/api/users/get-my-calendar', {
-            cache: true
+            cache: false
         }).then(function(response) {
             var events = Array.prototype.map.call(response.data || [], function(event, idx) {
                 return {
                     title: event.info,
                     info: event.info,
-                    start: new Date(event.createdAt),
+                    start: new Date(event.calendar ? event.calendar.start.dateTime : event.createdAt),
                     allDay: true,
                     className: ['b-l b-2x b-primary']
                 };
@@ -36,4 +36,7 @@ angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compi
         }
     };
     $scope.eventSources = [[], $scope.eventsF];
+    $scope.$on('info:created', function() {
+        console.log('cannot auto resfresh');
+    });
 }]);

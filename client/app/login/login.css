@@ -928,6 +928,7 @@ input[type="search"], input[type="tel"], input[type="color"] {
 
 .orange{color: #eb3c00;}
 .underline{text-decoration: underline}
+
 .btn-area a{display: inline-block}
 .btn-o365{
     background: #E83F24 !important;
@@ -937,4 +938,8 @@ input[type="search"], input[type="tel"], input[type="color"] {
 .btn-o365:hover{
     color: white;
     opacity: .8;
+}
+.login-footer{
+    position: absolute;
+    bottom: 0;
 }

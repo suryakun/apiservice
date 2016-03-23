@@ -3642,10 +3642,10 @@ form legend {
   margin: 15px 0px 10px 0px !important;
 }
 .column-seperation > div[class*="col-"] {
-  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
 }
-.column-seperation > div[class*="col-"]:last-child {
-  border-right: 0px;
+.column-seperation > div[class*="col-"]:first-child {
+  border-left: 0px;
 }
 .form-no-horizontal-spacing .row-fluid .side-label {
   border-right: 1px solid #dddddd;

@@ -31,21 +31,21 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-10 btn-area">
                         <!-- <label class="checkbox-wrapper pull-left">
                             <input name="remember_me" type="checkbox" />
                             Remember me
                         </label>
 -->
-                        <button ng-click="connectMicrosoft()" type="button" class="btn btn-cons" style="background-color: transparent !important;">     
-                            <img src="assets/img/microsoft_logo.png" />
-                        </button>
+                        <a href="javascript:void(0)" class="m-t-20" ui-sref="reset-password">Forgot Your password?</a>
                         <button class="btn btn-primary btn-cons pull-right" type="submit" value="LOGIN">Login</button>
                         <input type='hidden' name='login' id='login' value='true' />
                     </div>
                     <div class="col-md-10 text-center">
                         <hr />
-                        <a href="javascript:void(0)" ui-sref="reset-password">Forgot Your password?</a>
+                        <button ng-click="connectMicrosoft()" type="button" class="btn btn-o365">
+                            Login via <img src="assets/img/microsoft_logo.png" />
+                        </button>
                     </div>
                 </div>
         </form>

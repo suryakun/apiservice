@@ -11,6 +11,7 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
     $scope.responseCode = undefined;
     $scope.onFormSubmit = function(form) {
         if (form.$valid) {
+            $scope.responseCode = undefined;
             $scope.promise = appAuth.login($scope.data).then(function(response) {
                 appAuth.getMe().then(function(me) {
                     if (appAuth.data.role === 'teacher') {

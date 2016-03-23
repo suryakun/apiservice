@@ -1,11 +1,11 @@
-<div id="login-page" class="container" cg-busy="promise">
+<div id="login-page" class="container">
     <div class="row login-container column-seperation">
         <div class="col-md-5 col-md-offset-1">
             <h2>Media Interaksi Sekolah</h2>
             <p>7Pagi merupakan Media Privat Sekolah untuk Guru dan Orang Tua.<br>Memudahkan Guru untuk menginformasikan kegiatan Anak di Sekolah, karena kami percaya interaksi yang baik antara Sekolah & Orang Tua membentuk Lingkungan belajar terbaik untuk Anak.
               <br />Silahkan login dengan Username dan Password yang telah diberikan pihak Sekolah. </p>
         </div>
-        <div class="col-md-5 "> <br />
+        <div class="col-md-5 " cg-busy="promise"> <br />
             <form id="form-login" name="form" class="animated fadeIn" ng-submit="onFormSubmit(form)">
                 <div class="row">
                     <div class="form-group col-md-10">
@@ -26,7 +26,9 @@
                           <div class="input-with-icon  right">
                             <i class=""></i>
                                 <input  type='password' name='password' value=''  class="form-control" placeholder="Password" ng-model="data.password" required>
-                                <p class="help-block text-warning animated fadeIn" ng-show="responseCode===401"><em>Username or Password not valid</em></p>
+                                <p class="help-block text-warning animated fadeIn" ng-if="responseCode == 401"><em>Username or Password not valid</em></p>
+                                <p class="help-block text-warning animated fadeIn" ng-if="responseCode > 401"><em>Server Error</em></p>
+                                <p class="help-block text-warning animated fadeIn" ng-if="responseCode <= 0"><em>Unknown error</em></p>
                           </div>
                         </div>
                     </div>

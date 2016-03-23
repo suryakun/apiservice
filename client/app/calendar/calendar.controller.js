@@ -5,11 +5,17 @@ angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compi
             cache: false
         }).then(function(response) {
             var events = Array.prototype.map.call(response.data || [], function(event, idx) {
+                var start = new Date(event.calendar ? event.calendar.start.dateTime : event.createdAt),
+                    end = new Date(event.calendar ? event.calendar.end.dateTime : event.createdAt),
+                    isAllDay = start.getTime() === end.getTime();
+                start.setHours(0, 0, 0);
+                end.setHours(23, 59, 59);
                 return {
                     title: event.info,
                     info: event.info,
-                    start: new Date(event.calendar ? event.calendar.start.dateTime : event.createdAt),
-                    allDay: true,
+                    start: start,
+                    end: end,
+                    allDay: isAllDay,
                     className: ['b-l b-2x b-primary']
                 };
             });
@@ -35,7 +41,9 @@ angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compi
             eventRender: $scope.eventRender
         }
     };
-    $scope.eventSources = [[], $scope.eventsF];
+    $scope.eventSources = [
+        [], $scope.eventsF
+    ];
     $scope.$on('info:created', function() {
         console.log('cannot auto resfresh');
     });

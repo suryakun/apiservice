@@ -58,9 +58,15 @@
                                 <option ng-value="room._id" ng-repeat="(key, room) in receipents | orderBy:'name'" ng-bind="room.name"></option>
                             </select>
                         </div>
-                        <div class="input-append date col-md-12 no-padding">
-                            <input type="text" placeholder="Date" class="form-control" datepicker-popup ng-model="date.model" is-open="date.opened" min-date="date.minDate" max-date="date.maxDate" datepicker-options="date.dateOptions" ng-required="true" show-button-bar="false"/>
-                            <span class="add-on" ng-click="open($event)"><span class="arrow"></span><i class="fa fa-th"></i></span>
+                        <div class="col-md-12">
+                            <div class="input-append date col-md-6 no-padding">
+                                <input type="text" placeholder="Date" class="form-control" readonly="true" datepicker-popup ng-model="date.startDate" is-open="date.opened[0]" min-date="date.minDate" max-date="date.maxDate" datepicker-options="date.dateOptions" ng-required="true" show-button-bar="false" show-weeks="false"/>
+                                <span class="add-on" ng-click="open(0)"><span class="arrow"></span><i class="fa fa-th"></i></span>
+                            </div>
+                            <div class="input-append date col-md-6 no-padding">
+                                <input type="text" placeholder="Date" class="form-control" readonly="true" datepicker-popup ng-model="date.endDate" is-open="date.opened[1]" min-date="date.minDate" max-date="date.maxDate" datepicker-options="date.dateOptions" ng-required="true" show-button-bar="false" show-weeks="false"/>
+                                <span class="add-on" ng-click="open(1)"><span class="arrow"></span><i class="fa fa-th"></i></span>
+                            </div>
                         </div>
                         <textarea rows="5" class="form-control user-status-box post-input" placeholder="Post Info Here" ng-model="data.info"></textarea>
                         <section class="image-area clearfix">

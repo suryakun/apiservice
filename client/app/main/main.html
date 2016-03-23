@@ -17,7 +17,8 @@
                     <div class="container">
                         <section class="header-identity col-sm-3">
                             <figure>
-                                <a href="javascript:void(0)" ui-sref="main"> <img src="assets/img/scholl-logo.png" alt="logo" /> </a>
+                                <a href="javascript:void(0)" ui-sref="main.activity" ng-if="appAuth.profile.role === 'teacher'"> <img src="assets/img/scholl-logo.png" alt="logo" /> </a>
+                                <a href="javascript:void(0)" ui-sref="main.diary({id: appAuth.profile._student[0]._id})" ng-if="appAuth.profile.role === 'parent'"> <img src="assets/img/scholl-logo.png" alt="logo" /> </a>
                             </figure>
                             <span ng-bind="appAuth.data.school_name">School Name</span>
                         </section>

@@ -8,6 +8,7 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
     //     email: 'denia@kidzpotentia.sch.id',
     //     password: 'teacher.denia'
     // };
+    $scope.responseCode = undefined;
     $scope.onFormSubmit = function(form) {
         if (form.$valid) {
             $scope.promise = appAuth.login($scope.data).then(function(response) {
@@ -21,7 +22,7 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
                     }
                 });
             }, function(response) {
-                console.log(response);
+                $scope.responseCode = response.status;
             });
         }
     };

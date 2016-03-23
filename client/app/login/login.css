@@ -927,3 +927,11 @@ input[type="search"], input[type="tel"], input[type="color"] {
 
 .orange{color: #eb3c00;}
 .underline{text-decoration: underline}
+
+#login-page hr {
+  border-top: 1px solid #eee;
+  border-bottom: none;
+}
+#login-page .column-seperation > div[class*="col-"] {
+  border-right: none !important;
+}

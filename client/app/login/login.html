@@ -1,4 +1,4 @@
-<div class="container" cg-busy="promise">
+<div id="login-page" class="container" cg-busy="promise">
     <div class="row login-container column-seperation">
         <div class="col-md-5 col-md-offset-1">
             <h2>Media Interaksi Sekolah</h2>
@@ -26,6 +26,7 @@
                           <div class="input-with-icon  right">
                             <i class=""></i>
                                 <input  type='password' name='password' value=''  class="form-control" placeholder="Password" ng-model="data.password" required>
+                                <p class="help-block text-warning animated fadeIn" ng-show="responseCode===401"><em>Username or Password not valid</em></p>
                           </div>
                         </div>
                     </div>
@@ -36,8 +37,8 @@
                             <input name="remember_me" type="checkbox" />
                             Remember me
                         </label>
--->
-                        <button ng-click="connectMicrosoft()" type="button" class="btn btn-cons" style="background-color: transparent !important;">     
+                        -->
+                        <button ng-click="connectMicrosoft()" type="button" class="btn btn-cons" style="background-color: transparent !important; padding: 0 !important;">     
                             <img src="assets/img/microsoft_logo.png" />
                         </button>
                         <button class="btn btn-primary btn-cons pull-right" type="submit" value="LOGIN">Login</button>

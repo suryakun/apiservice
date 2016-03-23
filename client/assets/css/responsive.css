@@ -516,6 +516,7 @@
   /*** Page content ***/
   .page-content {
     margin-top: 0px;
+    padding-bottom: 75px;
     min-height: 100%;
   }
   .page-content .content {
@@ -798,8 +799,8 @@
 }
 @media (max-width: 768px) {
   /* 7pagi custom */
-  .cover-pic-wrapper{
-      max-height: 130px;
+  .cover-pic-wrapper, #email-list{
+      margin-top: 70px;
   }
   .page-content .content{
     padding-top: 135px
@@ -829,9 +830,9 @@
 
   #sidebar_menu .main-menu > li{
         float: left;
-        width: 15%;
-        margin: 0;
+        padding: 0 13px;
         text-align: center;
+        margin: 0;
   }
   #sidebar_menu .main-menu > li:last-child, #sidebar_menu .main-menu > li:nth-last-child(2){
       position: absolute;
@@ -864,6 +865,7 @@
         box-shadow: 0 0 10px -1px rgba(0, 0, 0, 0.5);
         right: 5px;
         bottom: 10px;
+        position: absolute;
   }
   #sidebar_menu .create-new{
         position: absolute;
@@ -1114,10 +1116,17 @@
   .school {
   	display: none;
   }
-  .add-status {
-  	margin-left:0px;
-  	margin-right:0px;
-  }
+
+    /* New Post */
+    .add-status {
+    	margin-left:0px;
+    	margin-right:0px;
+        right: 0;
+        top: 0;
+        width: 100%;
+    }
+    /* End */
+
   .nav-tabs > li {
   	width:25%;
   }
@@ -1252,11 +1261,6 @@
   }
   .horizontal-menu .bar .bar-inner > ul > li > .horizontal li {
     display: block;
-  }
-  .chat-window-wrapper {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s linear 0.5s,opacity 0.5s linear;
   }
 
   /* Login/Reigster/Form User */

@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="tab-content">
-        <aside class="col-md-4 no-padding">
+        <aside class="col-xs-4 no-padding">
             <div class="chat-window-wrapper">
                 <div id="main-chat-wrapper" class="inner-content">
                     <div class="scroll-wrapper chat-window-wrapper scroller scrollbar-dynamic" style="position: relative;">
@@ -48,12 +48,12 @@
                 </div>
             </div>
         </aside>
-        <div class="tab-pane active col-sm-8" id="tab_diary">
+        <div class="tab-pane active col-xs-8" id="tab_diary">
             <div class="row column-seperation">
                 <div class="col-md-12 no-padding">
                     <div class="message clearfix">
                         <div class="to-message">
-                            <label class="pull-left col-xs-1 text-right bold m-t-15">To</label>
+                            <label class="pull-left col-xs-1 text-right bold">To</label>
                             <select class="multiple-ruang col-xs-11" multiple ng-model="data.parent" ui-select2>
                                 <option ng-value="room._id" ng-repeat="(key, room) in receipents | orderBy:'name'" ng-bind="room.name"></option>
                             </select>

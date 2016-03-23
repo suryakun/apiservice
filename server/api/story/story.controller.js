@@ -197,7 +197,7 @@ exports.create = function(req, res) {
                             if (gcm_ids_group.length > 0) {
                                 sendGCM (gcm_ids_group, 'story', req.user._id, story._id);
                             };
-                        })
+                        });
                     }
 
                     function updateStoryToBeMine (story) {
@@ -355,7 +355,9 @@ exports.create = function(req, res) {
                                 });
                             };
 
-                            User.find({_id: { $in : dataDescription._parent }},"_id name email azure", function (err, parents) {
+                            var receiverEmail = dataDescription._parent;
+                            receiverEmail.push(req.user._id);
+                            User.find({_id: { $in : receiverEmail }},"_id name email azure", function (err, parents) {
                                 if (start_date !== '' && end_date !== '') {
                                     Azure.createCalendar(story._id, parents, start_date, end_date, dataDescription.info);
                                 };
@@ -368,7 +370,6 @@ exports.create = function(req, res) {
                                     description: dataDescription.info
                                 }
                                 Azure.sendMail(joinMail, text);
-
                             });
 
 
@@ -472,6 +473,19 @@ exports.create = function(req, res) {
                                         t.push(pgcm.gcm_id);
                                         sendGCM (t, 'story', req.user._id, story._id);
                                     });
+                                });
+
+                                var receiverEmail = Parents;
+                                receiverEmail.push(req.user._id);
+                                User.find({_id: { $in : receiverEmail }},"_id name email azure", function (err, parentsNew) {
+                                    var emails = _.pluck(parentsNew, "email");
+                                    var joinMail = emails.join();
+                                    var text = {
+                                        author: req.user.name,
+                                        avatar: 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
+                                        description: dataDescription.info
+                                    }
+                                    Azure.sendMail(joinMail, text);
                                 });
 
                             });
@@ -625,6 +639,19 @@ exports.create = function(req, res) {
                                 });
                             };
 
+                            var receiverEmail = _.pluck(parents, "_id");
+                            receiverEmail.push(req.user._id);
+                            User.find({_id: { $in : receiverEmail }},"_id name email azure", function (err, parents) {
+                                var emails = _.pluck(parents, "email");
+                                var joinMail = emails.join();
+                                var text = {
+                                    author: req.user.name,
+                                    avatar: 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
+                                    description: dataDescription.info
+                                }
+                                Azure.sendMail(joinMail, text);
+                            });
+
                         });
                     });
                 });
@@ -726,6 +753,19 @@ exports.create = function(req, res) {
                                         sendGCM (t, 'story', req.user._id, story._id);
                                     });
                                 });
+
+                                var receiverEmail = Parents;
+                                receiverEmail.push(req.user._id);
+                                User.find({_id: { $in : receiverEmail }},"_id name email azure", function (err, parents) {
+                                    var emails = _.pluck(parents, "email");
+                                    var joinMail = emails.join();
+                                    var text = {
+                                        author: req.user.name,
+                                        avatar: 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
+                                        description: dataDescription.info
+                                    }
+                                    Azure.sendMail(joinMail, text);
+                                });                                
 
                             });
                         });

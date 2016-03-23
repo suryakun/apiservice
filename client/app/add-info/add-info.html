@@ -58,6 +58,10 @@
                                 <option ng-value="room._id" ng-repeat="(key, room) in receipents | orderBy:'name'" ng-bind="room.name"></option>
                             </select>
                         </div>
+                        <div class="input-append date col-md-12 no-padding">
+                            <input type="text" placeholder="Date" class="form-control" datepicker-popup ng-model="date.model" is-open="date.opened" min-date="date.minDate" max-date="date.maxDate" datepicker-options="date.dateOptions" ng-required="true" show-button-bar="false"/>
+                            <span class="add-on" ng-click="open($event)"><span class="arrow"></span><i class="fa fa-th"></i></span>
+                        </div>
                         <textarea rows="5" class="form-control user-status-box post-input" placeholder="Post Info Here" ng-model="data.info"></textarea>
                         <section class="image-area clearfix">
                             <div ng-repeat="item in files">

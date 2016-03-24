@@ -1,5 +1,6 @@
 'use strict';
 angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compile', 'uiCalendarConfig', function($scope, $http, $compile, uiCalendarConfig) {
+    var calendar = null;
     $scope.eventsF = function(start, end, timezone, callback) {
         $scope.promise = $http.get('/api/users/get-my-calendar', {
             cache: false
@@ -31,7 +32,7 @@ angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compi
     };
     $scope.uiConfig = {
         calendar: {
-            height: 450,
+            height: 500,
             editable: false,
             header: {
                 left: 'prev,next today',
@@ -45,6 +46,14 @@ angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compi
         [], $scope.eventsF
     ];
     $scope.$on('info:created', function() {
-        console.log('cannot auto resfresh');
+        if (calendar) calendar.fullCalendar('refetchEvents');
     });
+    var deregister = $scope.$watch(function() {
+        return uiCalendarConfig.calendars;
+    }, function(newVal) {
+        if (newVal && newVal.calendar) {
+            calendar = newVal.calendar;
+            deregister();
+        }
+    }, true)
 }]);

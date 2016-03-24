@@ -212,8 +212,11 @@ exports.create = function(req, res) {
                 var dataDescription = {};
                 var filename = [];
                 var uniqid = Date.now();
-                var start_date = fields.start_date || '';
-                var end_date = fields.end_date || '';
+                var start_date = fields.start_date;
+                var end_date = fields.end_date;
+                console.log(fields);
+                console.log(">>> end "+ end_date);
+                console.log(">>> end "+ end_date);
 
                 dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
                 dataDescription.info = fields.info;
@@ -354,7 +357,7 @@ exports.create = function(req, res) {
                             var receiverEmail = dataDescription._parent;
                             receiverEmail.push(req.user._id);
                             User.find({_id: { $in : receiverEmail }},"_id name email azure", function (err, parents) {
-                                if (start_date !== '' && end_date !== '') {
+                                if (start_date && end_date) {
                                     Azure.createCalendar(story._id, parents, start_date, end_date, dataDescription.info);
                                 };
 

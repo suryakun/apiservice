@@ -45,11 +45,13 @@ angular.module('roomApp').controller('AddActivityCtrl', ['$modalInstance', '$sco
     var selectedReceipents = [];
     $scope.$watch('receipentIds', function(newValue) {
         selectedReceipents = [];
-        newValue.forEach(function(id) {
-            selectedReceipents.push(_.find($scope.receipents, {
-                _id: id
-            }));
-        });
+        if (newValue) {
+            newValue.forEach(function(id) {
+                selectedReceipents.push(_.find($scope.receipents, {
+                    _id: id
+                }));
+            });
+        }
     });
     $scope.onPostBtnClick = function(files) {
         $scope.data.cc = [];

@@ -50,15 +50,15 @@
         </aside>
         <div class="tab-pane active col-sm-8" id="tab_diary">
             <div class="row column-seperation">
-                <div class="col-md-12 no-padding">
+                <form class="col-md-12 no-padding" ng-submit="onPostBtnClick()">
                     <div class="message clearfix">
                         <div class="to-message">
                             <label class="pull-left col-xs-1 text-right bold m-t-15">To</label>
-                            <select class="multiple-ruang col-xs-11" multiple ng-model="data.parent" ui-select2>
+                            <select class="multiple-ruang col-xs-11" multiple required="true" ng-model="data.parent" ui-select2>
                                 <option ng-value="room._id" ng-repeat="(key, room) in receipents | orderBy:'name'" ng-bind="room.name"></option>
                             </select>
                         </div>
-                        <textarea rows="5" class="form-control user-status-box post-input" placeholder="Post Diary Here" ng-model="data.info"></textarea>
+                        <textarea rows="5" class="form-control user-status-box post-input" placeholder="Post Diary Here" required="true" ng-model="data.info"></textarea>
                         <section class="image-area clearfix">
                             <div ng-repeat="item in files">
                                 <div ng-thumb="{ file: item.file, height: 100 }"></div>
@@ -71,11 +71,11 @@
                             <label class="btn btn-default btn-sm btn-small upload-style" type="button"> <input type="file" multiple nv-file-select="" uploader="uploader" ngf-select="onFileSelect($files)"  accept="image/*"> <i class="fa fa-camera"></i></label>
                         </div>
                         <div class="pull-right">
-                            <button class="btn btn-primary btn-sm" type="button" ng-click="onPostBtnClick()">POST <i class="glyphicon glyphicon-send"></i></button>
+                            <button class="btn btn-primary btn-sm" type="submit">POST <i class="glyphicon glyphicon-send"></i></button>
                         </div>
                         <div class="clearfix"></div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

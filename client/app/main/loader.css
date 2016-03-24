@@ -1,8 +1,19 @@
+.cg-busy-backdrop {
+  opacity: 0 !important;
+}
+
+.busy-loader {
+  position: relative;;
+}
+
 .sk-circle {
-  margin: 100px auto;
   width: 40px;
   height: 40px;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  margin-top: -20px;
+  left: 50%;
+  margin-left: -20px;
 }
 .sk-circle .sk-child {
   width: 100%;

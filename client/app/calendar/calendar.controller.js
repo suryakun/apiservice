@@ -2,18 +2,18 @@
 angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compile', 'uiCalendarConfig', function($scope, $http, $compile, uiCalendarConfig) {
     var calendar = null;
     $scope.eventsF = function(start, end, timezone, callback) {
-        $scope.promise = $http.get('/api/users/get-my-calendar', {
+        $scope.promise = $http.get('/api/stories/get-events/' + start + '/' + end, {
             cache: false
         }).then(function(response) {
             var events = Array.prototype.map.call(response.data || [], function(event, idx) {
-                var start = new Date(event.calendar ? event.calendar.start.dateTime : event.createdAt),
-                    end = new Date(event.calendar ? event.calendar.end.dateTime : event.createdAt),
+                var start = new Date(event.start.dateTime),
+                    end = new Date(event.end.dateTime),
                     isAllDay = start.getTime() === end.getTime();
                 start.setHours(0, 0, 0);
                 end.setHours(23, 59, 59);
                 return {
-                    title: event.info,
-                    info: event.info,
+                    title: event.body.content,
+                    info: event.body.content,
                     start: start,
                     end: end,
                     allDay: isAllDay,

@@ -50,7 +50,7 @@ module.exports = function (grunt) {
     },
     open: {
       server: {
-        url: 'http://localhost:<%= express.options.port %>'
+        url: 'http://7pagi.dev:<%= express.options.port %>'
       }
     },
     watch: {

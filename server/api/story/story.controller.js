@@ -35,12 +35,8 @@ exports.index = function(req, res) {
 
 exports.getEvents = function (req, res) {
     User.findById(req.user._id).populate("_story", "calendar", {type:"info", calendar:{$ne:null}}).exec(function (err, call) {
-        var events = [];
-        _.each(call._story, function (story) {
-            events.push(story.calendar);
-        })
         if (err) res.status(500).send(err);
-        res.status(200).json(events);
+        res.status(200).json(_.map(call._story, 'calendar'));
     })
 }
 

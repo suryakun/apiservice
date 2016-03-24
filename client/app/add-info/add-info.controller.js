@@ -6,12 +6,13 @@ angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope',
             startingDay: 1
         },
         format: 'dd-MMMM-yyyy',
-        opened: false,
+        opened: [false, false],
         minDate: new Date(),
-        model: new Date()
+        startDate: new Date(),
+        endDate: new Date()
     };
-    $scope.open = function($event) {
-        $scope.date.opened = true;
+    $scope.open = function(idx) {
+        $scope.date.opened[idx] = true;
     };
     $scope.data = {
         type: 'info',
@@ -89,9 +90,11 @@ angular.module('roomApp').controller('AddInfoCtrl', ['$modalInstance', '$scope',
             }
         }
         $scope.data.cc = $scope.data.cc.toString();
-        if($scope.date.model) {
-            $scope.data.start_date = moment($scope.date.model).toISOString();
-            $scope.data.end_date = $scope.data.start_date;
+        if($scope.date.startDate) {
+            $scope.data.start_date = moment($scope.date.startDate).toISOString();
+        }
+        if($scope.date.endDate) {
+            $scope.data.end_date = moment($scope.date.endDate).toISOString();
         }
         Upload.upload({
             url: appConfig.baseAPIUrl + '/api/stories',

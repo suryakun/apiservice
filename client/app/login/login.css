@@ -924,6 +924,27 @@ input[type="search"], input[type="tel"], input[type="color"] {
 .margin-bottom-20 {
   margin-bottom: 20px;
 }
+.no-bg{background: none !important}
 
 .orange{color: #eb3c00;}
 .underline{text-decoration: underline}
+
+#login-page hr {
+  border-top: 1px solid #eee;
+  border-bottom: none;
+}
+#login-page .column-seperation > div[class*="col-"] {
+  border-right: none !important;
+  border-left: none !important;
+}
+
+.btn-area a{display: inline-block}
+.btn-o365{
+    background: #E83F24 !important;
+    padding: 2px 10px 2px 15px;
+    color: white;
+}
+.btn-o365:hover{
+    color: white;
+    opacity: .8;
+}

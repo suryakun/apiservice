@@ -8,8 +8,10 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
     //     email: 'denia@kidzpotentia.sch.id',
     //     password: 'teacher.denia'
     // };
+    $scope.responseCode = undefined;
     $scope.onFormSubmit = function(form) {
         if (form.$valid) {
+            $scope.responseCode = undefined;
             $scope.promise = appAuth.login($scope.data).then(function(response) {
                 appAuth.getMe().then(function(me) {
                     if (appAuth.data.role === 'teacher') {
@@ -21,7 +23,7 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
                     }
                 });
             }, function(response) {
-                console.log(response);
+                $scope.responseCode = response.status;
             });
         }
     };

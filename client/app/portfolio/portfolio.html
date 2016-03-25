@@ -21,7 +21,7 @@
     <div class="col-sm-5 no-padding">
         <h3><span class="semi-bold">Portfolio</span></h3>
     </div>
-    <div class="col-sm-7 album-filter">
+    <!-- <div class="col-sm-7 album-filter">
         <div class="pull-right">
             <ul class="nav nav-pills" id="tab-4">
                 <li class="active"><a href="javascript:void(0)">Name</a></li>
@@ -29,7 +29,7 @@
             </ul>
         </div>
         <div class="pull-right sort-by">Sort by:</div>
-    </div>
+    </div> -->
 </div>
 <div class="clear"></div>
 <div class="row">
@@ -52,7 +52,7 @@
             </div>
             <div class="grid-body no-border album">
                 <div class="photo Collage clearfix" collage-plus>
-                    <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-show="photo.url"><a><img ng-src="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
+                    <div class="work-masonry-thumb" ng-repeat="(key, photo) in story._photo" ng-show="photo.url"><a href="javascript:void(0)" ui-sref="main.portfolio-detail({id: story._id})"><img ng-src="{{ photo.url|apiFile:'story' }}" alt="" /></a></div>
                 </div>
                 <!-- <div class="tag">
                     <strong>Tags :</strong>

@@ -8,7 +8,12 @@ var Story = require('./story.model');
 
 exports.register = function(socket) {
   Story.schema.post('save', function (doc) {
-    onSave(socket, doc);
+    Story.populate(doc, {
+        path: "_teacher",
+        select: "name email avatar role",
+    }, function(err, story) {
+        onSave(socket, story);
+    });
   });
   Story.schema.post('remove', function (doc) {
     onRemove(socket, doc);

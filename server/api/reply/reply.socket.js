@@ -8,7 +8,17 @@ var Reply = require('./reply.model');
 
 exports.register = function(socket) {
   Reply.schema.post('save', function (doc) {
-    onSave(socket, doc);
+    Reply.populate(doc, {
+        path: "_teacher",
+        select: "name email avatar",
+    }, function(err, reply) {
+        Reply.populate(doc, {
+            path: "_parent",
+            select: "name email avatar",
+        }, function(err, reply) {
+            onSave(socket, reply);
+        });
+    });
   });
   Reply.schema.post('remove', function (doc) {
     onRemove(socket, doc);

@@ -11,52 +11,54 @@ var https = require('https');
 exports.createCalendar = function (story_id, receivers, start, end, description) {
     if (receivers.length > 0) {
         
-      var options = {
-        "start": {
-          "dateTime": start,
-          "timeZone": "Asia/Bangkok"
-        },
-        "end": {
-          "dateTime": end,
-          "timeZone": "Asia/Bangkok"
-        },
-        "body" : {"contentType": "text",
-                    "content": description},
-        "subject" : "7pagi update event",
-        "bodyPreview": description,
-        "reminderMinutesBeforeStart": 99,
-        "isReminderOn": true,
-      }
+        var options = {
+          "start": {
+            "dateTime": start,
+            "timeZone": "Asia/Bangkok"
+          },
+          "end": {
+            "dateTime": end,
+            "timeZone": "Asia/Bangkok"
+          },
+          "body" : {"contentType": "text",
+                      "content": description},
+          "subject" : "7pagi update event",
+          "bodyPreview": description,
+          "reminderMinutesBeforeStart": 99,
+          "isReminderOn": true,
+        }
 
         _.each(receivers, function (azureReceiver) {
             
             if (azureReceiver.azure) {
                 azureReceiver.refreshAzure(function (err, azure) {
-                    request.post({
-                        url: 'https://graph.microsoft.com/v1.0/me/calendar/events',
-                        headers: {
-                          'content-type': 'application/json',
-                          'authorization': 'Bearer ' + azure.access_token,
-                        },
-                        body: JSON.stringify(options)
-                    }, function (err, response, body) {
-                        if (err) {
-                          console.error('>>> Application error: ' + err);
-                        } else {
-                          var parsedBody = JSON.parse(body);
-                          var displayName = "surya";
-
-                          if (parsedBody.error) {
-                            if (parsedBody.error.code === 'RequestBroker-ParseUri') {
-                              console.error('>>> Error creating an event for ' + displayName  + '. Most likely due to this user having a MSA instead of an Office 365 account.');
+                    if (azure && azure.access_token) {
+                        request.post({
+                            url: 'https://graph.microsoft.com/v1.0/me/calendar/events',
+                            headers: {
+                              'content-type': 'application/json',
+                              'authorization': 'Bearer ' + azure.access_token,
+                            },
+                            body: JSON.stringify(options)
+                        }, function (err, response, body) {
+                            if (err) {
+                              console.error('>>> Application error: ' + err);
                             } else {
-                              console.error('>>> Error creating an event for ' + displayName  + '.' + parsedBody.error.message);
+                              var parsedBody = JSON.parse(body);
+                              var displayName = "surya";
+
+                              if (parsedBody.error) {
+                                if (parsedBody.error.code === 'RequestBroker-ParseUri') {
+                                  console.error('>>> Error creating an event for ' + displayName  + '. Most likely due to this user having a MSA instead of an Office 365 account.');
+                                } else {
+                                  console.error('>>> Error creating an event for ' + displayName  + '.' + parsedBody.error.message);
+                                }
+                              } else {
+                                console.log('>>> Successfully created an event on ' + displayName + "'s calendar.");
+                              }
                             }
-                          } else {
-                            console.log('>>> Successfully created an event on ' + displayName + "'s calendar.");
-                          }
-                        }
-                    });
+                        });
+                    }
                 })
             };
         })

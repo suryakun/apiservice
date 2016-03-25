@@ -8530,7 +8530,7 @@ ul.my-friends li .profile-pic {
 }
 
 .scrollbar-dynamic > .scroll-element.scroll-x{display: none;}
-.chat-window-wrapper .nav.nav-tabs{margin-top: 10px;margin-bottom: 5px;}
+.chat-window-wrapper .nav.nav-tabs{/*margin-top: 10px;*/ margin-bottom: 5px;}
 .chat-window-wrapper .nav.nav-tabs li{width: 50%; border-top: 1px solid #e6e7e8; border-bottom: 1px solid #e6e7e8; text-align: center;}
 .chat-window-wrapper .nav.nav-tabs li.active{border-bottom: 2px solid #40C4D0}
 .chat-window-wrapper .nav.nav-tabs li.active a{color: #40C4D0; font-weight: bold}

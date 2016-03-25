@@ -24,7 +24,7 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
             templateUrl: 'app/add-' + type + '/add-' + type + '.html',
             windowTemplateUrl: 'app/main/post-template.html',
             backdrop: false,
-            windowClass: 'add-status',
+            windowClass: 'add-status display-block',
             openedClass: 'none',
             controller: 'Add' + type.charAt(0).toUpperCase() + type.substr(1) + 'Ctrl'
         });

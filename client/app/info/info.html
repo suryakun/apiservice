@@ -8,7 +8,7 @@
                     <a class="muted m-t-5" href="javascript:void(0)">No info yet</a>
                 </td>
             </tr>
-            <tr ng-repeat="(key, story) in stories | orderBy:'-createdAt'">
+            <tr ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-click="$state.go('main.info-detail', { id: story._id})">
                 <td width="6%" class="clickable v-align-middle">
                     <div class="user-profile-pic-1x">
                         <img width="25" height="25" src="assets/img/profiles/bc.jpg" alt="" data-src="img/profiles/bc.jpg" data-src-retina="img/profiles/bc.jpg">
@@ -16,7 +16,7 @@
                 </td>
                 <td width="84%" class="clickable tablefull v-align-middle">
                     <h5 class="bold no-margin" ng-bind="story._teacher.name | capitalize">Teacher</h5>
-                    <a class="muted m-t-5" href="javascript:void(0)" ui-sref="main.info-detail({id: story._id})" ng-bind-html="story.info | nl2br"></a>
+                    <a class="muted m-t-5" ng-bind-html="story.info | nl2br"></a>
                 </td>
                 <td width="10%" class="clickable"><span class="muted text-right" am-time-ago="story.createdAt"></span></td>
 

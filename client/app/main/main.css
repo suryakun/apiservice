@@ -4,3 +4,7 @@
 .reduce-margin {
     margin-top: 20px !important;
 }
+.add-status .image-area {
+    max-height: 110px !important;
+    overflow-y: auto;
+}

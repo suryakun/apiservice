@@ -383,7 +383,19 @@ UserSchema.statics.getStoriesForParentWithFilter = function (id, params, callbac
                                 path: "_story._teacher",
                                 select: "name email avatar role",
                                 model: usr
-                            }, callback);
+                            }, function(err, popstory) {
+                                    Story.populate(story, {
+                                        path: "_story._class",
+                                        select: "name",
+                                        model: Classd
+                                    }, function (err, popstory) {
+                                        Story.populate(story, {
+                                            path: "_story._group",
+                                            select: "name",
+                                            model: Group
+                                        }, callback);
+                                    });
+                            });
                         });
                     });
                 });

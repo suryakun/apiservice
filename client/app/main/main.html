@@ -46,41 +46,12 @@
                                         </div>
                                     </div>
                                     <section class="pull-right">
-                                        <ul class="nav quick-section ">
+                                        <ul class="nav quick-section" ng-controller="NotificationController">
                                             <li class="quicklinks">
-                                                <a data-toggle="dropdown" id="message-trigger" data-placement="bottom" class="dropdown-toggle  pull-right" href="javascript:void(0)" popover-placement="bottom" popover-trigger="click" popover-template="'myPopoverTemplate.html'" popover-animation="false" popover-popup-delay="0" popover-is-open="notificationOpened">
+                                                <a data-toggle="dropdown" id="message-trigger" data-placement="bottom" class="dropdown-toggle  pull-right" href="javascript:void(0)" popover-placement="bottom" popover-trigger="click" popover-template="'app/main/notification-template.html'" popover-animation="false" popover-popup-delay="0" popover-is-open="notificationOpened">
                                                     <i class="fa fa-comment">&nbsp;</i>
                                                     <span class="badge badge-important animated bounceIn" id="chat-message-count" ng-bind="unreadCount" ng-if="unreadCount > 0">0</span>
                                                 </a>
-
-                                                <!-- <div id="message-list" style="display:none"> -->
-                                                <script type="text/ng-template" id="myPopoverTemplate.html">
-                                                    <div class="notification-messages" ng-repeat="story in unreadStory">
-                                                        <div class="user-profile"> <img src="assets/img/profiles/d.jpg" alt="" data-src="assets/img/profiles/d.jpg" data-src-retina="assets/img/profiles/d2x.jpg" width="35" height="35"> </div>
-                                                        <div class="message-wrapper" style="width: 90%">
-                                                            <div class="heading">
-                                                                David Nester - Commented on your wall
-                                                            </div>
-                                                            <div class="description">
-                                                                Meeting postponed to tomorrow
-                                                            </div>
-                                                            <div class="date pull-left">
-                                                                A min ago
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                                    <div class="notification-messages" ng-if="!unreadStory || !unreadStory.length">
-                                                        <div class="message-wrapper" style="width: 100%">
-                                                            <div class="description">
-                                                                You have no pending notification yet
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                                </script>
-                                                <!-- </div> -->
-
                                             </li>
                                         </ul>
                                     </section>

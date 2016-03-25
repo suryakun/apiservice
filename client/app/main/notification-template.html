@@ -1,0 +1,28 @@
+<div style="min-width: 300px">
+    <div class="notification-messages" ng-repeat="story in unreadStory" ng-click="gotoDetail(story)">
+        <div class="user-profile" >
+            <img ng-src="{{ story._teacher.avatar ? (story._teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg'}}" alt="" width="35" height="35"/>
+        </div>
+        <div class="message-wrapper">
+            <div class="heading">
+                <span ng-bind="story._teacher.name"></span>
+                Posting
+                <span ng-bind="story.type | capitalize"></span>
+            </div>
+            <div class="description" ng-bind="story.info">
+            </div>
+            <div class="date pull-left" am-time-ago="story.createdAt"></div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+    <div class="notification-messages" ng-if="!unreadStory || !unreadStory.length">
+        <div class="message-wrapper" style="width: 100%">
+            <div class="description">
+                You have no pending notification yet
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$state', '$modal', '$modalStack', 'socket', '$rootScope', function($scope, appAuth, $state, $modal, $modalStack, socket, $rootScope) {
+angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$state', '$modal', '$modalStack', 'socket', function($scope, appAuth, $state, $modal, $modalStack, socket) {
     // Method
     $scope.createType = null;
     $scope.onPostNewClick = function() {
@@ -39,11 +39,29 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
             });
         }
     }
-    // Listeners
+    $scope.$on('$stateChangeSuccess', function(event) {
+        $('.create-new').hide(350);
+    });
+    $scope.$on('$viewContentLoaded', function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 100) {
+                $('.scrollup').fadeIn();
+            } else {
+                $('.scrollup').fadeOut();
+            }
+        });
+    });
+    $scope.scrollTop = function() {
+        $("html, body").animate({
+            scrollTop: 0
+        }, 700);
+    };
+}]).controller('NotificationController', ['$scope', 'appAuth', '$state', 'socket', '$rootScope', function($scope, appAuth, $state, socket, $rootScope) {
     $scope.notificationOpened = false;
     $scope.unreadCount = 0;
     $scope.unreadStory = [];
     socket.socket.on('story:save', function(data) {
+        console.info('story:save', data);
         // Untuk membedakan event ketika baru dan update
         if (+new Date(data.createdAt) === +new Date(data.updatedAt)) {
             if (appAuth.data.role === 'parent' && data._parent.indexOf(appAuth.data.id) !== -1) {
@@ -67,21 +85,23 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
     });
     $scope.$on('$stateChangeSuccess', function(event) {
         $scope.notificationOpened = false;
-        $('.create-new').hide(350);
     });
-    $scope.$on('$viewContentLoaded', function() {
-        $(window).scroll(function() {
-            if ($(this).scrollTop() > 100) {
-                $('.scrollup').fadeIn();
-            } else {
-                $('.scrollup').fadeOut();
-            }
-        });
-    });
-    $scope.scrollTop = function() {
-        $("html, body").animate({
-            scrollTop: 0
-        }, 700);
+    $scope.gotoDetail = function(story) {
+        if (story.type === 'info') {
+            $state.go('main.info-detail', {
+                id: story._id
+            });
+        } else if (story.type === 'portfolio') {
+            $state.go('main.portfolio-detail', {
+                id: story._id
+            });
+        } else {
+            $state.go('main.comment-detail', {
+                id: story._id
+            });
+        }
+        --$scope.unreadCount;
+        _.remove($scope.unreadStory, {_id: story._id});
     };
 }]).controller('UpdateProfilePict', ['$scope', 'Upload', '$timeout', 'socket', function($scope, Upload, $timeout, socket) {
     $scope.temp = null;

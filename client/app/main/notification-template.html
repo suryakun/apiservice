@@ -1,5 +1,5 @@
 <div style="min-width: 300px">
-    <div class="notification-messages" ng-repeat="story in unreadStory" ng-click="gotoDetail(story)">
+    <div class="notification-messages" ng-repeat="story in (unreadStory | orderBy:createdAt:true | limitTo:5)" ng-click="gotoDetail(story)">
         <div class="user-profile" >
             <img ng-src="{{ story._teacher.avatar ? (story._teacher.avatar|apiFile:'avatar') : 'assets/img/profiles/bc.jpg'}}" alt="" width="35" height="35"/>
         </div>

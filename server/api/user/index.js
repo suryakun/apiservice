@@ -38,7 +38,7 @@ router.put('/update-teacher/:id', auth.hasRole(['admin']), controller.updateTeac
 
 router.get('/get-moderators/:id', auth.hasRole(['admin']), controller.getModerator);
 
-router.get('/get-my-calendar', auth.hasRole(['teacher','parent','admin']), controller.getCalendarOfUser);
+router.get('/unread-stories', auth.hasRole(['teacher','parent','admin']), controller.getUnread);
 
 router
   .get('/azure', passport.authenticate('azureoauthuser', {

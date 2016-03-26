@@ -424,11 +424,32 @@ exports.getModerator = function (req, res) {
     });
 }
 
-exports.getCalendarOfUser = function (req, res) {
-    Story.getInfoByUser(req.user._id, function (err, info) {
+exports.getUnread = function (req, res) {
+    User.findById(req.user._id).populate({
+        path: '_story',
+        select: 'type info createdAt updatedAt _teacher _readed'
+    }).exec(function (err, user) {
         if(err) { return handleError(res, err); }
-        if(!info) { return res.status(404).send('Not Found'); }
-        res.status(200).json(info._story); 
+        if(!user) { return res.status(404).send('Not Found'); }
+        Story.populate(user, {
+            path: '_story._teacher',
+            select: 'name role',
+            model: User
+        }, function(err, user) {
+            var stories = user._story,
+                total = stories.length;
+            stories = stories.filter(function(story){
+                return story._teacher._id !== req.user._id &&  story._readed && story._readed.indexOf(req.user._id) === -1;
+            });
+            stories = stories.sort(function(a, b){
+                return new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime();
+            });
+            res.status(200).json({
+                total: total,
+                count: stories.length,
+                data: stories
+            }); 
+        });
     });
 }
 

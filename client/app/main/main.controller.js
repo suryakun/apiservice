@@ -56,36 +56,18 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
             scrollTop: 0
         }, 700);
     };
-}]).controller('NotificationController', ['$scope', 'appAuth', '$state', 'socket', '$rootScope', function($scope, appAuth, $state, socket, $rootScope) {
+}]).controller('NotificationController', ['$scope', 'appAuth', '$state', 'socket', '$rootScope', '$http', function($scope, appAuth, $state, socket, $rootScope, $http) {
     $scope.notificationOpened = false;
     $scope.unreadCount = 0;
     $scope.unreadStory = [];
-    socket.socket.on('story:save', function(data) {
-        console.info('story:save', data);
-        // Untuk membedakan event ketika baru dan update
-        if (+new Date(data.createdAt) === +new Date(data.updatedAt)) {
-            if (appAuth.data.role === 'parent' && data._parent.indexOf(appAuth.data.id) !== -1) {
-                ++$scope.unreadCount;
-                $scope.unreadStory.push(data);
-            } else if (appAuth.data.role === 'teacher' && data._cc.indexOf(appAuth.data.id) !== -1) {
-                ++$scope.unreadCount;
-                $scope.unreadStory.push(data);
-            }
-            $rootScope.$broadcast(data.type + ':created', true);
-        }
-    });
-    socket.socket.on('reply:save', function(data) {
-        if (appAuth.data.role === 'parent' && data._parent !== appAuth.data.id) {
-            ++$scope.unreadCount;
-            $scope.unreadStory.push(data);
-        } else if (appAuth.data.role === 'teacher' && data._teacher !== appAuth.data.id) {
-            ++$scope.unreadCount;
-            $scope.unreadStory.push(data);
-        }
-    });
-    $scope.$on('$stateChangeSuccess', function(event) {
-        $scope.notificationOpened = false;
-    });
+    var getData = function() {
+        $scope.promise = $http.get('/api/users/unread-stories', {
+            cache: false
+        }).then(function(response) {
+            $scope.unreadCount = response.data.count;
+            $scope.unreadStory = response.data.data;
+        });
+    };
     $scope.gotoDetail = function(story) {
         if (story.type === 'info') {
             $state.go('main.info-detail', {
@@ -100,9 +82,41 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
                 id: story._id
             });
         }
-        --$scope.unreadCount;
-        _.remove($scope.unreadStory, {_id: story._id});
     };
+    $scope.$on('$stateChangeSuccess', function(event) {
+        $scope.notificationOpened = false;
+    });
+    socket.socket.on('story:save', function(data) {
+        // console.info('story:save', data);
+        // Untuk membedakan event ketika baru dan update
+        if (+new Date(data.createdAt) === +new Date(data.updatedAt)) {
+            if (appAuth.data.role === 'parent' && data._parent.indexOf(appAuth.data.id) !== -1) {
+                ++$scope.unreadCount;
+                $scope.unreadStory.push(data);
+            } else if (appAuth.data.role === 'teacher' && data._cc.indexOf(appAuth.data.id) !== -1) {
+                ++$scope.unreadCount;
+                $scope.unreadStory.push(data);
+            }
+            $rootScope.$broadcast(data.type + ':created', true);
+        }
+    });
+    // socket.socket.on('reply:save', function(data) {
+    //     if (appAuth.data.role === 'parent' && data._parent !== appAuth.data.id) {
+    //         ++$scope.unreadCount;
+    //         $scope.unreadStory.push(data);
+    //     } else if (appAuth.data.role === 'teacher' && data._teacher !== appAuth.data.id) {
+    //         ++$scope.unreadCount;
+    //         $scope.unreadStory.push(data);
+    //     }
+    // });
+    // Listener for update notification readed
+    $scope.$on('story:readed', function(event, story){
+        if(_.find($scope.unreadStory, {_id: story._id})) {
+            _.remove($scope.unreadStory, {_id: story._id});
+            --$scope.unreadCount;
+        }
+    });
+    getData();
 }]).controller('UpdateProfilePict', ['$scope', 'Upload', '$timeout', 'socket', function($scope, Upload, $timeout, socket) {
     $scope.temp = null;
     $scope.onFileSelect = function(files) {

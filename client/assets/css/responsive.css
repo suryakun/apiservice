@@ -219,7 +219,7 @@
     width: 420px;
   }
   /* end */
-  
+
   .horizontal-menu .page-content {
     margin-left: 0px;
   }
@@ -228,7 +228,6 @@
   }
   /*** Body ***/
   body {
-    background-color: #0aa699;
     padding-top: 0px;
   }
   .page-sidebar.opened {
@@ -517,6 +516,7 @@
   /*** Page content ***/
   .page-content {
     margin-top: 0px;
+    padding-bottom: 75px;
     min-height: 100%;
   }
   .page-content .content {
@@ -799,8 +799,8 @@
 }
 @media (max-width: 768px) {
   /* 7pagi custom */
-  .cover-pic-wrapper{
-      max-height: 130px;
+  .cover-pic-wrapper, #email-list{
+      margin-top: 70px;
   }
   .page-content .content{
     padding-top: 135px
@@ -808,16 +808,90 @@
   .header .menu-bar .quick-section{
     margin-top: 17px;
   }
-  .page-content .content aside{
+  .page-content .content aside#sidebar_menu{
     position: fixed;
-    top: 110px;
     left: 0px;
     z-index: 100;
     padding: 0;
-    height: 100%;
-    background-color: rgba(48, 43, 43, 0.41);
     width: 100%;
+    background: white;
+    top: 60px;
+    padding-top: 10px;
+    box-shadow: 0 0 5px #EDEDED;
   }
+
+  .cbp_tmtimeline > li .cbp_tmlabel{
+      margin: 0;
+  }
+
+  .header .menu-bar{
+      box-shadow: none;
+  }
+
+  #sidebar_menu .main-menu > li{
+        float: left;
+        padding: 0 13px;
+        text-align: center;
+        margin: 0;
+  }
+  #sidebar_menu .main-menu > li:last-child, #sidebar_menu .main-menu > li:nth-last-child(2){
+      position: absolute;
+      width: auto;
+  }
+  #sidebar_menu .main-menu > li.separator{
+      display: none;
+  }
+  #sidebar_menu .main-menu > li:last-child{
+      right: 0;
+  }
+  #sidebar_menu .main-menu > li:nth-last-child(2){
+      right: 40px;
+  }
+
+  /* Floating add new post button */
+  #sidebar_menu .main-menu > li:first-child{
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      width: 200px;
+  }
+  #sidebar_menu .create-new li a i{
+      box-shadow: 0 0 10px -1px rgba(0, 0, 0, 0.5);
+  }
+  #sidebar_menu .main-menu > li:first-child button{
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0 0 10px -1px rgba(0, 0, 0, 0.5);
+        right: 5px;
+        bottom: 10px;
+        position: absolute;
+  }
+  #sidebar_menu .create-new{
+        position: absolute;
+        border: none;
+        padding: 0 20px;
+        right: 0;
+        width: 100%;
+        bottom: 70px;
+  }
+  #sidebar_menu .create-new li{
+      text-align: right;
+  }
+  #sidebar_menu .create-new li a span{
+        position: absolute;
+        right: 50px;
+        white-space: nowrap;
+        box-shadow: 0 0 7px -1px rgba(0, 0, 0, 0.3);
+        top: 15px;
+        margin-right: 10px;
+  }
+  #sidebar_menu .main-menu > li a{
+      position: relative;
+      font-weight: 400;
+  }
+  /* End */
+
   .page-content .content aside .tiles.white{
     border-radius: 0;
     width: 280px;
@@ -837,14 +911,11 @@
   .cbp_tmtimeline:before{
     right: 48px;
   }
-  .cbp_tmtimeline > li .cbp_tmlabel{
-     margin: 0 15% 15px 0;
-  }
   .cbp_tmlabel .photo{
     width: 93%;
   }
   .header .menu-bar{
-      height: 110px;
+      height: auto;
   }
   .menu-bar > .container > .pull-left{
     position: absolute;
@@ -879,8 +950,9 @@
   .header .chat-toggler{
     min-width: 50px;
   }
-  .header .chat-toggler > a .bold{display: none}
-  .header .chat-toggler > a{font-size: 0; color: transparent}
+  .header .chat-toggler > a span, .header-identity span{
+      display: none;
+  }
   .header .chat-toggler .profile-pic{
     margin-top: 3px;
     height: 25px;
@@ -1044,10 +1116,17 @@
   .school {
   	display: none;
   }
-  .add-status {
-  	margin-left:0px;
-  	margin-right:0px;
-  }
+
+    /* New Post */
+    .add-status {
+    	margin-left:0px;
+    	margin-right:0px;
+        right: 0;
+        top: 0;
+        width: 100%;
+    }
+    /* End */
+
   .nav-tabs > li {
   	width:25%;
   }
@@ -1183,11 +1262,23 @@
   .horizontal-menu .bar .bar-inner > ul > li > .horizontal li {
     display: block;
   }
-  .chat-window-wrapper {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s linear 0.5s,opacity 0.5s linear;
+
+  /* Login/Reigster/Form User */
+  .login-container{
+      margin-top: 20px;
   }
+  .column-seperation > div[class*="col-"]{
+      border: none;
+  }
+  .login-footer{
+      position: relative;
+      margin-top: 60px;
+      text-align: center;
+  }
+  .login-footer > div{
+      padding: 0;
+  }
+  /* END */
 }
 /*** Phones ***/
 @media (max-width: 480px) {
@@ -1418,7 +1509,7 @@
   }
   .header .nav > li.dropdown .dropdown-toggle {
     padding-left: 8px !important;
-    padding-right: 8px !important; 
+    padding-right: 8px !important;
   }
   .cbp_tmtimeline > li .cbp_tmlabel, .cbp_tmlabel .post-content > p, .cbp_tmlabel .post-content > a{
     margin: 0;
@@ -1581,6 +1672,15 @@
     position: absolute;
     margin-right: 15px;
   }
+  /* History */
+  #sidebar_menu{
+      padding: 0;
+  }
+  #sidebar_menu .main-menu > li a{
+      padding: 10px 0;
+      margin-right: 0;
+  }
+  /* End */
 }
 /* Portrait view of all tablet devices */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {

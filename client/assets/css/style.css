@@ -4315,7 +4315,6 @@ form legend,
 .select2-container-multi .select2-choices {
   background-image: none;
   border: none !important;
-  margin-top: 10px;
 }
 .select2-container-multi .select2-choices .select2-search-choice {
   background-color:#40C4D0;
@@ -8263,7 +8262,7 @@ input[type="checkbox"] {
   border-radius: 0;  font-size: 12px;font-weight:400;}
 .add-status .nav-tabs>li.active>a{  border-right: none;box-shadow: none;background: none;color: #505458;padding-top: 12px;  border-radius: 0;}
 .add-status .message textarea, .add-status .message input{border-top: 1px solid rgba(0, 0, 0, 0.07); border-right: none !important;border-bottom: none !important;border-left: none !important; border-radius: 0}
-.add-status .message textarea{border-radius: 0;border-top: none;}
+.add-status .message textarea{border-radius: 0;}
 .add-status .message input.big-text{
     font-size: 22px;
     height: 46px;
@@ -8272,6 +8271,10 @@ input[type="checkbox"] {
 }
 .add-status .tiles.grey{color: grey}
 .add-status .message textarea{height: 300px;}
+.add-status .message{
+    height: 470px;
+    position: relative;
+}
 .add-status .message textarea:focus{background: white}
 .add-status .message em{  margin-top: 10px;position: relative;display: inline-block;}
 .add-status .message label{  line-height: 38px;}
@@ -8310,7 +8313,10 @@ input[type="checkbox"] {
 .add-status .image-area{
     background-color: #F3F3F4;
     padding: 10px;
-    padding-bottom: 0
+    padding-bottom: 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 .add-status .image-area > div{
     float: left;
@@ -8530,11 +8536,11 @@ ul.my-friends li .profile-pic {
 }
 
 .scrollbar-dynamic > .scroll-element.scroll-x{display: none;}
-.chat-window-wrapper .nav.nav-tabs{/*margin-top: 10px;*/ margin-bottom: 5px;}
+.chat-window-wrapper .nav.nav-tabs{margin-bottom: 5px;}
 .chat-window-wrapper .nav.nav-tabs li{width: 50%; border-top: 1px solid #e6e7e8; border-bottom: 1px solid #e6e7e8; text-align: center;}
 .chat-window-wrapper .nav.nav-tabs li.active{border-bottom: 2px solid #40C4D0}
 .chat-window-wrapper .nav.nav-tabs li.active a{color: #40C4D0; font-weight: bold}
-.chat-window-wrapper .nav.nav-tabs li a{padding: 8px 10px;}
+.chat-window-wrapper .nav.nav-tabs li a{padding: 12px 10px;}
 .scroll-wrapper > .scroll-content{width: 100% !important;}
 /* end */
 

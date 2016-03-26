@@ -948,3 +948,7 @@ input[type="search"], input[type="tel"], input[type="color"] {
     color: white;
     opacity: .8;
 }
+.login-footer{
+    position: absolute;
+    bottom: 0;
+}

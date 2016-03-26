@@ -388,22 +388,22 @@ exports.create = function(req, res) {
                 User.findById(req.user._id).exec(function (err, user) {
                     User.find({_id : { $in : Parents }}, function (err, parents) {
 
-                        _.each(parents, function (parent, index) {
+                        // _.each(parents, function (parent, index) {
 
                             dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
                             dataDescription.info = fields.info;
                             dataDescription.type = fields.type;
                             dataDescription.active = true;
-                            dataDescription._parent = [];
+                            dataDescription._parent = Parents;
                             dataDescription._photo = [];
 
                             var filename = [];
                             Story.create(dataDescription, function (err, story) {
                                 
-                                Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
-                                    if (err) console.log(err);
-                                    console.log(ok);
-                                });
+                                // Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
+                                //     if (err) console.log(err);
+                                //     console.log(ok);
+                                // });
                                 
                                 var Filekeys = Object.keys(files);
                                 if (Filekeys.length > 0) {
@@ -465,13 +465,15 @@ exports.create = function(req, res) {
                                     console.log(ok);
                                 });
                                 
-                                User.findById(parent._id, function (err, p) {
+                                _.each(Parents, function(_id) {
+                                User.findById(_id, function (err, p) {
                                     p._story.push(story._id);
                                     p.save(function (err, pgcm) {
                                         var t = [];                                    
                                         t.push(pgcm.gcm_id);
                                         sendGCM (t, 'story', req.user._id, story._id);
                                     });
+                                });
                                 });
 
                                 var receiverEmail = Parents;
@@ -488,7 +490,7 @@ exports.create = function(req, res) {
                                 });
 
                             });
-                        });
+                        // });
                         return res.send({message: 'ok'});
                     });
                 });
@@ -667,22 +669,22 @@ exports.create = function(req, res) {
                 User.findById(req.user._id).exec(function (err, user) {
                     User.find({_id : { $in : Parents }}, function (err, parents) {
 
-                        _.each(parents, function (parent, index) {
+                        // _.each(parents, function (parent, index) {
 
                             dataDescription._teacher = mongoose.Types.ObjectId(req.user._id);
                             dataDescription.info = fields.info;
                             dataDescription.type = fields.type;
                             dataDescription.active = true;
-                            dataDescription._parent = [];
+                            dataDescription._parent = Parents;
                             dataDescription._photo = [];
 
                             var filename = [];
                             Story.create(dataDescription, function (err, story) {
                                 
-                                Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
-                                    if (err) console.log(err);
-                                    console.log(ok);
-                                });
+                                // Story.update({_id: story._id}, {$push: {_parent: parent._id}}, {multi:false}, function (err, ok) {
+                                //     if (err) console.log(err);
+                                //     console.log(ok);
+                                // });
                                 
                                 var Filekeys = Object.keys(files);
                                 if (Filekeys.length > 0) {
@@ -744,13 +746,15 @@ exports.create = function(req, res) {
                                     console.log(ok);
                                 });
                                 
-                                User.findById(parent._id, function (err, p) {
+                                _.each(Parents, function(_id, index) {
+                                User.findById(_id, function (err, p) {
                                     p._story.push(story._id);
                                     p.save(function (err, pgcm) {
                                         var t = [];                                    
                                         t.push(pgcm.gcm_id);
                                         sendGCM (t, 'story', req.user._id, story._id);
                                     });
+                                });
                                 });
 
                                 var receiverEmail = Parents;
@@ -767,7 +771,7 @@ exports.create = function(req, res) {
                                 });                                
 
                             });
-                        });
+                        // });
                         return res.send({message: 'ok'});
                     });
                 });

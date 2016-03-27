@@ -112,7 +112,6 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
     // Listener for update notification readed
     $scope.$on('story:read', function(event, story){
         if(_.find($scope.unreadStory, {_id: story._id})) {
-            console.log(story);
             (function() {
                 $scope.promise = $http.post('/api/stories/read-story', {
                     story_id: story._id,

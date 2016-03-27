@@ -8,7 +8,7 @@
                     <a class="muted m-t-5" href="javascript:void(0)">No info yet</a>
                 </td>
             </tr>
-            <tr ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-click="$state.go('main.info-detail', { id: story._id})">
+            <tr ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-click="$state.go('main.info-detail', { id: story._id})" ng-class="{unread: story._readed.indexOf(appAuth.profile._id) === -1}">
                 <td width="6%" class="clickable v-align-middle">
                     <div class="user-profile-pic-1x">
                         <img width="25" height="25" src="assets/img/profiles/bc.jpg" alt="" data-src="img/profiles/bc.jpg" data-src-retina="img/profiles/bc.jpg">

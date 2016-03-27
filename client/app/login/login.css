@@ -181,7 +181,7 @@ blockquote small{
 }
 
 .login-container{
-    margin-top:13%;
+    margin-top:100px;
 }
 
 .form-group {
@@ -930,7 +930,7 @@ input[type="search"], input[type="tel"], input[type="color"] {
 .underline{text-decoration: underline}
 
 #login-page hr {
-  border-top: 1px solid #eee;
+  border-top: 1px solid #dedede;
   border-bottom: none;
 }
 #login-page .column-seperation > div[class*="col-"] {

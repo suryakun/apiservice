@@ -1,19 +1,7 @@
 'use strict';
-angular.module('roomApp').controller('CommentDetailCtrl', ['$scope', 'storyDetailHttp', '$http', 'socket', '$state', '$rootScope', 'appAuth', function($scope, storyDetailHttp, $http, socket, $state, $rootScope, appAuth) {
+angular.module('roomApp').controller('CommentDetailCtrl', ['$scope', 'storyDetailHttp', '$http', 'socket', '$state', '$rootScope', function($scope, storyDetailHttp, $http, socket, $state, $rootScope) {
     $scope.story = storyDetailHttp.data[0];
-    (function() {
-        $scope.promise = $http.post('/api/stories/read-story', {
-            cache: false,
-            data: {
-                story_id: $scope.story._id,
-                user_id: appAuth.profile._id
-            }
-        }).then(function(response) {
-            $rootScope.$broadcast('story:readed', $scope.story);
-            $scope.story.reply = response.data;
-        });
-    })();
-    $rootScope.$broadcast('story:readed', $scope.story);
+    $rootScope.$broadcast('story:read', $scope.story);
     $scope.getReply = function(story) {
         $scope.promise = $http.get('/api/stories/' + story._id + '/replies', {
             cache: false

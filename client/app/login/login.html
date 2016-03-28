@@ -1,18 +1,23 @@
 <div id="login-page" class="container">
     <div class="row login-container column-seperation">
-        <div class="col-md-5 col-md-offset-1">
+        <div class="col-md-6 col-md-offset-1">
             <h2>Communication platform for school</h2>
-            <p>7Pagi is  a School's Private Media that can be used by Teachers and Parents. 7Pagi helps The Teacher to send school's information about kids to the Parent. To get a Sign in account, please contact the school administrator, or you can register your school via email to halo@7Pagi.com. 
-              <br />To try 7Pagi Applications, please login through Office 365 using this account:</p>
+            <p>7Pagi is  a School's Private Media that can be used by Teachers and Parents. 7Pagi helps The Teacher to send school's information about kids to the Parent. To get a Sign in account, please contact the school administrator, or you can register your school via email to <a href="mailto:halo@7Pagi.com">halo@7Pagi.com</a>.
 
-            <p><strong>Teacher's Account</strong>
-            <br/>Username : teacher@7Pagi.com
-            <br/>Password : 7Pagi123</p>
+              <br /><br />To try 7Pagi Applications, please login through Office 365 using this account:</p>
 
-            <p><strong>Parent's Account</strong>
-            <br/>Username : parent@7Pagi.com
-            <br/>Password : 7Pagi123</p>
-
+            <div class="row">
+                <div class="col-xs-5">
+                    <p><strong>Teacher's Account</strong>
+                    <br/>Username : teacher@7Pagi.com
+                    <br/>Password : 7Pagi123</p>
+                </div>
+                <div class="col-xs-6">
+                    <p><strong>Parent's Account</strong>
+                    <br/>Username : parent@7Pagi.com
+                    <br/>Password : 7Pagi123</p>
+                </div>
+            </div>
         </div>
         <div class="col-md-5 " cg-busy="promise"> <br />
             <form id="form-login" name="form" class="animated fadeIn" ng-submit="onFormSubmit(form)">
@@ -35,9 +40,9 @@
                           <div class="input-with-icon  right">
                             <i class=""></i>
                                 <input  type='password' name='password' value=''  class="form-control" placeholder="Password" ng-model="data.password" required>
-                                <p class="help-block text-warning animated fadeIn" ng-if="responseCode == 401"><em>Username or Password not valid</em></p>
-                                <p class="help-block text-warning animated fadeIn" ng-if="responseCode > 401"><em>Server Error</em></p>
-                                <p class="help-block text-warning animated fadeIn" ng-if="responseCode <= 0"><em>Unknown error</em></p>
+                                <p class="help-block text-error animated fadeIn" ng-if="responseCode == 401"><em>Username or Password not valid</em></p>
+                                <p class="help-block text-error animated fadeIn" ng-if="responseCode > 401"><em>Server Error</em></p>
+                                <p class="help-block text-error animated fadeIn" ng-if="responseCode <= 0"><em>Unknown error</em></p>
                           </div>
                         </div>
                     </div>

@@ -8,3 +8,6 @@
     max-height: 110px !important;
     overflow-y: auto;
 }
+.unread, tr.unread > td {
+    background-color: #e2e8eb !important;
+}

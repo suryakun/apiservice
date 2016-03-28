@@ -140,7 +140,7 @@ exports.create = function(req, res) {
                         var Filekeys = Object.keys(files);
                         if (Filekeys.length > 0) {
                             _.each(Filekeys, function (file, index) {
-                                var name = uniqid + files[file]['name'];
+                                var name = uniqid + files[file]['name'].replace(/ /g,"_");
                                 var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/original");
                                 var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
                                 var targetthumb = paththumb + '/' + name;
@@ -260,7 +260,7 @@ exports.create = function(req, res) {
                             var Filekeys = Object.keys(files);
                             if (Filekeys.length > 0) {
                                 _.each(Filekeys, function (file, index) {
-                                    var name = uniqid + files[file]['name'];
+                                    var name = uniqid + files[file]['name'].replace(/ /g,"_");
                                     var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/original");
                                     var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
                                     var targetthumb = paththumb + '/' + name;
@@ -361,14 +361,18 @@ exports.create = function(req, res) {
                                     Azure.createCalendar(story._id, parents, start_date, end_date, dataDescription.info);
                                 };
 
-                                var emails = _.pluck(parents, "email");
-                                var joinMail = emails.join();
-                                var text = {
-                                    author: req.user.name,
-                                    avatar: 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
-                                    description: dataDescription.info
-                                }
-                                Azure.sendMail(joinMail, text);
+                                Story.findById(story._id).populate("_photo").exec(function (err, stphoto) {
+                                    var pic = (stphoto._photo.length > 0) ? "http://web.7pagi.com:8080/upload/story/" + stphoto._photo[0]['thumb'] : "#";
+                                    var emails = _.pluck(parents, "email");
+                                    var joinMail = emails.join();
+                                    var text = {
+                                        author: req.user.name,
+                                        avatar: (req.user.avatar) ? 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar : "https://www.mautic.org/media/images/default_avatar.png",
+                                        description: dataDescription.info,
+                                        pic: pic
+                                    }
+                                    Azure.sendMail(joinMail, text);
+                                })
                             });
 
 
@@ -408,7 +412,7 @@ exports.create = function(req, res) {
                                 var Filekeys = Object.keys(files);
                                 if (Filekeys.length > 0) {
                                     _.each(Filekeys, function (file, index) {
-                                        var name = uniqid + files[file]['name'];
+                                        var name = uniqid + files[file]['name'].replace(/ /g,"_");
                                         var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/original");
                                         var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
                                         var targetthumb = paththumb + '/' + name;
@@ -479,15 +483,20 @@ exports.create = function(req, res) {
                                 var receiverEmail = Parents;
                                 receiverEmail.push(req.user._id);
                                 User.find({_id: { $in : receiverEmail }},"_id name email azure", function (err, parentsNew) {
-                                    var emails = _.pluck(parentsNew, "email");
-                                    var joinMail = emails.join();
-                                    var text = {
-                                        author: req.user.name,
-                                        avatar: 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
-                                        description: dataDescription.info
-                                    }
-                                    Azure.sendMail(joinMail, text);
+                                    Story.findById(story._id).populate("_photo").exec(function (err, stphoto) {
+                                        var pic = (stphoto._photo.length > 0) ? "http://web.7pagi.com:8080/upload/story/" + stphoto._photo[0]['thumb'] : "#";
+                                        var emails = _.pluck(parentsNew, "email");
+                                        var joinMail = emails.join();
+                                        var text = {
+                                            author: req.user.name,
+                                            avatar: (req.user.avatar) ? 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar : "https://www.mautic.org/media/images/default_avatar.png",
+                                            description: dataDescription.info,
+                                            pic: pic
+                                        }
+                                        Azure.sendMail(joinMail, text);
+                                    })
                                 });
+
 
                             });
                         // });
@@ -546,7 +555,7 @@ exports.create = function(req, res) {
                             var Filekeys = Object.keys(files);
                             if (Filekeys.length > 0) {
                                 _.each(Filekeys, function (file, index) {
-                                    var name = uniqid + files[file]['name'];
+                                    var name = uniqid + files[file]['name'].replace(/ /g,"_");
                                     var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/original");
                                     var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
                                     var targetthumb = paththumb + '/' + name;
@@ -643,14 +652,18 @@ exports.create = function(req, res) {
                             var receiverEmail = _.pluck(parents, "_id");
                             receiverEmail.push(req.user._id);
                             User.find({_id: { $in : receiverEmail }},"_id name email azure", function (err, parents) {
-                                var emails = _.pluck(parents, "email");
-                                var joinMail = emails.join();
-                                var text = {
-                                    author: req.user.name,
-                                    avatar: 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
-                                    description: dataDescription.info
-                                }
-                                Azure.sendMail(joinMail, text);
+                                Story.findById(story._id).populate("_photo").exec(function (err, stphoto) {
+                                    var pic = (stphoto._photo.length > 0) ? "http://web.7pagi.com:8080/upload/story/" + stphoto._photo[0]['thumb'] : "#";
+                                    var emails = _.pluck(parents, "email");
+                                    var joinMail = emails.join();
+                                    var text = {
+                                        author: req.user.name,
+                                        avatar: (req.user.avatar) ? 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar : "https://www.mautic.org/media/images/default_avatar.png",
+                                        description: dataDescription.info,
+                                        pic: pic
+                                    }
+                                    Azure.sendMail(joinMail, text);
+                                })
                             });
 
                         });
@@ -689,7 +702,7 @@ exports.create = function(req, res) {
                                 var Filekeys = Object.keys(files);
                                 if (Filekeys.length > 0) {
                                     _.each(Filekeys, function (file, index) {
-                                        var name = uniqid + files[file]['name'];
+                                        var name = uniqid + files[file]['name'].replace(/ /g,"_");
                                         var pathfile = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/original");
                                         var paththumb = path.resolve(__dirname, "../../../client/upload/story/" + story._id + "/thumb");
                                         var targetthumb = paththumb + '/' + name;
@@ -760,15 +773,19 @@ exports.create = function(req, res) {
                                 var receiverEmail = Parents;
                                 receiverEmail.push(req.user._id);
                                 User.find({_id: { $in : receiverEmail }},"_id name email azure", function (err, parents) {
-                                    var emails = _.pluck(parents, "email");
-                                    var joinMail = emails.join();
-                                    var text = {
-                                        author: req.user.name,
-                                        avatar: 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar,
-                                        description: dataDescription.info
-                                    }
-                                    Azure.sendMail(joinMail, text);
-                                });                                
+                                    Story.findById(story._id).populate("_photo").exec(function (err, stphoto) {
+                                        var pic = (stphoto._photo.length > 0) ? "http://web.7pagi.com:8080/upload/story/" + stphoto._photo[0]['thumb'] : "#";
+                                        var emails = _.pluck(parents, "email");
+                                        var joinMail = emails.join();
+                                        var text = {
+                                            author: req.user.name,
+                                            avatar: (req.user.avatar) ? 'http://web.7pagi.com:8080/upload/avatar/' + req.user.avatar : "https://www.mautic.org/media/images/default_avatar.png",
+                                            description: dataDescription.info,
+                                            pic: pic
+                                        }
+                                        Azure.sendMail(joinMail, text);
+                                    })
+                                });
 
                             });
                         // });

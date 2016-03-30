@@ -11,7 +11,7 @@ var router = express.Router();
 
 router
   .get('/', passport.authenticate('azureoauth', {
-      prompt: 'login'
+      prompt: 'consent'
   }))
 
   .get('/callback', 

@@ -10,9 +10,7 @@ var User = require('../../api/user/user.model');
 var router = express.Router();
 
 router
-  .get('/', passport.authenticate('azureoauth', {
-      prompt: 'consent'
-  }))
+  .get('/', passport.authenticate('azureoauth'))
 
   .get('/callback', 
     passport.authenticate('azureoauth'),

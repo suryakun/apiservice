@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('NotificationCtrl', ['$scope', 'appAuth', '$state', 'socket', '$rootScope', '$http', function($scope, appAuth, $state, socket, $rootScope, $http) {
+angular.module('roomApp').controller('NotificationCtrl', ['$scope', 'appAuth', 'socket', '$rootScope', '$http', function($scope, appAuth, socket, $rootScope, $http) {
     $scope.notificationOpened = false;
     $scope.unreadCount = 0;
     $rootScope.unreadStory = [];
@@ -10,21 +10,6 @@ angular.module('roomApp').controller('NotificationCtrl', ['$scope', 'appAuth', '
             $scope.unreadCount = response.data.count;
             $rootScope.unreadStory = response.data.data;
         });
-    };
-    $rootScope.gotoDetail = function(story) {
-        if (story.type === 'info') {
-            $state.go('main.info-detail', {
-                id: story._id
-            });
-        } else if (story.type === 'portfolio') {
-            $state.go('main.portfolio-detail', {
-                id: story._id
-            });
-        } else {
-            $state.go('main.comment-detail', {
-                id: story._id
-            });
-        }
     };
     $scope.$on('$stateChangeSuccess', function(event) {
         $scope.notificationOpened = false;

@@ -88,7 +88,22 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
             });
         }
     });
-
+    /* Akses detail story */
+    $rootScope.gotoDetail = function(story) {
+        if (story.type === 'info') {
+            $state.go('main.info-detail', {
+                id: story._id
+            });
+        } else if (story.type === 'portfolio') {
+            $state.go('main.portfolio-detail', {
+                id: story._id
+            });
+        } else {
+            $state.go('main.comment-detail', {
+                id: story._id
+            });
+        }
+    };
 }]).factory('authInterceptor', function($rootScope, $q, $store, $location) {
     return {
         // Add authorization token to headers

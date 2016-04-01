@@ -53,7 +53,6 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
         });
     };
 }]).controller('CallbackCtrl', ['$scope', 'appAuth', '$state', 'AzureService', '$stateParams', function($scope, appAuth, $state, AzureService, $stateParams) {
-    console.log($state);
     if($state.params.token) {
         appAuth.setData({
             authenticated: true,

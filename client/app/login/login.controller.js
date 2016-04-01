@@ -52,4 +52,24 @@ angular.module('roomApp').controller('LoginCtrl', ['$scope', 'appAuth', '$state'
             });
         });
     };
+}]).controller('CallbackCtrl', ['$scope', 'appAuth', '$state', 'AzureService', '$log', function($scope, appAuth, $state, AzureService, $log) {
+    console.log($state);
+    if($state.params.token) {
+        // appAuth.setData({
+        //     authenticated: true,
+        //     token: $state.params.token,
+        //     role: AUTHConfig.userRoles['teacher'],
+        //     expires: (new Date()).setSeconds(24 * 60 * 60),
+        //     data: data
+        // });
+        // $scope.promise = appAuth.getMe().then(function(me) {
+        //     if (appAuth.data.role === 'teacher') {
+        //         $state.go('main.activity');
+        //     } else if (appAuth.data.role === 'parent') {
+        //         $state.go('main.diary', {
+        //             id: appAuth.profile._student[0]._id
+        //         });
+        //     }
+        // });
+    }
 }]);

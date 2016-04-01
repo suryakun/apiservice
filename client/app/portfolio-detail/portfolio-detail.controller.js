@@ -28,11 +28,7 @@ angular.module('roomApp').controller('PortfolioDetailCtrl', ['$scope', 'storyDet
         return result.join(', ');
     };
     $scope.back = function() {
-        if ($scope.story.type === 'activity') {
-            $state.go('main.activity');
-        } else {
-            history.back();
-        }
+        history.back();
     };
     // Event Listeners
     socket.socket.on('reply:save', function(data) {

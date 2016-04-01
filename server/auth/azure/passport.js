@@ -7,7 +7,7 @@ exports.setup = function (User, config) {
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
       redirectURL: config.azure.callbackURL, 
-      tenantId: '7pagi.com',
+      tenantId: 'common',
       resource: 'https://graph.microsoft.com/'
   },
   function(accessToken, refreshToken, params, profile, done) {
@@ -38,7 +38,7 @@ exports.setup = function (User, config) {
   passport.use('azureoauthuser', new AzureOAuthStrategy({
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
-      tenantId: '7pagi.com',
+      tenantId: 'common',
       resource: 'https://graph.microsoft.com/' 
   }));
 

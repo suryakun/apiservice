@@ -73,10 +73,10 @@ router
                 var responseUser = JSON.parse(user);
                 User.findOne({email: responseUser.mail.toLowerCase()}, function(err, user) {
                     if (err || !user) {
-                        return res.redirect(302, '/unregister?email=' + responseUser.mail.toLowerCase());
+                        return res.redirect(302, '/callback?error=400&email=' + responseUser.mail.toLowerCase());
                     } 
                     var token = auth.signToken(user._id, user.role);  
-                    return res.redirect(302, '/callback?token=' + token);
+                    return res.redirect(302, '/callback?token=' + token + '&id=' + user._id + '&role=' + user.role);
                 });
             });
         });

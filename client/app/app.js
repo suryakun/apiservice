@@ -89,27 +89,6 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
         }
     });
 
-    /**
-     * This function does any initialization work the 
-     * controller needs.
-     */
-    (function activate() {
-      // Check connection status and show appropriate UI.
-      console.log(adalAuthenticationService);
-      if (adalAuthenticationService.userInfo.isAuthenticated) {
-        console.log(adalAuthenticationService.userInfo.profile);
-        // vm.isConnected = true;
-        
-        // // Get the user alias from the universal principal name (UPN).
-        // vm.userAlias = adalAuthenticationService.userInfo.profile.email.split('@')[0];
-        
-        // // Get the user email address.
-        // vm.emailAddress = adalAuthenticationService.userInfo.profile.email;
-      }
-      else {
-        // vm.isConnected = false;
-      }
-    })();
 }]).factory('authInterceptor', function($rootScope, $q, $store, $location) {
     return {
         // Add authorization token to headers

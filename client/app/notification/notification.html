@@ -1,0 +1,26 @@
+<div id="email-list">
+    <table class="table table-striped table-hover" id="emails" >
+        <tbody>
+            <tr ng-if="!unreadStory.length">
+                <td width="6%" class="clickable v-align-middle">
+                </td>
+                <td width="84%" class="clickable tablefull v-align-middle">
+                    <a class="muted m-t-5" href="javascript:void(0)">No unread story yet</a>
+                </td>
+            </tr>
+            <tr ng-repeat="(key, story) in (unreadStory | orderBy:createdAt:true)" ng-click="gotoDetail(story)">
+                <td width="6%" class="clickable v-align-middle">
+                    <div class="user-profile-pic-1x">
+                        <img width="25" height="25" src="assets/img/profiles/bc.jpg" alt="" data-src="img/profiles/bc.jpg" data-src-retina="img/profiles/bc.jpg">
+                    </div>
+                </td>
+                <td width="84%" class="clickable tablefull v-align-middle">
+                    <h5 class="bold no-margin" ng-bind="story._teacher.name | capitalize">Teacher</h5>
+                    <a class="muted m-t-5" ng-bind-html="story.info | nl2br"></a>
+                </td>
+                <td width="10%" class="clickable"><span class="muted text-right" am-time-ago="story.createdAt"></span></td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>

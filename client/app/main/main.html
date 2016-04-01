@@ -38,15 +38,15 @@
                                             </a>
                                             <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
                                                 <li><a href="javascript:void(0)" ui-sref="main.profile"> My Account</a> </li>
-                                                <!-- <li><a href="calender.html">My Calendar</a> </li> -->
-                                                <!-- <li><a href="email.html"> My Inbox&nbsp;&nbsp;<span class="badge badge-important animated bounceIn">2</span></a> </li> -->
+                                                <!-- <li><a href="javascript:void(0)" ui-sref="main.calendar">My Calendar</a> </li> -->
+                                                <!-- <li><a href="javascript:void(0)" ui-sref="main.calendar"> My Inbox&nbsp;&nbsp;<span class="badge badge-important animated bounceIn">2</span></a> </li> -->
                                                 <li class="divider"></li>
                                                 <li><a href="javascript:void(0)" ng-click="onLogoutClick()"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <section class="pull-right">
-                                        <ul class="nav quick-section" ng-controller="NotificationController">
+                                        <ul class="nav quick-section" ng-controller="NotificationCtrl">
                                             <li class="quicklinks">
                                                 <a data-toggle="dropdown" id="message-trigger" data-placement="bottom" class="dropdown-toggle  pull-right" href="javascript:void(0)" popover-placement="bottom" popover-trigger="click" popover-template="'app/main/notification-template.html'" popover-animation="false" popover-popup-delay="0" popover-is-open="notificationOpened">
                                                     <i class="fa fa-comment">&nbsp;</i>
@@ -92,7 +92,7 @@
                         <li><a href="javascript:void(0)" ui-sref-active="cur" ui-sref="main.activity"><i class="icon7p-activity"></i> Activity</a></li>
                         <li><a href="javascript:void(0)" ui-sref="main.info" ng-class="{cur: $state.current.name === 'main.info' || $state.current.name === 'main.info-detail'}"><i class="icon7p-info"></i> Info <span class="badge badge-grey">4</span></a></li>
                         <li><a href="javascript:void(0)" ui-sref="main.calendar" ng-class="{cur: $state.current.name === 'main.calendar'}"><i class="icon7p-calendar"></i> Calendar</a></li>
-                        <li class="separator"></li>
+                        <!-- <li class="separator"></li> -->
                         <!-- <li><a href="javascript:void(0)"><i class="icon7p-message"></i> <span class="visible-md">Send Feedback</span></a></li>
                         <li><a href="javascript:void(0)"><i class="icon7p-about"></i> <span class="visible-md">About</span></a></li> -->
                     </ul>

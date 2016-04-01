@@ -10,6 +10,7 @@ angular.module('roomApp').controller('PortfolioDetailCtrl', ['$scope', 'storyDet
         });
     };
     $scope.onSubmitReply = function(story) {
+        if (!story.newReply) return;
         $scope.promise = $http.post('/api/replies', {
             info: story.newReply,
             story_id: story._id

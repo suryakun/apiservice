@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize', 'ui.calendar', 'AdalAngular', 'LocalStorageModule']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider', 'localStorageServiceProvider', function($urlRouterProvider, $locationProvider, $httpProvider, adalAuthenticationServiceProvider, localStorageServiceProvider) {
+angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize', 'ui.calendar', 'AdalAngular', 'LocalStorageModule', 'infinite-scroll']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider', 'localStorageServiceProvider', function($urlRouterProvider, $locationProvider, $httpProvider, adalAuthenticationServiceProvider, localStorageServiceProvider) {
     $urlRouterProvider.otherwise('/activity');
     $locationProvider.html5Mode(true).hashPrefix('!');
     /**
@@ -176,7 +176,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
     delay: 0,
     minDuration: 300,
     // wrapperClass: 'my-class my-class2'
-}).directive('ngThumb', ['$window', function($window) {
+}).value('THROTTLE_MILLISECONDS', 1000).directive('ngThumb', ['$window', function($window) {
     var helper = {
         support: !!($window.FileReader && $window.CanvasRenderingContext2D),
         isFile: function(item) {

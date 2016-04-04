@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$state', '$modal', '$modalStack', 'socket', function($scope, appAuth, $state, $modal, $modalStack, socket) {
+angular.module('roomApp').controller('MainController', ['$scope', '$rootScope', 'appAuth', '$state', '$modal', '$modalStack', 'socket', function($scope, $rootScope, appAuth, $state, $modal, $modalStack, socket) {
     // Method
     $scope.createType = null;
     $scope.onPostNewClick = function() {
@@ -14,6 +14,13 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
     $scope.onLogoutClick = function() {
         appAuth.logout();
         $state.go('login');
+    };
+    $scope.scroll = {
+        distance: 0,
+        disable: false
+    };
+    $scope.onScroll = function() {
+        $rootScope.$broadcast('main:scroll', true);
     };
     // Posting Form
     $scope.openForm = function(type) {
@@ -41,6 +48,7 @@ angular.module('roomApp').controller('MainController', ['$scope', 'appAuth', '$s
     }
     $scope.$on('$stateChangeSuccess', function(event) {
         $('.create-new').hide(350);
+        $scope.scroll.disable = false;
     });
     $scope.$on('$viewContentLoaded', function() {
         $(window).scroll(function() {

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp').controller('ActivityCtrl', ['$compile', '$scope', '$http', 'socket', '$filter',function($compile, $scope, $http, socket, $filter) {
+angular.module('roomApp').controller('ActivityCtrl', ['$scope', '$http', '$filter',function($scope, $http, $filter) {
     $scope.stories = [];
     var lastId = null,
         scrollInitialized = false;
@@ -7,7 +7,6 @@ angular.module('roomApp').controller('ActivityCtrl', ['$compile', '$scope', '$ht
         if ($scope.scroll.disable) return false;
         $scope.scroll.disable = true; 
         $scope.promise = $http.get('/api/users/get-story-filter/activity/0', {
-            cache: false,
             cache: lastId ? true : false,
             params: {
                 after: lastId,

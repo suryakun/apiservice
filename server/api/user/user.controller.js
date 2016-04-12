@@ -303,13 +303,67 @@ exports.getStoryFilter = function (req, res) {
         User.getStoriesForTeacherWithFilter(user_id, params, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            res.status(200).json(data._story);
+            var stories = data._story;
+            stories = stories.sort(function(a, b) {
+                var timeA = new Date(a.createdAt).getTime(),
+                    timeB = new Date(b.createdAt).getTime();
+                if (timeA < timeB) {
+                    return 1;
+                } else if (timeA > timeB) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+            var remove = [];
+            if (req.query.after) {
+                for (var i = 0; stories[i]; i++) {
+                    remove.push(stories[i]._id);
+                    if (stories[i]._id == req.query.after) {
+                        break;
+                    }
+                };
+                _.remove(stories, function(story) {
+                    return remove.indexOf(story._id) !== -1;
+                });
+            }
+            if (req.query.limit) {
+                stories = _.take(stories, 5); 
+            }
+            res.status(200).json(stories);
         });
     } else if (req.user.role == 'parent') {
         User.getStoriesForParentWithFilter(user_id, params, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            res.status(200).json(data._story);
+            var stories = data._story;
+            stories = stories.sort(function(a, b) {
+                var timeA = new Date(a.createdAt).getTime(),
+                    timeB = new Date(b.createdAt).getTime();
+                if (timeA < timeB) {
+                    return 1;
+                } else if (timeA > timeB) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+            var remove = [];
+            if (req.query.after) {
+                for (var i = 0; stories[i]; i++) {
+                    remove.push(stories[i]._id);
+                    if (stories[i]._id == req.query.after) {
+                        break;
+                    }
+                };
+                _.remove(stories, function(story) {
+                    return remove.indexOf(story._id) !== -1;
+                });
+            }
+            if (req.query.limit) {
+                stories = _.take(stories, 5); 
+            }
+            res.status(200).json(stories);
         });
     }
 }

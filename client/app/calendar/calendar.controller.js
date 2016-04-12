@@ -12,6 +12,7 @@ angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compi
                 start.setHours(0, 0, 0);
                 end.setHours(23, 59, 59);
                 return {
+                    id: event._id,
                     title: event.body.content,
                     info: event.body.content,
                     start: start,
@@ -26,7 +27,8 @@ angular.module('roomApp').controller('CalendarCtrl', ['$scope', '$http', '$compi
     $scope.eventRender = function(event, element, view) {
         element.attr({
             'tooltip': event.title,
-            'tooltip-append-to-body': true
+            'tooltip-append-to-body': true,
+            'ng-click': 'gotoDetail({_id: "' + event.id + '",type: "info"})'
         });
         $compile(element)($scope);
     };

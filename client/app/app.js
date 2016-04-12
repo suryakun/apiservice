@@ -1,5 +1,5 @@
 'use strict';
-angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize', 'ui.calendar', 'AdalAngular', 'LocalStorageModule']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider', 'localStorageServiceProvider', function($urlRouterProvider, $locationProvider, $httpProvider, adalAuthenticationServiceProvider, localStorageServiceProvider) {
+angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.select2', 'ui.bootstrap', 'colorbox', 'ngFileUpload', 'angular-moment', 'cgBusy', 'btford.socket-io', 'ngSanitize', 'ui.calendar', 'AdalAngular', 'LocalStorageModule', 'infinite-scroll']).config(['$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider', 'localStorageServiceProvider', function($urlRouterProvider, $locationProvider, $httpProvider, adalAuthenticationServiceProvider, localStorageServiceProvider) {
     $urlRouterProvider.otherwise('/activity');
     $locationProvider.html5Mode(true).hashPrefix('!');
     /**
@@ -47,7 +47,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
     localStorageServiceProvider
       .setPrefix('unifiedApiSnippets');
     
-}]).run(['$rootScope', '$state', '$stateParams', 'appAuth', function($rootScope, $state, $stateParams, appAuth) {
+}]).run(['$rootScope', '$state', '$stateParams', 'appAuth', 'adalAuthenticationService', function($rootScope, $state, $stateParams, appAuth, adalAuthenticationService) {
     $rootScope.containerClass = null;
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
@@ -88,6 +88,22 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
             });
         }
     });
+    /* Akses detail story */
+    $rootScope.gotoDetail = function(story) {
+        if (story.type === 'info') {
+            $state.go('main.info-detail', {
+                id: story._id
+            });
+        } else if (story.type === 'portfolio') {
+            $state.go('main.portfolio-detail', {
+                id: story._id
+            });
+        } else {
+            $state.go('main.comment-detail', {
+                id: story._id
+            });
+        }
+    };
 }]).factory('authInterceptor', function($rootScope, $q, $store, $location) {
     return {
         // Add authorization token to headers
@@ -160,7 +176,7 @@ angular.module('roomApp', ['roomApp.constants', 'ngCookies', 'ngResource', 'ngSa
     delay: 0,
     minDuration: 300,
     // wrapperClass: 'my-class my-class2'
-}).directive('ngThumb', ['$window', function($window) {
+}).value('THROTTLE_MILLISECONDS', 1000).directive('ngThumb', ['$window', function($window) {
     var helper = {
         support: !!($window.FileReader && $window.CanvasRenderingContext2D),
         isFile: function(item) {

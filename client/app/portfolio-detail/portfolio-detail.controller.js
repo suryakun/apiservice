@@ -10,6 +10,7 @@ angular.module('roomApp').controller('PortfolioDetailCtrl', ['$scope', 'storyDet
         });
     };
     $scope.onSubmitReply = function(story) {
+        if (!story.newReply) return;
         $scope.promise = $http.post('/api/replies', {
             info: story.newReply,
             story_id: story._id
@@ -28,11 +29,7 @@ angular.module('roomApp').controller('PortfolioDetailCtrl', ['$scope', 'storyDet
         return result.join(', ');
     };
     $scope.back = function() {
-        if ($scope.story.type === 'activity') {
-            $state.go('main.activity');
-        } else {
-            history.back();
-        }
+        history.back();
     };
     // Event Listeners
     socket.socket.on('reply:save', function(data) {

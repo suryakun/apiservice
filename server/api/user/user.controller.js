@@ -328,7 +328,7 @@ exports.getStoryFilter = function (req, res) {
                 });
             }
             if (req.query.limit) {
-                stories = _.take(stories, 5); 
+                stories = _.take(stories, parseInt(req.query.limit)); 
             }
             res.status(200).json(stories);
         });
@@ -361,7 +361,7 @@ exports.getStoryFilter = function (req, res) {
                 });
             }
             if (req.query.limit) {
-                stories = _.take(stories, 5); 
+                stories = _.take(stories, parseInt(req.query.limit)); 
             }
             res.status(200).json(stories);
         });

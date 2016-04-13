@@ -46,7 +46,7 @@ router
 
   .get('/sign-in', passport.authenticate('azureoauthuser', {
         // Redirect to Client Apps
-        redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/auth/azure/sign-in/callback'
+        redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com') + '/auth/azure/sign-in/callback'
   }))
   
   .get('/sign-in/callback',  
@@ -58,7 +58,7 @@ router
             form: {
                 grant_type: 'authorization_code', // 'refresh_token'
                 resource: 'https://graph.microsoft.com/',
-                redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/auth/azure/sign-in/callback',
+                redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com') + '/auth/azure/sign-in/callback',
                 client_id: config.azure.clientID,
                 client_secret: config.azure.clientSecret,
                 code: req.query.code // refresh_token 

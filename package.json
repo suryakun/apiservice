@@ -142,6 +142,8 @@
   },
   "scripts": {
     "start": "node server/app.js",
+    "restart": "pm2 stop server/app.js && pm2 start server/app.js",
+    "log": "pm2 logs",
     "test": "grunt test",
     "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
   },

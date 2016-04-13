@@ -7,15 +7,16 @@ exports.setup = function (User, config) {
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
       redirectURL: config.azure.callbackURL, 
-      tenantId: '7Pagi.com',
+      tenantId: 'common',
       resource: 'https://graph.microsoft.com/'
   },
   function(accessToken, refreshToken, params, profile, done) {
       // currently we can't find a way to exchange access token by user info (see userProfile implementation), so
       // you will need a jwt-package like https://github.com/auth0/node-jsonwebtoken to decode id_token and get waad profile
       var waadProfile = profile || jwt.decode(params.id_token);
+      var email = waadProfile.rawObject.upn || waadProfile.rawObject.email || '';
       User.findOne({
-        'email': waadProfile.rawObject.email ? waadProfile.rawObject.email.toLowerCase() : null
+        'email': email.toLowerCase()
       },
       function(err, user) {
         if (err) {
@@ -38,7 +39,7 @@ exports.setup = function (User, config) {
   passport.use('azureoauthuser', new AzureOAuthStrategy({
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
-      tenantId: '7Pagi.com',
+      tenantId: 'common',
       resource: 'https://graph.microsoft.com/' 
   }));
 
@@ -65,7 +66,7 @@ exports.setup = function (User, config) {
           + '&client_secret=' + encodeURIComponent(config.azure.clientSecret) 
           + '&resource=' + encodeURIComponent(resource);
           var opts = {
-              url: 'https://login.microsoftonline.com/7Pagi.com/oauth2/token',
+              url: 'https://login.microsoftonline.com/common/oauth2/token',
               body: data,
               headers : { 'Content-Type' : 'application/x-www-form-urlencoded' }
           };

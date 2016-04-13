@@ -54,7 +54,7 @@ router
         /* Menggunakan request karena tidak bisa menggunakan middleware azureoauthuser (Failed to obtain access token)*/
         // https://msdn.microsoft.com/en-us/library/azure/dn645542.aspx
         request.post({
-            url:'https://login.windows.net/7Pagi.com/oauth2/token', 
+            url:'https://login.windows.net/common/oauth2/token', 
             form: {
                 grant_type: 'authorization_code', // 'refresh_token'
                 resource: 'https://graph.microsoft.com/',
@@ -69,7 +69,7 @@ router
                 auth : { 
                     'bearer' : responseToken.access_token 
                 } 
-            }, function(err, httpResponse, user) {
+            }, function(err, httpResponse, user) { 
                 var responseUser = JSON.parse(user);
                 User.findOne({email: responseUser.mail.toLowerCase()}, function(err, user) {
                     if (err || !user) {

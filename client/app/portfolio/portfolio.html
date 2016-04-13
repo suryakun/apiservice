@@ -33,7 +33,7 @@
 </div>
 <div class="clear"></div>
 <div class="row">
-    <section class="col-sm-12" ng-if="!stories.length">
+    <section class="col-sm-12" ng-show="scrollInitialized &amp;&amp; !stories.length">
         <div class="grid simple">
             <div class="grid-title no-border">
                 <p style="color: inherit;">No portfolio yet</p>
@@ -58,6 +58,13 @@
                     <strong>Tags :</strong>
                     Sport, Math, Art
                 </div> -->
+            </div>
+        </div>
+    </section>
+    <section class="col-sm-12" ng-hide="scroll.disable">
+        <div class="grid simple">
+            <div class="grid-title no-border">
+                <p style="color: inherit;" class="text-center"><i class="fa fa-spinner fa-spin" style="font-size: 18px"></i>  Loading ...</p>
             </div>
         </div>
     </section>

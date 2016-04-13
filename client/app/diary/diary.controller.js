@@ -5,6 +5,8 @@ angular.module('roomApp').controller('DiaryCtrl', ['$scope', 'userDetailHttp', '
     var lastId = null,
         scrollInitialized = false;
     var getData = function() {
+        if ($scope.scroll.disable) return false;
+        $scope.scroll.disable = true; 
         $scope.promise = $http.get('/api/users/get-story-filter/diary/'+ $scope.user._parent._id, {
             cache: lastId ? true : false,
             params: {

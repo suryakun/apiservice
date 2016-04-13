@@ -18,7 +18,7 @@
     </ul>
 </div>
 <ul class="cbp_tmtimeline">
-    <li ng-class="{'reduce-margin': story.hideDate}" ng-if="!stories.length">
+    <li class="reduce-margin" ng-if="scrollInitialized &amp;&amp; !stories.length">
         <div class="cbp_tmlabel">
             <div class="post-content">
                 <p class="dark-text">No diary yet</p>
@@ -27,5 +27,13 @@
         </div>
     </li>
     <li ng-repeat="(key, story) in stories | orderBy:'-createdAt'" ng-class="{'reduce-margin': story.hideDate}" story-card="story" story-user="user">
+    </li>
+    <li class="reduce-margin" ng-hide="scroll.disable">
+        <div class="cbp_tmlabel">
+            <div class="post-content text-center">
+                <i class="fa fa-spinner fa-spin" style="font-size: 18px"></i>  Loading ...
+            </div>
+            <div class="clearfix"></div>
+        </div>
     </li>
 </ul>

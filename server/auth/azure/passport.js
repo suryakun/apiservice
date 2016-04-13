@@ -7,7 +7,7 @@ exports.setup = function (User, config) {
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
       redirectURL: config.azure.callbackURL, 
-      tenantId: 'common',
+      tenantId: '7Pagi.com',
       resource: 'https://graph.microsoft.com/'
   },
   function(accessToken, refreshToken, params, profile, done) {

@@ -7,7 +7,7 @@ exports.setup = function (User, config) {
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
       redirectURL: config.azure.callbackURL, 
-      tenantId: 'common',
+      tenantId: '7Pagi.com',
       resource: 'https://graph.microsoft.com/'
   },
   function(accessToken, refreshToken, params, profile, done) {
@@ -38,7 +38,7 @@ exports.setup = function (User, config) {
   passport.use('azureoauthuser', new AzureOAuthStrategy({
       clientId: config.azure.clientID,
       clientSecret: config.azure.clientSecret,
-      tenantId: 'common',
+      tenantId: '7Pagi.com',
       resource: 'https://graph.microsoft.com/' 
   }));
 
@@ -65,7 +65,7 @@ exports.setup = function (User, config) {
           + '&client_secret=' + encodeURIComponent(config.azure.clientSecret) 
           + '&resource=' + encodeURIComponent(resource);
           var opts = {
-              url: 'https://login.microsoftonline.com/common/oauth2/token',
+              url: 'https://login.microsoftonline.com/7Pagi.com/oauth2/token',
               body: data,
               headers : { 'Content-Type' : 'application/x-www-form-urlencoded' }
           };

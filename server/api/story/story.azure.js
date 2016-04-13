@@ -11,6 +11,8 @@ var https = require('https');
 exports.createCalendar = function (story_id, receivers, start, end, description) {
     if (receivers.length > 0) {
         
+        var palindromeOfDescription = description.substr(0, 20) + '...';
+
         var options = {
           "start": {
             "dateTime": start,
@@ -22,7 +24,7 @@ exports.createCalendar = function (story_id, receivers, start, end, description)
           },
           "body" : {"contentType": "text",
                       "content": description},
-          "subject" : "7pagi update event",
+          "subject" : '7Pagi : ' + palindromeOfDescription,
           "bodyPreview": description,
           "reminderMinutesBeforeStart": 99,
           "isReminderOn": true,

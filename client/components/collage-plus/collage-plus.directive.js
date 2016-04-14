@@ -13,7 +13,7 @@ angular.module('roomApp').directive('collagePlus', ['$timeout', function($timeou
             element.imagesLoaded(function() {
                 $timeout(function(){
                     element.collagePlus(options);
-                }, 500);
+                }, 1000);
             });
         }
     };

@@ -23,7 +23,7 @@ exports.setup = function (User, config) {
           return done(err);
         }
         if (!user) {
-          return done(false, [401, waadProfile.rawObject.email.toLowerCase()]);
+          return done(false, [401, email.toLowerCase()]);
         } else {
           params.refresh_token = refreshToken;
           user.azure = params;

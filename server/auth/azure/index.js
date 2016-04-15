@@ -71,9 +71,11 @@ router
                 } 
             }, function(err, httpResponse, user) { 
                 var responseUser = JSON.parse(user);
-                User.findOne({email: responseUser.mail.toLowerCase()}, function(err, user) {
+                var email = responseUser.mail || responseUser.upn || '';
+                email = email.toLowerCase();
+                User.findOne({email: email}, function(err, user) {
                     if (err || !user) {
-                        return res.redirect(302, '/callback?error=400&email=' + responseUser.mail.toLowerCase());
+                        return res.redirect(302, '/callback?error=400&email=' + email);
                     } 
                     var token = auth.signToken(user._id, user.role);  
                     return res.redirect(302, '/callback?token=' + token + '&id=' + user._id + '&role=' + user.role);

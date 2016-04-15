@@ -15,15 +15,16 @@ exports.setup = function (User, config) {
       // you will need a jwt-package like https://github.com/auth0/node-jsonwebtoken to decode id_token and get waad profile
       var waadProfile = profile || jwt.decode(params.id_token);
       var email = waadProfile.rawObject.upn || waadProfile.rawObject.email || '';
+      email = email.toLowerCase();
       User.findOne({
-        'email': email.toLowerCase()
+        'email': email
       },
       function(err, user) {
         if (err) {
           return done(err);
         }
         if (!user) {
-          return done(false, [401, waadProfile.rawObject.email.toLowerCase()]);
+          return done(false, [401, email]);
         } else {
           params.refresh_token = refreshToken;
           user.azure = params;

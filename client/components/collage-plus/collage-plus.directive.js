@@ -10,10 +10,24 @@ angular.module('roomApp').directive('collagePlus', ['$timeout', function($timeou
                 'targetHeight': 180,
                 'direction': 'horizontal'
             }, scope.options || {});
+
+            function doCollage() {
+                element.collagePlus(options);
+            }
+            var resizeTimer = null;
+            $(window).bind('resize', function() {
+                // element.find('.Image_Wrapper').css("opacity", 0);
+                if (resizeTimer) clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(doCollage, 200);
+            });
+            element.bind('resize', function() {
+                // element.find('.Image_Wrapper').css("opacity", 0);
+                if (resizeTimer) clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(doCollage, 200);
+            });
             element.imagesLoaded(function() {
-                $timeout(function(){
-                    element.collagePlus(options);
-                }, 500);
+                if (resizeTimer) clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(doCollage, 200);
             });
         }
     };

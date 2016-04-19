@@ -328,7 +328,7 @@ exports.getStoryFilter = function (req, res) {
                 });
             }
             if (req.query.limit) {
-                stories = _.take(stories, 5); 
+                stories = _.take(stories, parseInt(req.query.limit)); 
             }
             res.status(200).json(stories);
         });
@@ -361,7 +361,7 @@ exports.getStoryFilter = function (req, res) {
                 });
             }
             if (req.query.limit) {
-                stories = _.take(stories, 5); 
+                stories = _.take(stories, parseInt(req.query.limit)); 
             }
             res.status(200).json(stories);
         });
@@ -493,7 +493,7 @@ exports.getUnread = function (req, res) {
             var stories = user._story,
                 total = stories.length;
             stories = stories.filter(function(story){
-                return story._teacher._id !== req.user._id &&  story._readed && story._readed.indexOf(req.user._id) === -1;
+                return story._teacher !== null && story._teacher._id !== req.user._id &&  story._readed && story._readed.indexOf(req.user._id) === -1;
             });
             stories = stories.sort(function(a, b){
                 return new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime();

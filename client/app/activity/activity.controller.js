@@ -17,7 +17,9 @@ angular.module('roomApp').controller('ActivityCtrl', ['$scope', '$http', '$filte
             if (response.data.length) {
                 lastId = response.data[response.data.length - 1]._id;
                 $scope.stories = $scope.stories.concat(response.data);
-                $scope.scroll.disable = false;
+                if (response.data.length >= response.config.params.limit) {
+                    $scope.scroll.disable = false;
+                }
             }
         });
     };

@@ -46,7 +46,7 @@ router
 
   .get('/sign-in', passport.authenticate('azureoauthuser', {
         // Redirect to Client Apps
-        redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/auth/azure/sign-in/callback'
+        redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com') + '/auth/azure/sign-in/callback'
   }))
   
   .get('/sign-in/callback',  
@@ -58,7 +58,7 @@ router
             form: {
                 grant_type: 'authorization_code', // 'refresh_token'
                 resource: 'https://graph.microsoft.com/',
-                redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com:8080') + '/auth/azure/sign-in/callback',
+                redirect_uri: (process.env.DOMAIN || 'http://web.7pagi.com') + '/auth/azure/sign-in/callback',
                 client_id: config.azure.clientID,
                 client_secret: config.azure.clientSecret,
                 code: req.query.code // refresh_token 
@@ -69,11 +69,13 @@ router
                 auth : { 
                     'bearer' : responseToken.access_token 
                 } 
-            }, function(err, httpResponse, user) {
+            }, function(err, httpResponse, user) { 
                 var responseUser = JSON.parse(user);
-                User.findOne({email: responseUser.mail.toLowerCase()}, function(err, user) {
+                var email = responseUser.mail || responseUser.upn || '';
+                email = email.toLowerCase();
+                User.findOne({email: email}, function(err, user) {
                     if (err || !user) {
-                        return res.redirect(302, '/callback?error=400&email=' + responseUser.mail.toLowerCase());
+                        return res.redirect(302, '/callback?error=400&email=' + email);
                     } 
                     var token = auth.signToken(user._id, user.role);  
                     return res.redirect(302, '/callback?token=' + token + '&id=' + user._id + '&role=' + user.role);

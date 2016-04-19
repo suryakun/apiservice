@@ -5,6 +5,8 @@ angular.module('roomApp').controller('DiaryCtrl', ['$scope', 'userDetailHttp', '
     var lastId = null,
         scrollInitialized = false;
     var getData = function() {
+        if ($scope.scroll.disable) return false;
+        $scope.scroll.disable = true; 
         $scope.promise = $http.get('/api/users/get-story-filter/diary/'+ $scope.user._parent._id, {
             cache: lastId ? true : false,
             params: {
@@ -16,7 +18,9 @@ angular.module('roomApp').controller('DiaryCtrl', ['$scope', 'userDetailHttp', '
             if (response.data.length) {
                 lastId = response.data[response.data.length - 1]._id;
                 $scope.stories = $scope.stories.concat(response.data);
-                $scope.scroll.disable = false;
+                if (response.data.length >= response.config.params.limit) {
+                    $scope.scroll.disable = false;
+                }
             }
         });
     };

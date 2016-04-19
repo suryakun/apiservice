@@ -5356,7 +5356,6 @@ form legend,
   padding: 15px 18px 15px;
 }
 .notification-messages {
-  font-family: 'open sans';
   background-color: #F5F5F5;
   padding: 15px 18px 10px;
   display: block;
@@ -8588,6 +8587,12 @@ ul.my-friends li .profile-pic {
     position: relative;
     margin-left: 0;
 }
+
+#sidebar_menu .main-menu > li.parent-menu{
+    margin-left: 5px;
+    padding-bottom: 0;
+}
+
 #sidebar_menu .main-menu > li:first-child > button{
     color: white;
     font-size: 16px;
@@ -8608,7 +8613,7 @@ ul.my-friends li .profile-pic {
     font-weight: 500;
     line-height: 22px;
     display: block;
-    margin-right: 12px;
+    margin-right: 2px;
     text-decoration: none !important;
 }
 #sidebar_menu .main-menu > li a:hover{

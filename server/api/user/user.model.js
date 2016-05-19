@@ -514,6 +514,14 @@ UserSchema.statics.updateGcmId = function (id, gcm_id, callback) {
     });
 }
 
+UserSchema.statics.updateIosId = function (id, ios_id, callback) {
+    var user = this;
+    return user.findById(id).exec(function (err, me) {
+        me.ios_id = ios_id;
+        me.save();
+    });
+}
+
 UserSchema.statics.getAllPrincipal = function (callback) {
     return this.find({role: 'principal'}).exec(callback);
 }

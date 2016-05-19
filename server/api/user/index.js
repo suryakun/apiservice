@@ -21,6 +21,7 @@ router.get('/get-students-from-my-school', auth.hasRole(['teacher', 'student']),
 router.get('/get-my-stories', auth.hasRole(['teacher','parent']), controller.getMyStories);
 router.get('/get-my-class', auth.hasRole(['teacher','parent']), controller.getMyClass);
 router.post('/update-gcm-id', auth.hasRole(['teacher','parent','student','principal']), controller.updateGcmId);
+router.post('/update-ios-id', auth.hasRole(['teacher','parent','student','principal']), controller.updateIosId);
 router.post('/get-story-by-date', auth.hasRole(['teacher','parent']), controller.getMyStoriesByDate);
 router.post('/get-all-principal', auth.hasRole(['admin']), controller.getAllPrincipal);
 router.post('/create-parent', auth.hasRole(['admin']), controller.createParent);

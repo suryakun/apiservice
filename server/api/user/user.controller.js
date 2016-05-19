@@ -421,8 +421,21 @@ exports.updateGcmId = function (req, res) {
             if(err) { return handleError(res, err); }
             res.status(200).json({message: 'ok'});
         });
-    });
-    
+    });    
+}
+
+exports.updateIosId = function (req, res) {
+    var ios_id = req.body.ios_id;
+    if (!ios_id) {res.status(401).send('bad Request')};
+    User.findById(req.user._id, function (err, me) {
+        if(err) { return handleError(res, err); }
+        if(!me) { return res.status(404).send('Not Found'); }
+        me.ios_id = ios_id;
+        me.save(function (err) {
+            if(err) { return handleError(res, err); }
+            res.status(200).json({message: 'ok'});
+        });
+    });    
 }
 
 exports.getAllPrincipal = function (req, res) {

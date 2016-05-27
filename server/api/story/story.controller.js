@@ -22,6 +22,7 @@ var q = queue();
 var async = require('async');
 var gcm = require('android-gcm');
 var gcmObject = new gcm.AndroidGcm('AIzaSyBpjxJEYkAfLMhEWBq2ger2_0EV60VtdW4');
+var ios = require('../../components/apn/ios.notif');
 var im = require('imagemagick');
 var moment = require('moment');
 
@@ -197,6 +198,10 @@ exports.create = function(req, res) {
                             if (gcm_ids_group.length > 0) {
                                 sendGCM (gcm_ids_group, 'story', req.user._id, story._id);
                             };
+                            var ios_ids_group = _.pluck(user, "ios_id");
+                            if (ios_ids_group.length) {
+                                ios.apn(ios_ids_group, '7Pagi Notification - You have unread messages');
+                            };
                         });
                     }
 
@@ -339,6 +344,10 @@ exports.create = function(req, res) {
                                     if (gcm_ids_group.length > 0) {
                                         sendGCM (gcm_ids_group, 'story', req.user._id, story._id);
                                     };
+                                    var ios_ids_group = _.pluck(user, "ios_id");
+                                    if (ios_ids_group.length) {
+                                        ios.apn(ios_ids_group, '7Pagi Notification - You have unread messages');
+                                    };
                                 })
                             }
                             
@@ -474,14 +483,21 @@ exports.create = function(req, res) {
                                 });
                                 
                                 _.each(Parents, function(_id) {
-                                User.findById(_id, function (err, p) {
-                                    p._story.push(story._id);
-                                    p.save(function (err, pgcm) {
-                                        var t = [];                                    
-                                        t.push(pgcm.gcm_id);
-                                        sendGCM (t, 'story', req.user._id, story._id);
+                                    User.findById(_id, function (err, p) {
+                                        p._story.push(story._id);
+                                        p.save(function (err, pgcm) {
+                                            var t = [];                                    
+                                            t.push(pgcm.gcm_id);
+                                            sendGCM (t, 'story', req.user._id, story._id);
+
+                                            var ios_teacher = [];
+                                            ios_teacher.push(pgcm.ios_id);
+                                            if (ios_teacher.length) {
+                                                ios.apn(ios_teacher, '7Pagi Notification - You have unread messages');
+                                            };
+                                        });
+
                                     });
-                                });
                                 });
 
                                 var receiverEmail = Parents;
@@ -634,6 +650,11 @@ exports.create = function(req, res) {
                                     if (gcm_ids_group.length > 0) {
                                         sendGCM (gcm_ids_group, 'story', req.user._id, story._id);
                                     };
+
+                                    var ios_ids_group = _.pluck(user, "ios_id");
+                                    if (ios_ids_group.length) {
+                                        ios.apn(ios_ids_group, '7Pagi Notification - You have unread messages');
+                                    };
                                 })
                             }
                             
@@ -764,14 +785,20 @@ exports.create = function(req, res) {
                                 });
                                 
                                 _.each(Parents, function(_id, index) {
-                                User.findById(_id, function (err, p) {
-                                    p._story.push(story._id);
-                                    p.save(function (err, pgcm) {
-                                        var t = [];                                    
-                                        t.push(pgcm.gcm_id);
-                                        sendGCM (t, 'story', req.user._id, story._id);
+                                    User.findById(_id, function (err, p) {
+                                        p._story.push(story._id);
+                                        p.save(function (err, pgcm) {
+                                            var t = [];                                    
+                                            t.push(pgcm.gcm_id);
+                                            sendGCM (t, 'story', req.user._id, story._id);
+
+                                            var ios_teacher = [];
+                                            ios_teacher.push(pgcm.ios_id);
+                                            if (ios_teacher.length) {
+                                                ios.apn(ios_teacher, '7Pagi Notification - You have unread messages');
+                                            };
+                                        });
                                     });
-                                });
                                 });
 
                                 var receiverEmail = Parents;

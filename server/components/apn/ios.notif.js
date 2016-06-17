@@ -12,14 +12,14 @@ exports.apn = function(tokens, message){
     // Create a connection to the service using mostly default parameters.
 
     var service = new apn.connection({ 
-        cert: path.join(__dirname, 'cert.pem'),
-        key: path.join(__dirname, 'key.pem'),
+        cert: path.join(__dirname, process.env.NODE_ENV + '/cert.pem'),
+        key: path.join(__dirname, process.env.NODE_ENV + '/key.pem'),
         ca: null,
         pfx: null,
         passphrase: null,
         production: false,
         voip: false,
-        address: 'gateway.sandbox.push.apple.com',
+        address: process.env.NODE_ENV === 'production' ? 'gateway.push.apple.com:2195' : 'gateway.sandbox.push.apple.com',
         port: 2195,
         rejectUnauthorized: true,
         cacheLength: 1000,

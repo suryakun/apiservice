@@ -5,7 +5,7 @@ angular.module('roomApp').controller('StudentCtrl', ['$scope', 'myClassesHttp', 
     var schoolId = $scope.myClasses[0]._school._id;
     var otherClass = $http.get('/api/schools/get-class-by-school-id/' + schoolId);
     otherClass.then(function (response) {
-        console.log(response);
+        console.log(response.data._class);
         $scope.myClasses = response.data._class;
     })
     $scope.selectedClass = $scope.myClasses[0];

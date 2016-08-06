@@ -6,9 +6,9 @@ angular.module('roomApp').controller('StudentCtrl', ['$scope', 'myClassesHttp', 
     var otherClass = $http.get('/api/schools/get-class-by-school-id/' + schoolId);
     otherClass.then(function (response) {
         console.log(response.data._class);
-        $scope.myClasses = response.data._class;
+        $scope.myOtherClasses = response.data._class;
+        $scope.selectedClass = $scope.myOtherClasses[0];
     })
-    $scope.selectedClass = $scope.myClasses[0];
     $scope.students = [];
     var getData = function() {
         $scope.promise = $http.get('/api/classes/get-all-student-by-class-id/' + $scope.selectedClass._id, {

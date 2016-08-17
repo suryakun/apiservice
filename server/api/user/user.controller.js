@@ -294,14 +294,14 @@ exports.getOwnStories = function (req, res) {
         User.getStoriesForTeacher(user_id, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            var chunks = _.first( _.rest(data._story, req.params.limit), req.params.offset);
+            var chunks = _.first( _.rest(data._story, parseInt(req.params.limit) ), parseInt(req.params.offset) );
             res.status(200).json(chunks);
         });
     } else if (req.user.role == 'parent') {
         User.getStoriesForParent(user_id, function (err, data) {
             if(err) { return handleError(res, err); }
             if(!data) { return res.status(404).send('Not Found'); }
-            var chunks = _.first( _.rest(data._story, req.params.limit), req.params.offset);
+            var chunks = _.first( _.rest(data._story, parseInt(req.params.limit) ), parseInt(req.params.offset) );
             res.status(200).json(chunks);
         });
     }

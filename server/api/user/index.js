@@ -33,6 +33,7 @@ router.get('/get-parent-for-admin/:id', auth.hasRole(['admin','moderator']), con
 router.get('/get-teacher-for-admin/:id', auth.hasRole(['admin']), controller.getTeacherForAdmin );
 router.put('/update-user/:id', auth.hasRole(['admin']), controller.update);
 router.put('/update-teacher/:id', auth.hasRole(['admin']), controller.updateTeacher);
+router.get('/get-own-stories/:limit/:offset', auth.hasRole(['teacher','parent']), controller.getOwnStories);
 
 router.get('/get-moderators/:id', auth.hasRole(['admin']), controller.getModerator);
 

@@ -288,6 +288,25 @@ exports.getMyStories = function (req, res) {
     }
 }
 
+exports.getOwnStories = function (req, res) {
+    var user_id = req.user._id;
+    if (req.user.role == 'teacher') {
+        User.getStoriesForTeacher(user_id, function (err, data) {
+            if(err) { return handleError(res, err); }
+            if(!data) { return res.status(404).send('Not Found'); }
+            var chunks = _.first( _.rest(data._story, req.params.limit), req.params.offset);
+            res.status(200).json(chunks);
+        });
+    } else if (req.user.role == 'parent') {
+        User.getStoriesForParent(user_id, function (err, data) {
+            if(err) { return handleError(res, err); }
+            if(!data) { return res.status(404).send('Not Found'); }
+            var chunks = _.first( _.rest(data._story, req.params.limit), req.params.offset);
+            res.status(200).json(chunks);
+        });
+    }
+}
+
 exports.getStoryFilter = function (req, res) {
     var user_id = req.user._id;
     var params = {};
